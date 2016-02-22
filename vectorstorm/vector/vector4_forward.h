@@ -1,0 +1,16 @@
+#ifndef VECTORSTORM_VECTOR4_FORWARD_H_INCLUDED
+#define VECTORSTORM_VECTOR4_FORWARD_H_INCLUDED
+
+#ifdef VMATH_NAMESPACE
+namespace VMATH_NAMESPACE {
+#endif
+
+template<typename T> class vector4;
+
+#ifdef VMATH_NAMESPACE
+}
+#endif //VMATH_NAMESPACE
+
+#include "vector4_types.h"
+
+#endif // VECTORSTORM_VECTOR4_FORWARD_H_INCLUDED
