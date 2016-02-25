@@ -92,7 +92,9 @@ public:
    * Creates and sets to (0,0,0)
    */
   inline constexpr vector3() __attribute__((__always_inline__))
-    : x(0), y(0), z(0) {
+    : x(0),
+      y(0),
+      z(0) {
   }
 
   /**
@@ -102,7 +104,9 @@ public:
    * @param nz initial z-coordinate value
    */
   inline constexpr vector3(T nx, T ny, T nz) __attribute__((__always_inline__))
-    : x(nx), y(ny), z(nz) {
+    : x(nx),
+      y(ny),
+      z(nz) {
   }
 
   /**
@@ -110,25 +114,66 @@ public:
    * @param src Source of data for new created vector3 instance.
    */
   inline constexpr vector3(vector3<T> const &src) __attribute__((__always_inline__))
-    : x(src.x), y(src.y), z(src.z) {
+    : x(src.x),
+      y(src.y),
+      z(src.z) {
   }
 
   /**
    * Copy casting constructor.
    * @param src Source of data for new created vector3 instance.
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline constexpr vector3(vector3<FromT> const &src)
-    : x(static_cast<T>(src.x)), y(static_cast<T>(src.y)), z(static_cast<T>(src.z)) {
+    : x(static_cast<T>(src.x)),
+      y(static_cast<T>(src.y)),
+      z(static_cast<T>(src.z)) {
   }
 
-  inline constexpr vector3(vector2<T> const &src, T new_z)
-    : x(src.x), y(src.y), z(new_z) {
+  inline constexpr vector3(vector2<T> const &src, T new_z) __attribute__((__always_inline__))
+    : x(src.x),
+      y(src.y),
+      z(new_z) {
   }
 
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline constexpr vector3(vector2<FromT> const &src, FromT new_z)
-    : x(static_cast<T>(src.x)), y(static_cast<T>(src.y)), z(static_cast<T>(new_z)) {
+    : x(static_cast<T>(src.x)),
+      y(static_cast<T>(src.y)), z(static_cast<T>(new_z)) {
+  }
+
+  /**
+   * Move constructor.
+   * @param src Source of data for new created vector3 instance.
+   */
+  inline constexpr vector3(vector3<T> &&src) noexcept __attribute__((__always_inline__))
+    : x(std::move(src.x)),
+      y(std::move(src.y)),
+      z(std::move(src.z)) {
+  }
+
+  /**
+   * Move casting constructor.
+   * @param src Source of data for new created vector3 instance.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr vector3(vector3<FromT> &&src) noexcept
+    : x(static_cast<T>(std::move(src.x))),
+      y(static_cast<T>(std::move(src.y))),
+      z(static_cast<T>(std::move(src.z))) {
+  }
+
+  inline constexpr vector3(vector2<T> &&src, T new_z) noexcept __attribute__((__always_inline__))
+    : x(std::move(src.x)),
+      y(std::move(src.y)),
+      z(std::move(new_z)) {
+  }
+
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr vector3(vector2<FromT> &&src, FromT new_z) noexcept
+    : x(static_cast<T>(std::move(src.x))),
+      y(static_cast<T>(std::move(src.y))),
+      z(static_cast<T>(std::move(new_z))) {
   }
 
   //----------------[ assignment ]-------------------------
@@ -160,7 +205,7 @@ public:
    * Copy casting operator.
    * @param rhs Right hand side argument of binary operator.
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline vector3<T> constexpr operator=(vector3<FromT> const &rhs) {
     x = static_cast<T>(rhs.x);
     y = static_cast<T>(rhs.y);
@@ -169,7 +214,7 @@ public:
   }
 
   /**
-   * Copy operator to vector3
+   * Copy operator to vector3 from vector4
    * @param rhs Right hand side argument of binary operator.
    */
   inline vector3<T> constexpr operator=(vector4<T> const &rhs) __attribute__((__always_inline__)) {
@@ -180,14 +225,60 @@ public:
   }
 
   /**
-   * Copy casting operator to vector3
+   * Copy casting operator to vector3 from vector4
    * @param rhs Right hand side argument of binary operator.
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline vector3<T> constexpr operator=(vector4<FromT> const &rhs) {
     x = static_cast<T>(rhs.x);
     y = static_cast<T>(rhs.y);
     z = static_cast<T>(rhs.z);
+    return *this;
+  }
+
+  /**
+   * Move assignment operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline vector3<T> constexpr operator=(vector3<T> &&rhs) __attribute__((__always_inline__)) {
+    x = std::move(rhs.x);
+    y = std::move(rhs.y);
+    z = std::move(rhs.z);
+    return *this;
+  }
+
+  /**
+   * Move assignment casting operator.
+   * @param rhs Right hand side argument of binary operator.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline vector3<T> constexpr operator=(vector3<FromT> &&rhs) {
+    x = static_cast<T>(std::move(rhs.x));
+    y = static_cast<T>(std::move(rhs.y));
+    z = static_cast<T>(std::move(rhs.z));
+    return *this;
+  }
+
+  /**
+   * Move assignment operator to vector3 from vector4
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline vector3<T> constexpr operator=(vector4<T> &&rhs) __attribute__((__always_inline__)) {
+    x = std::move(rhs.x);
+    y = std::move(rhs.y);
+    z = std::move(rhs.z);
+    return *this;
+  }
+
+  /**
+   * Move assignment casting operator to vector3 from vector4
+   * @param rhs Right hand side argument of binary operator.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline vector3<T> constexpr operator=(vector4<FromT> &&rhs) {
+    x = static_cast<T>(std::move(rhs.x));
+    y = static_cast<T>(std::move(rhs.y));
+    z = static_cast<T>(std::move(rhs.z));
     return *this;
   }
 

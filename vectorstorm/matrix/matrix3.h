@@ -23,7 +23,7 @@ public:
   /**
    * Creates identity matrix
    */
-  inline constexpr matrix3()
+  inline constexpr matrix3() __attribute__((__always_inline__))
     : data{1, 0, 0,
            0, 1, 0,
            0, 0, 1} {
@@ -33,12 +33,12 @@ public:
    * Copy matrix values from array (these data must be in column
    * major order!)
    */
-  inline constexpr matrix3(T const *dt)
+  inline constexpr matrix3(T const *dt) __attribute__((__always_inline__))
     : data{dt[0], dt[1], dt[2],
            dt[3], dt[4], dt[5],
            dt[6], dt[7], dt[8]} {
   }
-  inline constexpr matrix3(T *dt)
+  inline constexpr matrix3(T *dt) __attribute__((__always_inline__))
     : data{dt[0], dt[1], dt[2],
            dt[3], dt[4], dt[5],
            dt[6], dt[7], dt[8]} {
@@ -48,7 +48,7 @@ public:
    * Copy constructor.
    * @param src Data source for new created instance of matrix3
    */
-  inline constexpr matrix3(matrix3<T> const &src)
+  inline constexpr matrix3(matrix3<T> const &src) __attribute__((__always_inline__))
     : data{src.data[0], src.data[1], src.data[2],
            src.data[3], src.data[4], src.data[5],
            src.data[6], src.data[7], src.data[8]} {
@@ -58,11 +58,30 @@ public:
    * Copy casting constructor.
    * @param src Data source for new created instance of matrix3
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline constexpr matrix3(matrix3<FromT> const &src)
     : data{static_cast<T>(src.data[0]), static_cast<T>(src.data[1]), static_cast<T>(src.data[2]),
            static_cast<T>(src.data[3]), static_cast<T>(src.data[4]), static_cast<T>(src.data[5]),
            static_cast<T>(src.data[6]), static_cast<T>(src.data[7]), static_cast<T>(src.data[8])} {
+  }
+
+  /**
+   * Move constructor.
+   * @param src Data source for new created instance of matrix3
+   */
+  inline constexpr matrix3(matrix3<T> &&src) __attribute__((__always_inline__))
+    : data(std::move(src.data)) {
+  }
+
+  /**
+   * Move casting constructor.
+   * @param src Data source for new created instance of matrix3
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr matrix3(matrix3<FromT> &&src)
+    : data{static_cast<T>(std::move(src.data[0])), static_cast<T>(std::move(src.data[1])), static_cast<T>(std::move(src.data[2])),
+           static_cast<T>(std::move(src.data[3])), static_cast<T>(std::move(src.data[4])), static_cast<T>(std::move(src.data[5])),
+           static_cast<T>(std::move(src.data[6])), static_cast<T>(std::move(src.data[7])), static_cast<T>(std::move(src.data[8]))} {
   }
 
   /**
@@ -73,7 +92,7 @@ public:
   //  : data(dt) __attribute__((__always_inline__)) {
   //}
   // see http://stackoverflow.com/a/5549918/1678468
-  template<class... FromT>
+  template<class... FromT> __attribute__((__always_inline__))
   inline constexpr matrix3(FromT... dt)
     : data{dt...} {
   }
@@ -196,7 +215,7 @@ public:
   /**
    * Creates rotation matrix from ODE matrix.
    */
-  template<typename It>
+  template<typename It> __attribute__((__always_inline__))
   inline static matrix3<T> constexpr fromOde(It const *mat) {
     return matrix3<T>(static_cast<T>(mat[0]), static_cast<T>(mat[4]), static_cast<T>(mat[8]),
                       static_cast<T>(mat[1]), static_cast<T>(mat[5]), static_cast<T>(mat[9]),
@@ -209,7 +228,7 @@ public:
    * @param arr An array of elements for 3x3 matrix in row major order.
    * @return An instance of matrix3<T> representing @a arr
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline static matrix3<T> constexpr fromRowMajorArray(FromT const *arr) {
     return matrix3<T>(static_cast<T>(arr[0]), static_cast<T>(arr[3]), static_cast<T>(arr[6]),
                       static_cast<T>(arr[1]), static_cast<T>(arr[4]), static_cast<T>(arr[7]),
@@ -222,7 +241,7 @@ public:
    * @param arr An array of elements for 3x3 matrix in column major order.
    * @return An instance of matrix3<T> representing @a arr
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline static matrix3<T> constexpr fromColumnMajorArray(FromT const *arr) {
     return matrix3<T>(static_cast<T>(arr[0]), static_cast<T>(arr[1]), static_cast<T>(arr[2]),
                       static_cast<T>(arr[3]), static_cast<T>(arr[4]), static_cast<T>(arr[5]),
@@ -331,7 +350,7 @@ public:
    * Copy casting operator
    * @param rhs Right hand side argument of binary operator.
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline matrix3<T> constexpr &operator=(matrix3<FromT> const &rhs) {
     data[0] = static_cast<T>(rhs.data[0]);
     data[1] = static_cast<T>(rhs.data[1]);
@@ -350,18 +369,41 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   inline matrix3<T> constexpr &operator=(T const *rhs) __attribute__((__always_inline__)) {
+    /*
+    for(int i = 0; i != 9; ++i) {
+      data[i] = (T)rhs[i];
+    }
+    */
     std::memcpy(data.data(), rhs, sizeof(T) * 9);
     return *this;
   }
 
-  /*
-  inline matrix3<T> constexpr &operator=(T const *rhs) __attribute__((__always_inline__)) {
-    for(int i = 0; i != 9; ++i) {
-      data[i] = (T)rhs[i];
-    }
+  /**
+   * Move assignment operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline matrix3<T> constexpr &operator=(matrix3<T> &&rhs) __attribute__((__always_inline__)) {
+    data = std::move(rhs.data);
     return *this;
   }
-  */
+
+  /**
+   * Move assignment casting operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline matrix3<T> constexpr &operator=(matrix3<FromT> &&rhs) {
+    data[0] = static_cast<T>(std::move(rhs.data[0]));
+    data[1] = static_cast<T>(std::move(rhs.data[1]));
+    data[2] = static_cast<T>(std::move(rhs.data[2]));
+    data[3] = static_cast<T>(std::move(rhs.data[3]));
+    data[4] = static_cast<T>(std::move(rhs.data[4]));
+    data[5] = static_cast<T>(std::move(rhs.data[5]));
+    data[6] = static_cast<T>(std::move(rhs.data[6]));
+    data[7] = static_cast<T>(std::move(rhs.data[7]));
+    data[8] = static_cast<T>(std::move(rhs.data[8]));
+    return *this;
+  }
 
   //--------------------[ matrix with matrix operations ]---------------------
   /**

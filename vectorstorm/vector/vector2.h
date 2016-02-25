@@ -61,7 +61,8 @@ public:
    * Creates and sets to (0,0)
    */
   inline constexpr vector2() __attribute__((__always_inline__))
-    : x(0), y(0) {
+    : x(0),
+      y(0) {
   }
 
   /**
@@ -70,7 +71,8 @@ public:
    * @param ny initial y-coordinate value
    */
   inline constexpr vector2(T nx, T ny) __attribute__((__always_inline__))
-    : x(nx), y(ny) {
+    : x(nx),
+      y(ny) {
   }
 
   /**
@@ -78,16 +80,37 @@ public:
    * @param src Source of data for new created instance.
    */
   inline constexpr vector2(vector2<T> const &src) __attribute__((__always_inline__))
-    : x(src.x), y(src.y) {
+    : x(src.x),
+      y(src.y) {
   }
 
   /**
    * Copy casting constructor.
    * @param src Source of data for new created instance.
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline constexpr vector2(vector2<FromT> const &src)
-    : x(static_cast<T>(src.x)), y(static_cast<T>(src.y)) {
+    : x(static_cast<T>(src.x)),
+      y(static_cast<T>(src.y)) {
+  }
+
+  /**
+   * Move constructor.
+   * @param src Source of data for new created vector2 instance.
+   */
+  inline constexpr vector2(vector2<T> &&src) noexcept __attribute__((__always_inline__))
+    : x(std::move(src.x)),
+      y(std::move(src.y)) {
+  }
+
+  /**
+   * Move casting constructor.
+   * @param src Source of data for new created vector2 instance.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr vector2(vector2<FromT> &&src) noexcept
+    : x(static_cast<T>(std::move(src.x))),
+      y(static_cast<T>(std::move(src.y))) {
   }
 
   //----------------[ assignment ]-------------------------
@@ -106,7 +129,7 @@ public:
    * Copy casting operator
    * @param rhs Right hand side argument of binary operator.
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline vector2<T> constexpr &operator=(vector2<FromT> const &rhs) {
     x = static_cast<T>(rhs.x);
     y = static_cast<T>(rhs.y);
@@ -120,6 +143,27 @@ public:
   inline vector2<T> constexpr &operator=(vector2<T> const &rhs) __attribute__((__always_inline__)) {
     x = rhs.x;
     y = rhs.y;
+    return *this;
+  }
+
+  /**
+   * Move assignment operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline vector2<T> constexpr operator=(vector2<T> &&rhs) __attribute__((__always_inline__)) {
+    x = std::move(rhs.x);
+    y = std::move(rhs.y);
+    return *this;
+  }
+
+  /**
+   * Move assignment casting operator.
+   * @param rhs Right hand side argument of binary operator.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline vector2<T> constexpr operator=(vector2<FromT> &&rhs) {
+    x = static_cast<T>(std::move(rhs.x));
+    y = static_cast<T>(std::move(rhs.y));
     return *this;
   }
 
@@ -545,7 +589,7 @@ public:
    * @param line2start The start coordinates of the first line
    * @param line2end The end coordinates of the first line
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline bool constexpr get_line_intersection(vector2<FromT> const &line1start,
                                               vector2<FromT> const &line1end,
                                               vector2<FromT> const &line2start,
@@ -571,7 +615,7 @@ public:
    * @param line2start The start coordinates of the first line
    * @param line2end The end coordinates of the first line
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline static bool constexpr do_lines_intersect(vector2<FromT> const &line1start,
                                                   vector2<FromT> const &line1end,
                                                   vector2<FromT> const &line2start,

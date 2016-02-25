@@ -44,22 +44,42 @@ public:
    * quaternion constructor, sets quaternion to (0 + 0i + 0j + 0k).
    */
   inline constexpr quaternion() __attribute__((__always_inline__))
-    : w(0), v(0, 0, 0) {
+    : w(0),
+      v(0, 0, 0) {
   }
 
   /**
    * Copy constructor.
    */
   inline constexpr quaternion(quaternion<T> const &q) __attribute__((__always_inline__))
-    : w(q.w), v(q.v) {
+    : w(q.w),
+      v(q.v) {
   }
 
   /**
    * Copy casting constructor.
    */
-  template<typename FromT>
+  template<typename FromT>  __attribute__((__always_inline__))
   inline constexpr quaternion(quaternion<FromT> const &q)
-    : w(static_cast<T>(q.w)), v(q.v) {
+    : w(static_cast<T>(q.w)),
+      v(q.v) {
+  }
+
+  /**
+   * Move constructor.
+   */
+  inline constexpr quaternion(quaternion<T> &&q) __attribute__((__always_inline__))
+    : w(std::move(q.w)),
+      v(std::move(q.v)) {
+  }
+
+  /**
+   * Move casting constructor.
+   */
+  template<typename FromT>  __attribute__((__always_inline__))
+  inline constexpr quaternion(quaternion<FromT> &&q)
+    : w(static_cast<T>(std::move(q.w))),
+      v(std::move(q.v)) {
   }
 
   /**
@@ -68,7 +88,8 @@ public:
    * @param v_ Complex part of quaternion (xi + yj + zk).
    */
   inline constexpr quaternion(T w_, vector3<T> const &v_) __attribute__((__always_inline__))
-    : w(w_), v(v_) {
+    : w(w_),
+      v(v_) {
   }
 
   /**
@@ -184,10 +205,31 @@ public:
    * Copy convert operator
    * @param rhs Right hand side argument of binary operator.
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline quaternion<T> constexpr &operator=(quaternion<FromT> const &rhs) {
     v = rhs.v;
     w = static_cast<T>(rhs.w);
+    return *this;
+  }
+
+  /**
+   * Move assignment operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline quaternion<T> constexpr &operator=(quaternion<T> &&rhs) __attribute__((__always_inline__)) {
+    v = std::move(rhs.v);
+    w = std::move(rhs.w);
+    return *this;
+  }
+
+  /**
+   * Move assignment convert operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline quaternion<T> constexpr &operator=(quaternion<FromT> &&rhs) {
+    v = std::move(rhs.v);
+    w = static_cast<T>(std::move(rhs.w));
     return *this;
   }
 

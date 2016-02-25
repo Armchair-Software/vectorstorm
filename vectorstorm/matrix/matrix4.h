@@ -29,7 +29,7 @@ public:
   /**
    *Creates identity matrix
    */
-  inline constexpr matrix4()
+  inline constexpr matrix4() __attribute__((__always_inline__))
     : data{1, 0, 0, 0,
            0, 1, 0, 0,
            0, 0, 1, 0,
@@ -40,13 +40,13 @@ public:
    * Copy matrix values from array (these data must be in column
    * major order!)
    */
-  inline constexpr matrix4(T const *dt)
+  inline constexpr matrix4(T const *dt) __attribute__((__always_inline__))
     : data{dt[ 0], dt[ 1], dt[ 2], dt[ 3],
            dt[ 4], dt[ 5], dt[ 6], dt[ 7],
            dt[ 8], dt[ 9], dt[10], dt[11],
            dt[12], dt[13], dt[14], dt[15]} {
   }
-  inline constexpr matrix4(T *dt)
+  inline constexpr matrix4(T *dt) __attribute__((__always_inline__))
     : data{dt[ 0], dt[ 1], dt[ 2], dt[ 3],
            dt[ 4], dt[ 5], dt[ 6], dt[ 7],
            dt[ 8], dt[ 9], dt[10], dt[11],
@@ -57,7 +57,7 @@ public:
    * Copy constructor.
    * @param src Data source for new created instance of matrix4.
    */
-  inline constexpr matrix4(matrix4<T> const &src)
+  inline constexpr matrix4(matrix4<T> const &src) __attribute__((__always_inline__))
     : data{src.data[ 0], src.data[ 1], src.data[ 2], src.data[ 3],
            src.data[ 4], src.data[ 5], src.data[ 6], src.data[ 7],
            src.data[ 8], src.data[ 9], src.data[10], src.data[11],
@@ -68,12 +68,32 @@ public:
    * Copy casting constructor.
    * @param src Data source for new created instance of matrix4.
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline constexpr matrix4(matrix4<FromT> const &src)
     : data{static_cast<T>(src.data[ 0]), static_cast<T>(src.data[ 1]), static_cast<T>(src.data[ 2]), static_cast<T>(src.data[ 3]),
            static_cast<T>(src.data[ 4]), static_cast<T>(src.data[ 5]), static_cast<T>(src.data[ 6]), static_cast<T>(src.data[ 7]),
            static_cast<T>(src.data[ 8]), static_cast<T>(src.data[ 9]), static_cast<T>(src.data[10]), static_cast<T>(src.data[11]),
            static_cast<T>(src.data[12]), static_cast<T>(src.data[13]), static_cast<T>(src.data[14]), static_cast<T>(src.data[15])} {
+  }
+
+  /**
+   * Move constructor.
+   * @param src Data source for new created instance of matrix4.
+   */
+  inline constexpr matrix4(matrix4<T> &&src) __attribute__((__always_inline__))
+    : data(std::move(src.data)) {
+  }
+
+  /**
+   * Move casting constructor.
+   * @param src Data source for new created instance of matrix4.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr matrix4(matrix4<FromT> &&src)
+    : data{static_cast<T>(std::move(src.data[ 0])), static_cast<T>(std::move(src.data[ 1])), static_cast<T>(std::move(src.data[ 2])), static_cast<T>(std::move(src.data[ 3])),
+           static_cast<T>(std::move(src.data[ 4])), static_cast<T>(std::move(src.data[ 5])), static_cast<T>(std::move(src.data[ 6])), static_cast<T>(std::move(src.data[ 7])),
+           static_cast<T>(std::move(src.data[ 8])), static_cast<T>(std::move(src.data[ 9])), static_cast<T>(std::move(src.data[10])), static_cast<T>(std::move(src.data[11])),
+           static_cast<T>(std::move(src.data[12])), static_cast<T>(std::move(src.data[13])), static_cast<T>(std::move(src.data[14])), static_cast<T>(std::move(src.data[15]))} {
   }
 
   /**
@@ -84,11 +104,11 @@ public:
   //  : data(dt) __attribute__((__always_inline__)) {
   //}
   // see http://stackoverflow.com/a/5549918/1678468
-  template<class... FromT>
+  template<class... FromT> __attribute__((__always_inline__))
   inline constexpr matrix4(FromT... dt)
     : data{dt...} {
   }
-  //template<class... FromT>
+  //template<class... FromT>  __attribute__((__always_inline__))
   //inline constexpr matrix4(FromT&&... dt)
   //  : data{std::forward<FromT>(dt)...} {
   //}
@@ -231,64 +251,64 @@ public:
   }
 
   /**
-   * Creates new view matrix to look from specified position @a eyePos to specified position @a centerPos
-   * @param eyePos A position of camera
-   * @param centerPos A position where camera looks-at
-   * @param upDir Direction of up vector
+   * Creates new view matrix to look from specified position @a eye_pos to specified position @a centre_pos
+   * @param eye_pos A position of camera
+   * @param centre_pos A position where camera looks-at
+   * @param up_dir Direction of up vector
    * @return Resulting view matrix that looks from and at specific position.
    */
-  inline static matrix4<T> constexpr createLookAt(vector3<T> const &eyePos, vector3<T> const &centerPos, vector3<T> const &upDir) __attribute__((__always_inline__)) {
-    /*
-    vector3<T> forward = centerPos - eyePos;
+  inline static matrix4<T> constexpr createLookAt(vector3<T> const &eye_pos, vector3<T> const &centre_pos, vector3<T> const &up_dir) __attribute__((__always_inline__)) {
+    vector3<T> forward = centre_pos - eye_pos;
     forward.normalise();
 
     // Side = forward x up
-    vector3<T> side = forward.crossProduct(upDir);
+    vector3<T> side = forward.crossProduct(up_dir);
     side.normalise();
 
     // Recompute up as: up = side x forward
     vector3<T> const up = side.crossProduct(forward);
 
-    return matrix4<T>(side.x,
-                      up.x,
-                      -forward.x,
-                      0.0f,
+    return matrix4<T>(static_cast<T>(side.x),
+                      static_cast<T>(up.x),
+                      static_cast<T>(-forward.x),
+                      static_cast<T>(0),
 
-                      side.y,
-                      up.y,
-                      -forward.y,
-                      0.0f,
+                      static_cast<T>(side.y),
+                      static_cast<T>(up.y),
+                      static_cast<T>(-forward.y),
+                      static_cast<T>(0),
 
-                      side.z,
-                      up.z,
-                      -forward.z,
-                      0.0f,
+                      static_cast<T>(side.z),
+                      static_cast<T>(up.z),
+                      static_cast<T>(-forward.z),
+                      static_cast<T>(0),
 
-                      0.0f,
-                      0.0f,
-                      0.0f,
-                      1.0f) * matrix4<T>::createTranslation(-eyePos.x, -eyePos.y, -eyePos.z);
-    */
+                      static_cast<T>(0),
+                      static_cast<T>(0),
+                      static_cast<T>(0),
+                      static_cast<T>(1)) * matrix4<T>::createTranslation(-eye_pos.x, -eye_pos.y, -eye_pos.z);
     // constexpr-suitable return-only alternative, may turn out much slower when computed at runtime:
-    return matrix4<T>( (centerPos - eyePos).normalise_copy().crossProduct(upDir).normalise_copy().x,
-                       (centerPos - eyePos).normalise_copy().crossProduct(upDir).normalise_copy().crossProduct((centerPos - eyePos).normalise_copy()).x,
-                      -(centerPos - eyePos).normalise_copy().x,
+    /*
+    return matrix4<T>( (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().x,
+                       (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().crossProduct((centre_pos - eye_pos).normalise_copy()).x,
+                      -(centre_pos - eye_pos).normalise_copy().x,
                        static_cast<T>(0),
 
-                       (centerPos - eyePos).normalise_copy().crossProduct(upDir).normalise_copy().y,
-                       (centerPos - eyePos).normalise_copy().crossProduct(upDir).normalise_copy().crossProduct((centerPos - eyePos).normalise_copy()).y,
-                      -(centerPos - eyePos).normalise_copy().y,
+                       (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().y,
+                       (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().crossProduct((centre_pos - eye_pos).normalise_copy()).y,
+                      -(centre_pos - eye_pos).normalise_copy().y,
                        static_cast<T>(0),
 
-                       (centerPos - eyePos).normalise_copy().crossProduct(upDir).normalise_copy().z,
-                       (centerPos - eyePos).normalise_copy().crossProduct(upDir).normalise_copy().crossProduct((centerPos - eyePos).normalise_copy()).z,
-                      -(centerPos - eyePos).normalise_copy().z,
+                       (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().z,
+                       (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().crossProduct((centre_pos - eye_pos).normalise_copy()).z,
+                      -(centre_pos - eye_pos).normalise_copy().z,
                        static_cast<T>(0),
 
                        static_cast<T>(0),
                        static_cast<T>(0),
                        static_cast<T>(0),
-                       static_cast<T>(1)) * matrix4<T>::createTranslation(-eyePos.x, -eyePos.y, -eyePos.z);
+                       static_cast<T>(1)) * matrix4<T>::createTranslation(-eye_pos.x, -eye_pos.y, -eye_pos.z);
+    */
   }
 
   /**
@@ -384,7 +404,7 @@ public:
    * @param arr An array of elements for 4x4 matrix in row major order.
    * @return An instance of matrix4<T> representing @a arr
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline static matrix4<T> constexpr fromRowMajorArray(FromT const *arr) {
     return matrix4<T>(static_cast<T>(arr[0]), static_cast<T>(arr[4]), static_cast<T>(arr[8]),  static_cast<T>(arr[12]),
                       static_cast<T>(arr[1]), static_cast<T>(arr[5]), static_cast<T>(arr[9]),  static_cast<T>(arr[13]),
@@ -398,7 +418,7 @@ public:
    * @param arr An array of elements for 4x4 matrix in column major order.
    * @return An instance of matrix4<T> representing @a arr
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline static matrix4<T> constexpr fromColumnMajorArray(FromT const *arr) {
     return matrix4<T>(static_cast<T>(arr[0]),  static_cast<T>(arr[1]),  static_cast<T>(arr[2]),  static_cast<T>(arr[3]),
                       static_cast<T>(arr[4]),  static_cast<T>(arr[5]),  static_cast<T>(arr[6]),  static_cast<T>(arr[7]),
@@ -549,7 +569,8 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   inline matrix4<T> constexpr &operator=(matrix4<T> const &rhs) __attribute__((__always_inline__)) {
-    std::memcpy(data.data(), rhs.data.data(), sizeof(T) * 16);
+    //std::memcpy(data.data(), rhs.data.data(), sizeof(T) * 16);
+    data = rhs.data;
     return *this;
   }
 
@@ -557,7 +578,7 @@ public:
    * Copy casting operator
    * @param rhs Right hand side argument of binary operator.
    */
-  template<typename FromT>
+  template<typename FromT> __attribute__((__always_inline__))
   inline matrix4<T> constexpr &operator=(matrix4<FromT> const &rhs) {
     data[ 0] = static_cast<T>(rhs.data[ 0]);
     data[ 1] = static_cast<T>(rhs.data[ 1]);
@@ -583,18 +604,48 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   inline matrix4<T> constexpr &operator=(T const *rhs) __attribute__((__always_inline__)) {
+    /*
+    for(int i = 0; i != 16; ++i) {
+      data[i] = (T)rhs[i];
+    }
+    */
     std::memcpy(data.data(), rhs, sizeof(T) * 16);
     return *this;
   }
 
-  /*
-  inline matrix4<T> constexpr &operator=(T const *rhs) __attribute__((__always_inline__)) {
-    for(int i = 0; i != 16; ++i) {
-      data[i] = (T)rhs[i];
-    }
+  /**
+   * Move assignment operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline matrix4<T> constexpr &operator=(matrix4<T> &&rhs) __attribute__((__always_inline__)) {
+    data = std::move(rhs.data);
     return *this;
   }
-  */
+
+  /**
+   * Move assignment casting operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline matrix4<T> constexpr &operator=(matrix4<FromT> &&rhs) {
+    data[ 0] = static_cast<T>(std::move(rhs.data[ 0]));
+    data[ 1] = static_cast<T>(std::move(rhs.data[ 1]));
+    data[ 2] = static_cast<T>(std::move(rhs.data[ 2]));
+    data[ 3] = static_cast<T>(std::move(rhs.data[ 3]));
+    data[ 4] = static_cast<T>(std::move(rhs.data[ 4]));
+    data[ 5] = static_cast<T>(std::move(rhs.data[ 5]));
+    data[ 6] = static_cast<T>(std::move(rhs.data[ 6]));
+    data[ 7] = static_cast<T>(std::move(rhs.data[ 7]));
+    data[ 8] = static_cast<T>(std::move(rhs.data[ 8]));
+    data[ 9] = static_cast<T>(std::move(rhs.data[ 9]));
+    data[10] = static_cast<T>(std::move(rhs.data[10]));
+    data[11] = static_cast<T>(std::move(rhs.data[11]));
+    data[12] = static_cast<T>(std::move(rhs.data[12]));
+    data[13] = static_cast<T>(std::move(rhs.data[13]));
+    data[14] = static_cast<T>(std::move(rhs.data[14]));
+    data[15] = static_cast<T>(std::move(rhs.data[15]));
+    return *this;
+  }
 
   //--------------------[ matrix with matrix operations ]---------------------
   /**
