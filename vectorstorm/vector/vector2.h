@@ -635,21 +635,21 @@ public:
   /**
    * Gets a 3D vector equivalent populating the X and Y axes
    */
-  inline vector3<T> constexpr to_3D_XY() const __attribute__((__always_inline__)) {
-    return vector3<T>(x, y, 0);
-  }
   inline vector3<T> constexpr to_3d_xy() const __attribute__((__always_inline__)) {
     return vector3<T>(x, y, 0);
+  }
+  inline vector3<T> constexpr to_3D_XY() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
+    return to_3d_xy();
   }
 
   /**
    * Gets a 3D vector equivalent populating the X and Z axes
    */
-  inline vector3<T> constexpr to_3D_XZ() const __attribute__((__always_inline__)) {
-    return vector3<T>(x, 0, z);
-  }
   inline vector3<T> constexpr to_3d_xz() const __attribute__((__always_inline__)) {
     return vector3<T>(x, 0, z);
+  }
+  inline vector3<T> constexpr to_3D_XZ() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
+    return to_3d_xz();
   }
 };
 

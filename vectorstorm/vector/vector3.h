@@ -909,21 +909,21 @@ public:
   /**
    * Gets a 2D vector equivalent using the X and Y axes
    */
-  inline vector2<T> constexpr to_2D_XY() const __attribute__((__always_inline__)) {
-    return vector2<T>(x, y);
-  }
   inline vector2<T> constexpr to_2d_xy() const __attribute__((__always_inline__)) {
     return vector2<T>(x, y);
+  }
+  inline vector2<T> constexpr to_2D_XY() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
+    return to_2d_xy();
   }
 
   /**
    * Gets a 2D vector equivalent using the X and Z axes
    */
-  inline vector2<T> constexpr to_2D_XZ() const __attribute__((__always_inline__)) {
-    return vector2<T>(x, z);
-  }
   inline vector2<T> constexpr to_2d_xz() const __attribute__((__always_inline__)) {
     return vector2<T>(x, z);
+  }
+  inline vector2<T> constexpr to_2D_XZ() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
+    return to_2d_xz();
   }
 };
 
