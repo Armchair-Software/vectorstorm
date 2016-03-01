@@ -684,8 +684,11 @@ public:
    * of length of two vector can be used just this value, instead
    * of more expensive length() method.
    */
-  inline T constexpr lengthSq() const __attribute__((__always_inline__)) {
+  inline T constexpr length_sq() const __attribute__((__always_inline__)) {
     return x * x + y * y + z * z + w * w;
+  }
+  inline T constexpr lengthSq() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Use length_sq()"))) {
+    return length_sq();
   }
 
   /**
@@ -693,21 +696,21 @@ public:
    * @return length of vector
    */
   inline T constexpr length() const __attribute__((__always_inline__)) {
-    return static_cast<T>(std::sqrt(lengthSq()));
+    return static_cast<T>(std::sqrt(length_sq()));
   }
   /**
    * Get length of vector, fast approximation.
    * @return length of vector
    */
   inline T constexpr length_fast() const __attribute__((__always_inline__)) {
-    return static_cast<T>(sqrt_fast(lengthSq()));
+    return static_cast<T>(sqrt_fast(length_sq()));
   }
   /**
    * Get length of vector, rougher fast approximation.
    * @return length of vector
    */
   inline T constexpr length_faster() const __attribute__((__always_inline__)) {
-    return static_cast<T>(sqrt_faster(lengthSq()));
+    return static_cast<T>(sqrt_faster(length_sq()));
   }
 
   /**

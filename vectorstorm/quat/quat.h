@@ -373,21 +373,21 @@ public:
    * @return Length of quaternion.
    */
   inline T constexpr length() const __attribute__((__always_inline__)) {
-    return static_cast<T>(std::sqrt(lengthSq()));
+    return static_cast<T>(std::sqrt(length_sq()));
   }
   /**
    * Get length of quaternion, fast approximation.
    * @return Length of quaternion.
    */
   inline T constexpr length_fast() const __attribute__((__always_inline__)) {
-    return static_cast<T>(sqrt_fast(lengthSq()));
+    return static_cast<T>(sqrt_fast(length_sq()));
   }
   /**
    * Get length of quaternion, rougher fast approximation.
    * @return Length of quaternion.
    */
   inline T constexpr length_faster() const __attribute__((__always_inline__)) {
-    return static_cast<T>(sqrt_faster(lengthSq()));
+    return static_cast<T>(sqrt_faster(length_sq()));
   }
 
   /**
@@ -397,8 +397,11 @@ public:
    * of length of two quaternion can be used just this value, instead
    * of more expensive length() method.
    */
-  inline T constexpr lengthSq() const __attribute__((__always_inline__)) {
-    return w * w + v.lengthSq();
+  inline T constexpr length_sq() const __attribute__((__always_inline__)) {
+    return w * w + v.length_sq();
+  }
+  inline T constexpr lengthSq() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Use length_sq()"))) {
+    return length_sq();
   }
 
   /**
@@ -531,7 +534,7 @@ public:
    * @param axis The axis around which the rotation is
    */
   inline void constexpr toAngleAxis(T &angle, vector3<T> &axis) __attribute__((__always_inline__)) {
-    T const squareLength = v.lengthSq();
+    T const squareLength = v.length_sq();
     if(squareLength != 0) {
       angle = static_cast<T>(2.0) * std::acos(w);
       axis = v / std::pow(squareLength, static_cast<T>(0.5));
