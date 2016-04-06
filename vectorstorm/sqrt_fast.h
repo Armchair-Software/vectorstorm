@@ -5,7 +5,9 @@
 namespace VMATH_NAMESPACE {
 #endif
 
-inline static float constexpr sqrt_inv_fast(float number) __attribute__((__always_inline__));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+inline static float constexpr sqrt_inv_fast(float number) __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
 inline static float constexpr sqrt_inv_fast(float number) {
   /// Adapted from Quake III's fast inverse square root approximation
   float constexpr const threehalfs = 1.5f;
@@ -20,7 +22,7 @@ inline static float constexpr sqrt_inv_fast(float number) {
   y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
 }
-inline static double constexpr sqrt_inv_fast(double number) __attribute__((__always_inline__));
+inline static double constexpr sqrt_inv_fast(double number) __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
 inline static double constexpr sqrt_inv_fast(double number) {
   /// Similar to the Quake III fast inverse square root but for doubles
   double constexpr const threehalfs = 1.5;
@@ -36,6 +38,7 @@ inline static double constexpr sqrt_inv_fast(double number) {
   y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
 }
+#pragma GCC diagnostic pop
 template<typename T>
 inline static T constexpr sqrt_fast(T number) __attribute__((__always_inline__));
 template<typename T>
@@ -53,7 +56,9 @@ inline static int constexpr sqrt_fast(int number) {
   return static_cast<int>(sqrt_inv_fast(static_cast<float>(number)) * static_cast<float>(number));
 }
 
-inline static float constexpr sqrt_inv_faster(float number) __attribute__((__always_inline__));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+inline static float constexpr sqrt_inv_faster(float number) __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
 inline static float constexpr sqrt_inv_faster(float number) {
   /// Adapted from Quake III's fast inverse square root approximation - one iteration version
   float constexpr const threehalfs = 1.5f;
@@ -68,7 +73,7 @@ inline static float constexpr sqrt_inv_faster(float number) {
   //y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
 }
-inline static double constexpr sqrt_inv_faster(double number) __attribute__((__always_inline__));
+inline static double constexpr sqrt_inv_faster(double number) __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
 inline static double constexpr sqrt_inv_faster(double number) {
   /// Similar to the Quake III fast inverse square root but for doubles
   double constexpr const threehalfs = 1.5;
@@ -84,6 +89,7 @@ inline static double constexpr sqrt_inv_faster(double number) {
   //y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
 }
+#pragma GCC diagnostic pop
 template<typename T>
 inline static T constexpr sqrt_faster(T number) __attribute__((__always_inline__));
 template<typename T>
