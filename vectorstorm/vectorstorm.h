@@ -91,6 +91,7 @@
 #include "rad2deg.h"
 
 #include "sincos.h"
+#include "sigmoid.h"
 
 #include "sqrt_fast.h"
 

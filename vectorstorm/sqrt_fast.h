@@ -120,4 +120,8 @@ inline static float sqrt_sse(float number) {
   return sqrt_inv_sse(number) * number;
 }
 
+#ifdef VMATH_NAMESPACE
+}
+#endif
+
 #endif // VECTORSTORM_SQRT_FAST_H_INCLUDED

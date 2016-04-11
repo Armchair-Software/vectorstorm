@@ -21,4 +21,8 @@ inline static T constexpr const deg2rad(T const angle_deg) {
   #endif // VMATH_NO_BOOST
 }
 
+#ifdef VMATH_NAMESPACE
+}
+#endif
+
 #endif // VECTORSTORM_DEG2RAD_H_INCLUDED

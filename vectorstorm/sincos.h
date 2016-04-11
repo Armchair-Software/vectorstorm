@@ -1,6 +1,8 @@
 #ifndef VECTORSTORM_SINCOS_H_INCLUDED
 #define VECTORSTORM_SINCOS_H_INCLUDED
 
+#include "pi.h"
+
 #ifdef VMATH_NAMESPACE
 namespace VMATH_NAMESPACE {
 #endif
@@ -28,5 +30,9 @@ inline static void constexpr sincos_any(long double const angle_rad, long double
 inline static void constexpr sincos_any(long double const angle_rad, long double &out_sin, long double &out_cos) {
   __builtin_sincosl(angle_rad, &out_sin, &out_cos);
 }
+
+#ifdef VMATH_NAMESPACE
+}
+#endif
 
 #endif // VECTORSTORM_SINCOS_H_INCLUDED
