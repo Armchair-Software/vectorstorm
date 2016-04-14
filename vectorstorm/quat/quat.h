@@ -488,10 +488,13 @@ public:
    * @param z Rotation around z axis (in degrees).
    * @return quaternion object representing transformation.
    */
-  inline static quaternion<T> constexpr fromEulerAngles(T x, T y, T z) __attribute__((__always_inline__)) {
-    return quaternion<T>(fromAxisRot(vector3<T>(1, 0, 0), x) *
-                         fromAxisRot(vector3<T>(0, 1, 0), y) *
-                         fromAxisRot(vector3<T>(0, 0, 1), z));
+  inline static quaternion<T> constexpr from_euler_angles(T x, T y, T z) __attribute__((__always_inline__)) {
+    return quaternion<T>(from_axis_rot(vector3<T>(1, 0, 0), x) *
+                         from_axis_rot(vector3<T>(0, 1, 0), y) *
+                         from_axis_rot(vector3<T>(0, 0, 1), z));
+  }
+  inline static quaternion<T> constexpr fromEulerAngles(T x, T y, T z) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_euler_angles()"))) {
+    return from_euler_angles(x, y, z);
   }
 
   /**
@@ -501,10 +504,13 @@ public:
    * @param z Rotation around z axis (in radians).
    * @return quaternion object representing transformation.
    */
-  inline static quaternion<T> constexpr fromEulerAngles_rad(T x, T y, T z) __attribute__((__always_inline__)) {
-    return quaternion<T>(fromAxisRot_rad(vector3<T>(1, 0, 0), x) *
-                         fromAxisRot_rad(vector3<T>(0, 1, 0), y) *
-                         fromAxisRot_rad(vector3<T>(0, 0, 1), z));
+  inline static quaternion<T> constexpr from_euler_angles_rad(T x, T y, T z) __attribute__((__always_inline__)) {
+    return quaternion<T>(from_axis_rot_rad(vector3<T>(1, 0, 0), x) *
+                         from_axis_rot_rad(vector3<T>(0, 1, 0), y) *
+                         from_axis_rot_rad(vector3<T>(0, 0, 1), z));
+  }
+  inline static quaternion<T> constexpr fromEulerAngles_rad(T x, T y, T z) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_euler_angles_rad()"))) {
+    return from_euler_angles_rad(x, y, z);
   }
 
   /**
@@ -512,8 +518,11 @@ public:
    * @param axis Unit vector expressing axis of rotation.
    * @param angleDeg Angle of rotation around axis (in degrees).
    */
-  inline static quaternion<T> constexpr fromAxisRot(vector3<T> axis, T angleDeg) __attribute__((__always_inline__)) {
-    return fromAxisRot_rad(axis, deg2rad(angleDeg));
+  inline static quaternion<T> constexpr from_axis_rot(vector3<T> axis, T angleDeg) __attribute__((__always_inline__)) {
+    return from_axis_rot_rad(axis, deg2rad(angleDeg));
+  }
+  inline static quaternion<T> constexpr fromAxisRot(vector3<T> axis, T angleDeg) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_axis_rot()"))) {
+    return from_axis_rot(axis, angleDeg);
   }
 
   /**
@@ -521,11 +530,14 @@ public:
    * @param axis Unit vector expressing axis of rotation.
    * @param angleDeg Angle of rotation around axis (in radians).
    */
-  inline static quaternion<T> constexpr fromAxisRot_rad(vector3<T> axis, T angleRad) __attribute__((__always_inline__)) {
+  inline static quaternion<T> constexpr from_axis_rot_rad(vector3<T> axis, T angleRad) __attribute__((__always_inline__)) {
     T temp_sin = static_cast<T>(0);
     T temp_cos = static_cast<T>(0);
     sincos_any(angleRad / static_cast<T>(2.0), temp_sin, temp_cos);
     return quaternion<T>(temp_cos, axis * temp_sin);
+  }
+  inline static quaternion<T> constexpr fromAxisRot_rad(vector3<T> axis, T angleRad) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_axis_rot_rad()"))) {
+    return from_axis_rot_rad(axis, angleRad);
   }
 
   /**
@@ -533,7 +545,7 @@ public:
    * @param angle The angle of rotation
    * @param axis The axis around which the rotation is
    */
-  inline void constexpr toAngleAxis(T &angle, vector3<T> &axis) __attribute__((__always_inline__)) {
+  inline void constexpr to_angle_axis(T &angle, vector3<T> &axis) __attribute__((__always_inline__)) {
     T const squareLength = v.length_sq();
     if(squareLength != 0) {
       angle = static_cast<T>(2.0) * std::acos(w);
@@ -542,6 +554,9 @@ public:
       angle = static_cast<T>(0.0);
       axis.assign(static_cast<T>(1.0), static_cast<T>(0.0), static_cast<T>(0.0));
     }
+  }
+  inline void constexpr toAngleAxis(T &angle, vector3<T> &axis) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_angle_axis()"))) {
+    to_angle_axis(angle, axis);
   }
 
   /**
@@ -591,10 +606,13 @@ public:
   /**
    * Gets string representation.
    */
-  inline std::string constexpr toString() const __attribute__((__always_inline__)) {
+  inline std::string constexpr to_string() const __attribute__((__always_inline__)) {
     std::ostringstream oss;
     oss << *this;
     return oss.str();
+  }
+  inline std::string constexpr toString() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_string()"))) {
+    return to_string();
   }
 
   /**
@@ -604,7 +622,7 @@ public:
    * @return quaternion representing rotation of matrix m.
    */
   // 2011-07-02: Davide Bacchet: changed formula to fix degenerate cases
-  inline static quaternion<T> constexpr frommatrix(matrix4<T> const &m) __attribute__((__always_inline__)) {
+  inline static quaternion<T> constexpr from_matrix(matrix4<T> const &m) __attribute__((__always_inline__)) {
     quaternion<T> q;
 
     T const tr = m(1, 1) + m(2, 2) + m(3, 3);
@@ -644,6 +662,9 @@ public:
 
     return q;
   }
+  inline static quaternion<T> constexpr frommatrix(matrix4<T> const &m) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
+    return from_matrix(m);
+  }
 
   /**
    * Creates quaternion from rotation matrix.
@@ -651,9 +672,8 @@ public:
    * @param m Rotation matrix used to compute quaternion.
    * @return quaternion representing rotation of matrix m.
    */
-
   // 2011-07-02: Davide Bacchet: changed formula to fix degenerate cases
-  inline static quaternion<T> constexpr frommatrix(matrix3<T> const &m) __attribute__((__always_inline__)) {
+  inline static quaternion<T> constexpr from_matrix(matrix3<T> const &m) __attribute__((__always_inline__)) {
     quaternion<T> q;
 
     T const tr = m(1, 1) + m(2, 2) + m(3, 3);
@@ -690,8 +710,10 @@ public:
         q.v.z = static_cast<T>(0.25) * s;
       }
     }
-
     return q;
+  }
+  inline static quaternion<T> constexpr frommatrix(matrix3<T> const &m) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
+    return from_matrix(m);
   }
 
   /**
