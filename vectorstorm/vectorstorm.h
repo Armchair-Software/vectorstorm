@@ -79,14 +79,6 @@
  * </ul>
  */
 
-//#define _USE_MATH_DEFINES
-//#include <cmath>
-//#include <cstring>
-//#include <iostream>
-//#include <sstream>
-//#include <string>
-//#include <array>
-
 #include "deg2rad.h"
 #include "rad2deg.h"
 
