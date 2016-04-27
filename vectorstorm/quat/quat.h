@@ -113,9 +113,9 @@ public:
     T const trace = matrix.at(0, 0) + matrix.at(1, 1) + matrix.at(2, 2);
     if(trace > 0) {
       // |w| > 1/2, may as well choose w > 1/2
-      T root = std::sqrt(trace + static_cast<T>(1.0));  // 2w
+      T root = std::sqrt(trace + static_cast<T>(1.0));                          // 2w
       w = static_cast<T>(0.5) * root;
-      root = static_cast<T>(0.5) / root;  // 1/(4w)
+      root = static_cast<T>(0.5) / root;                                        // 1/(4w)
       v.x = (matrix.at(2, 1) - matrix.at(1, 2)) * root;
       v.y = (matrix.at(0, 2) - matrix.at(2, 0)) * root;
       v.z = (matrix.at(1, 0) - matrix.at(0, 1)) * root;
@@ -148,9 +148,9 @@ public:
     T const trace = matrix.at(0, 0) + matrix.at(1, 1) + matrix.at(2, 2);
     if(trace > 0) {
       // |w| > 1/2, may as well choose w > 1/2
-      T root = std::sqrt(trace + static_cast<T>(1.0));  // 2w
+      T root = std::sqrt(trace + static_cast<T>(1.0));                          // 2w
       w = static_cast<T>(0.5) * root;
-      root = static_cast<T>(0.5) / root;  // 1/(4w)
+      root = static_cast<T>(0.5) / root;                                        // 1/(4w)
       v.x = (matrix.at(2, 1) - matrix.at(1, 2)) * root;
       v.y = (matrix.at(0, 2) - matrix.at(2, 0)) * root;
       v.z = (matrix.at(1, 0) - matrix.at(0, 1)) * root;

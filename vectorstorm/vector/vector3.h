@@ -650,14 +650,14 @@ public:
    * Get length of vector, fast approximation.
    * @return length of vector
    */
-  inline T constexpr length_fast() const __attribute__((__always_inline__)) {
+  inline T constexpr length_fast() const __attribute__((__always_inline__)) __attribute__((__pure__)) {
     return static_cast<T>(sqrt_fast(length_sq()));
   }
   /**
    * Get length of vector, rougher fast approximation.
    * @return length of vector
    */
-  inline T constexpr length_faster() const __attribute__((__always_inline__)) {
+  inline T constexpr length_faster() const __attribute__((__always_inline__)) __attribute__((__pure__)) {
     return static_cast<T>(sqrt_faster(length_sq()));
   }
 
