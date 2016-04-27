@@ -33,12 +33,12 @@ public:
    * Copy matrix values from array (these data must be in column
    * major order!)
    */
-  inline constexpr matrix3(T const *dt) __attribute__((__always_inline__))
+  inline constexpr explicit matrix3(T const *dt) __attribute__((__always_inline__))
     : data{dt[0], dt[1], dt[2],
            dt[3], dt[4], dt[5],
            dt[6], dt[7], dt[8]} {
   }
-  inline constexpr matrix3(T *dt) __attribute__((__always_inline__))
+  inline constexpr explicit matrix3(T *dt) __attribute__((__always_inline__))
     : data{dt[0], dt[1], dt[2],
            dt[3], dt[4], dt[5],
            dt[6], dt[7], dt[8]} {
@@ -48,7 +48,7 @@ public:
    * Copy constructor.
    * @param src Data source for new created instance of matrix3
    */
-  inline constexpr matrix3(matrix3<T> const &src) __attribute__((__always_inline__))
+  inline constexpr explicit matrix3(matrix3<T> const &src) __attribute__((__always_inline__))
     : data{src.data[0], src.data[1], src.data[2],
            src.data[3], src.data[4], src.data[5],
            src.data[6], src.data[7], src.data[8]} {
@@ -59,7 +59,7 @@ public:
    * @param src Data source for new created instance of matrix3
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr matrix3(matrix3<FromT> const &src)
+  inline constexpr explicit matrix3(matrix3<FromT> const &src)
     : data{static_cast<T>(src.data[0]), static_cast<T>(src.data[1]), static_cast<T>(src.data[2]),
            static_cast<T>(src.data[3]), static_cast<T>(src.data[4]), static_cast<T>(src.data[5]),
            static_cast<T>(src.data[6]), static_cast<T>(src.data[7]), static_cast<T>(src.data[8])} {
@@ -93,7 +93,7 @@ public:
   //}
   // see http://stackoverflow.com/a/5549918/1678468
   template<class... FromT> __attribute__((__always_inline__))
-  inline constexpr matrix3(FromT... dt)
+  inline constexpr explicit matrix3(FromT... dt)
     : data{dt...} {
   }
 
@@ -531,7 +531,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline matrix3<T> constexpr operator*(matrix3<T> rhs) const __attribute__((__always_inline__)) {
+  inline matrix3<T> constexpr operator*(matrix3<T> const &rhs) const __attribute__((__always_inline__)) {
     return matrix3<T>(rhs.data[0] * data[0] + rhs.data[1] * data[3] + rhs.data[2] * data[6],
                       rhs.data[0] * data[1] + rhs.data[1] * data[4] + rhs.data[2] * data[7],
                       rhs.data[0] * data[2] + rhs.data[1] * data[5] + rhs.data[2] * data[8],
@@ -549,7 +549,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline matrix3<T> constexpr &operator*=(matrix3<T> rhs) __attribute__((__always_inline__)) {
+  inline matrix3<T> constexpr &operator*=(matrix3<T> const &rhs) __attribute__((__always_inline__)) {
     *this = *this * rhs;
     return *this;
   }

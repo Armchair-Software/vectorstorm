@@ -48,7 +48,7 @@ public:
    * @param point
    */
   template<typename SrcT>  __attribute__((__always_inline__))
-  inline constexpr aabb3(vector3<SrcT> const &point)
+  inline constexpr explicit aabb3(vector3<SrcT> const &point)
     : min(point),
       max(point) {
   }
@@ -97,7 +97,7 @@ public:
    * @param src Source bounding-box
    */
   template<typename SrcT>  __attribute__((__always_inline__))
-  inline constexpr aabb3(aabb3<SrcT> const &src)
+  inline constexpr explicit aabb3(aabb3<SrcT> const &src)
     : min(src.min),
       max(src.max) {
   }
@@ -107,7 +107,7 @@ public:
    * @param src Source bounding-box
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline constexpr aabb3(aabb3<SrcT> &&src)
+  inline constexpr explicit aabb3(aabb3<SrcT> &&src)
     : min(std::move(src.min)),
       max(std::move(src.max)) {
   }
@@ -328,7 +328,9 @@ public:
    *
    */
   inline vector3<T> constexpr point(unsigned int i) const __attribute__((__always_inline__)) {
-    return vector3<T>(i & 1 ? min.x : max.x, i & 2 ? min.y : max.y, i & 4 ? min.z : max.z);
+    return vector3<T>((i & 1) ? min.x : max.x,
+                      (i & 2) ? min.y : max.y,
+                      (i & 4) ? min.z : max.z);
   }
 
   /**

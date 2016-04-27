@@ -79,7 +79,7 @@ public:
    * Copy constructor.
    * @param src Source of data for new created instance.
    */
-  inline constexpr vector2(vector2<T> const &src) __attribute__((__always_inline__))
+  inline constexpr explicit vector2(vector2<T> const &src) __attribute__((__always_inline__))
     : x(src.x),
       y(src.y) {
   }
@@ -89,7 +89,7 @@ public:
    * @param src Source of data for new created instance.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr vector2(vector2<FromT> const &src)
+  inline constexpr explicit vector2(vector2<FromT> const &src)
     : x(static_cast<T>(src.x)),
       y(static_cast<T>(src.y)) {
   }
@@ -150,7 +150,7 @@ public:
    * Move assignment operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector2<T> constexpr operator=(vector2<T> &&rhs) __attribute__((__always_inline__)) {
+  inline vector2<T> constexpr &operator=(vector2<T> &&rhs) __attribute__((__always_inline__)) {
     x = std::move(rhs.x);
     y = std::move(rhs.y);
     return *this;
@@ -161,7 +161,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline vector2<T> constexpr operator=(vector2<FromT> &&rhs) {
+  inline vector2<T> constexpr &operator=(vector2<FromT> &&rhs) {
     x = static_cast<T>(std::move(rhs.x));
     y = static_cast<T>(std::move(rhs.y));
     return *this;

@@ -108,7 +108,7 @@ public:
    * Copy constructor.
    * @param src Source of data for new created vector4 instance.
    */
-  inline constexpr vector4(vector4<T> const &src) __attribute__((__always_inline__))
+  inline constexpr explicit vector4(vector4<T> const &src) __attribute__((__always_inline__))
     : x(src.x),
       y(src.y),
       z(src.z),
@@ -120,7 +120,7 @@ public:
    * @param src Source of data for new created vector4 instance.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr vector4(vector4<FromT> const &src)
+  inline constexpr explicit vector4(vector4<FromT> const &src)
     : x(static_cast<T>(src.x)),
       y(static_cast<T>(src.y)),
       z(static_cast<T>(src.z)),
@@ -185,7 +185,7 @@ public:
    * Copy operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector4<T> constexpr operator=(vector4<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector4<T> constexpr &operator=(vector4<T> const &rhs) __attribute__((__always_inline__)) {
     x = rhs.x;
     y = rhs.y;
     z = rhs.z;
@@ -198,7 +198,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline vector4<T> constexpr operator=(vector4<FromT> const &rhs) {
+  inline vector4<T> constexpr &operator=(vector4<FromT> const &rhs) {
     x = static_cast<T>(rhs.x);
     y = static_cast<T>(rhs.y);
     z = static_cast<T>(rhs.z);
@@ -210,7 +210,7 @@ public:
    * Copy operator to vector4 from vector3
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector4<T> constexpr operator=(vector3<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector4<T> constexpr &operator=(vector3<T> const &rhs) __attribute__((__always_inline__)) {
     x = rhs.x;
     y = rhs.y;
     z = rhs.z;
@@ -223,7 +223,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline vector4<T> constexpr operator=(vector3<FromT> const &rhs) {
+  inline vector4<T> constexpr &operator=(vector3<FromT> const &rhs) {
     x = static_cast<T>(rhs.x);
     y = static_cast<T>(rhs.y);
     z = static_cast<T>(rhs.z);
@@ -236,7 +236,7 @@ public:
    * Move assignment operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector4<T> constexpr operator=(vector4<T> &&rhs) __attribute__((__always_inline__)) {
+  inline vector4<T> constexpr &operator=(vector4<T> &&rhs) __attribute__((__always_inline__)) {
     x = std::move(rhs.x);
     y = std::move(rhs.y);
     z = std::move(rhs.z);
@@ -249,7 +249,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline vector4<T> constexpr operator=(vector4<FromT> &&rhs) {
+  inline vector4<T> constexpr &operator=(vector4<FromT> &&rhs) {
     x = static_cast<T>(std::move(rhs.x));
     y = static_cast<T>(std::move(rhs.y));
     z = static_cast<T>(std::move(rhs.z));
@@ -261,7 +261,7 @@ public:
    * Move assignment operator to vector4 from vector3
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector4<T> constexpr operator=(vector3<T> &&rhs) __attribute__((__always_inline__)) {
+  inline vector4<T> constexpr &operator=(vector3<T> &&rhs) __attribute__((__always_inline__)) {
     x = std::move(rhs.x);
     y = std::move(rhs.y);
     z = std::move(rhs.z);
@@ -274,7 +274,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline vector4<T> constexpr operator=(vector3<FromT> &&rhs) {
+  inline vector4<T> constexpr &operator=(vector3<FromT> &&rhs) {
     x = static_cast<T>(std::move(rhs.x));
     y = static_cast<T>(std::move(rhs.y));
     z = static_cast<T>(std::move(rhs.z));
@@ -539,7 +539,7 @@ public:
    * Multiplication by 3x3 matrix operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector4<T> constexpr &operator*=(matrix3<T> rhs) __attribute__((__always_inline__)) {
+  inline vector4<T> constexpr &operator*=(matrix3<T> const &rhs) __attribute__((__always_inline__)) {
     *this = rhs * *this;
     return *this;
   }
@@ -548,7 +548,7 @@ public:
    * Multiplication by 4x4 matrix operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector4<T> constexpr &operator*=(matrix4<T> rhs) __attribute__((__always_inline__)) {
+  inline vector4<T> constexpr &operator*=(matrix4<T> const &rhs) __attribute__((__always_inline__)) {
     *this = rhs * *this;
     return *this;
   }

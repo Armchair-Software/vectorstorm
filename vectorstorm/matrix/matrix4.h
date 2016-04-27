@@ -40,13 +40,13 @@ public:
    * Copy matrix values from array (these data must be in column
    * major order!)
    */
-  inline constexpr matrix4(T const *dt) __attribute__((__always_inline__))
+  inline constexpr explicit matrix4(T const *dt) __attribute__((__always_inline__))
     : data{dt[ 0], dt[ 1], dt[ 2], dt[ 3],
            dt[ 4], dt[ 5], dt[ 6], dt[ 7],
            dt[ 8], dt[ 9], dt[10], dt[11],
            dt[12], dt[13], dt[14], dt[15]} {
   }
-  inline constexpr matrix4(T *dt) __attribute__((__always_inline__))
+  inline constexpr explicit matrix4(T *dt) __attribute__((__always_inline__))
     : data{dt[ 0], dt[ 1], dt[ 2], dt[ 3],
            dt[ 4], dt[ 5], dt[ 6], dt[ 7],
            dt[ 8], dt[ 9], dt[10], dt[11],
@@ -57,7 +57,7 @@ public:
    * Copy constructor.
    * @param src Data source for new created instance of matrix4.
    */
-  inline constexpr matrix4(matrix4<T> const &src) __attribute__((__always_inline__))
+  inline constexpr explicit matrix4(matrix4<T> const &src) __attribute__((__always_inline__))
     : data{src.data[ 0], src.data[ 1], src.data[ 2], src.data[ 3],
            src.data[ 4], src.data[ 5], src.data[ 6], src.data[ 7],
            src.data[ 8], src.data[ 9], src.data[10], src.data[11],
@@ -69,7 +69,7 @@ public:
    * @param src Data source for new created instance of matrix4.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr matrix4(matrix4<FromT> const &src)
+  inline constexpr explicit matrix4(matrix4<FromT> const &src)
     : data{static_cast<T>(src.data[ 0]), static_cast<T>(src.data[ 1]), static_cast<T>(src.data[ 2]), static_cast<T>(src.data[ 3]),
            static_cast<T>(src.data[ 4]), static_cast<T>(src.data[ 5]), static_cast<T>(src.data[ 6]), static_cast<T>(src.data[ 7]),
            static_cast<T>(src.data[ 8]), static_cast<T>(src.data[ 9]), static_cast<T>(src.data[10]), static_cast<T>(src.data[11]),
@@ -100,16 +100,16 @@ public:
    * Variadic initialisation constructor
    * @param dt Initialiser list containing raw data for each element in order.
    */
-  //inline constexpr matrix4(std::initializer_list<T> dt)
+  //inline constexpr explicit matrix4(std::initializer_list<T> dt)
   //  : data(dt) __attribute__((__always_inline__)) {
   //}
   // see http://stackoverflow.com/a/5549918/1678468
   template<class... FromT> __attribute__((__always_inline__))
-  inline constexpr matrix4(FromT... dt)
+  inline constexpr explicit matrix4(FromT... dt)
     : data{dt...} {
   }
   //template<class... FromT>  __attribute__((__always_inline__))
-  //inline constexpr matrix4(FromT&&... dt)
+  //inline constexpr explicit matrix4(FromT&&... dt)
   //  : data{std::forward<FromT>(dt)...} {
   //}
 
@@ -777,7 +777,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline matrix4<T> constexpr operator*(matrix4<T> rhs) const __attribute__((__always_inline__)) {
+  inline matrix4<T> constexpr operator*(matrix4<T> const &rhs) const __attribute__((__always_inline__)) {
     return matrix4<T>(rhs.data[ 0] * data[ 0] + rhs.data[ 1] * data[ 4] + rhs.data[ 2] * data[ 8] + rhs.data[ 3] * data[12],
                       rhs.data[ 0] * data[ 1] + rhs.data[ 1] * data[ 5] + rhs.data[ 2] * data[ 9] + rhs.data[ 3] * data[13],
                       rhs.data[ 0] * data[ 2] + rhs.data[ 1] * data[ 6] + rhs.data[ 2] * data[10] + rhs.data[ 3] * data[14],
@@ -803,7 +803,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline matrix4<T> constexpr &operator*=(matrix4<T> rhs) __attribute__((__always_inline__)) {
+  inline matrix4<T> constexpr &operator*=(matrix4<T> const &rhs) __attribute__((__always_inline__)) {
     *this = *this * rhs;
     return *this;
   }

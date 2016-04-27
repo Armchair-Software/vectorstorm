@@ -51,7 +51,7 @@ public:
   /**
    * Copy constructor.
    */
-  inline constexpr quaternion(quaternion<T> const &q) __attribute__((__always_inline__))
+  inline constexpr explicit quaternion(quaternion<T> const &q) __attribute__((__always_inline__))
     : w(q.w),
       v(q.v) {
   }
@@ -60,7 +60,7 @@ public:
    * Copy casting constructor.
    */
   template<typename FromT>  __attribute__((__always_inline__))
-  inline constexpr quaternion(quaternion<FromT> const &q)
+  inline constexpr explicit quaternion(quaternion<FromT> const &q)
     : w(static_cast<T>(q.w)),
       v(q.v) {
   }
@@ -107,7 +107,7 @@ public:
    * Construct quaternion from rotation matrix.
    * @return Rotation matrix expressing this quaternion.
    */
-  inline constexpr quaternion(matrix3<T> const &matrix) __attribute__((__always_inline__)) {
+  inline constexpr explicit quaternion(matrix3<T> const &matrix) __attribute__((__always_inline__)) {
     // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
     // article "quaternion Calculus and Fast Animation".
     T const trace = matrix.at(0, 0) + matrix.at(1, 1) + matrix.at(2, 2);
@@ -142,7 +142,7 @@ public:
       *q[k] = (matrix.at(k, i) + matrix.at(i, k)) * root;
     }
   }
-  inline constexpr quaternion(matrix4<T> const &matrix) __attribute__((__always_inline__)) {
+  inline constexpr explicit quaternion(matrix4<T> const &matrix) __attribute__((__always_inline__)) {
     // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
     // article "quaternion Calculus and Fast Animation".
     T const trace = matrix.at(0, 0) + matrix.at(1, 1) + matrix.at(2, 2);
@@ -518,10 +518,10 @@ public:
    * @param axis Unit vector expressing axis of rotation.
    * @param angleDeg Angle of rotation around axis (in degrees).
    */
-  inline static quaternion<T> constexpr from_axis_rot(vector3<T> axis, T angleDeg) __attribute__((__always_inline__)) {
+  inline static quaternion<T> constexpr from_axis_rot(vector3<T> const &axis, T angleDeg) __attribute__((__always_inline__)) {
     return from_axis_rot_rad(axis, deg2rad(angleDeg));
   }
-  inline static quaternion<T> constexpr fromAxisRot(vector3<T> axis, T angleDeg) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_axis_rot()"))) {
+  inline static quaternion<T> constexpr fromAxisRot(vector3<T> const &axis, T angleDeg) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_axis_rot()"))) {
     return from_axis_rot(axis, angleDeg);
   }
 
@@ -530,13 +530,13 @@ public:
    * @param axis Unit vector expressing axis of rotation.
    * @param angleDeg Angle of rotation around axis (in radians).
    */
-  inline static quaternion<T> constexpr from_axis_rot_rad(vector3<T> axis, T angleRad) __attribute__((__always_inline__)) {
+  inline static quaternion<T> constexpr from_axis_rot_rad(vector3<T> const &axis, T angleRad) __attribute__((__always_inline__)) {
     T temp_sin = static_cast<T>(0);
     T temp_cos = static_cast<T>(0);
     sincos_any(angleRad / static_cast<T>(2.0), temp_sin, temp_cos);
     return quaternion<T>(temp_cos, axis * temp_sin);
   }
-  inline static quaternion<T> constexpr fromAxisRot_rad(vector3<T> axis, T angleRad) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_axis_rot_rad()"))) {
+  inline static quaternion<T> constexpr fromAxisRot_rad(vector3<T> const &axis, T angleRad) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_axis_rot_rad()"))) {
     return from_axis_rot_rad(axis, angleRad);
   }
 
