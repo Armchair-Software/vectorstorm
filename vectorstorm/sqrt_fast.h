@@ -1,6 +1,8 @@
 #ifndef VECTORSTORM_SQRT_FAST_H_INCLUDED
 #define VECTORSTORM_SQRT_FAST_H_INCLUDED
 
+#include <xmmintrin.h>
+
 #ifdef VMATH_NAMESPACE
 namespace VMATH_NAMESPACE {
 #endif
