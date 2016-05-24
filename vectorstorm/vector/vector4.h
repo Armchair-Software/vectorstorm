@@ -1,6 +1,8 @@
 #ifndef VECTORSTORM_VECTOR4_H_INCLUDED
 #define VECTORSTORM_VECTOR4_H_INCLUDED
 
+#include <cmath>
+#include <sstream>
 #include "vectorstorm/epsilon.h"
 #include "vector2_forward.h"
 #include "vector3_forward.h"
