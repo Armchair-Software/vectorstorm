@@ -662,7 +662,7 @@ public:
 
     return q;
   }
-  inline static quaternion<T> constexpr frommatrix(matrix4<T> const &m) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
+  inline static quaternion<T> constexpr fromMatrix(matrix4<T> const &m) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
     return from_matrix(m);
   }
 
@@ -712,7 +712,7 @@ public:
     }
     return q;
   }
-  inline static quaternion<T> constexpr frommatrix(matrix3<T> const &m) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
+  inline static quaternion<T> constexpr fromMatrix(matrix3<T> const &m) __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
     return from_matrix(m);
   }
 
