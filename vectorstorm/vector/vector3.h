@@ -91,7 +91,7 @@ public:
   /**
    * Creates and sets to (0,0,0)
    */
-  inline constexpr vector3() __attribute__((__always_inline__))
+  inline constexpr vector3() noexcept __attribute__((__always_inline__))
     : x(0),
       y(0),
       z(0) {
@@ -103,7 +103,7 @@ public:
    * @param ny initial y-coordinate value
    * @param nz initial z-coordinate value
    */
-  inline constexpr vector3(T nx, T ny, T nz) __attribute__((__always_inline__))
+  inline constexpr vector3(T nx, T ny, T nz) noexcept __attribute__((__always_inline__))
     : x(nx),
       y(ny),
       z(nz) {
@@ -113,7 +113,7 @@ public:
    * Copy constructor.
    * @param src Source of data for new created vector3 instance.
    */
-  inline constexpr explicit vector3(vector3<T> const &src) __attribute__((__always_inline__))
+  inline constexpr explicit vector3(vector3<T> const &src) noexcept __attribute__((__always_inline__))
     : x(src.x),
       y(src.y),
       z(src.z) {
@@ -124,20 +124,20 @@ public:
    * @param src Source of data for new created vector3 instance.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr explicit vector3(vector3<FromT> const &src)
+  inline constexpr explicit vector3(vector3<FromT> const &src) noexcept
     : x(static_cast<T>(src.x)),
       y(static_cast<T>(src.y)),
       z(static_cast<T>(src.z)) {
   }
 
-  inline constexpr vector3(vector2<T> const &src, T new_z) __attribute__((__always_inline__))
+  inline constexpr vector3(vector2<T> const &src, T new_z) noexcept __attribute__((__always_inline__))
     : x(src.x),
       y(src.y),
       z(new_z) {
   }
 
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr vector3(vector2<FromT> const &src, FromT new_z)
+  inline constexpr vector3(vector2<FromT> const &src, FromT new_z) noexcept
     : x(static_cast<T>(src.x)),
       y(static_cast<T>(src.y)), z(static_cast<T>(new_z)) {
   }
@@ -183,7 +183,7 @@ public:
    * @param ny initial y-coordinate value
    * @param nz initial z-coordinate value
    */
-  inline void constexpr assign(T nx = 0, T ny = 0, T nz = 0) __attribute__((__always_inline__)) {
+  inline void constexpr assign(T nx = 0, T ny = 0, T nz = 0) noexcept __attribute__((__always_inline__)) {
     x = nx;
     y = ny;
     z = nz;
@@ -194,7 +194,7 @@ public:
    * Copy operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator=(vector3<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator=(vector3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     x = rhs.x;
     y = rhs.y;
     z = rhs.z;
@@ -206,7 +206,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline vector3<T> constexpr &operator=(vector3<FromT> const &rhs) {
+  inline vector3<T> constexpr &operator=(vector3<FromT> const &rhs) noexcept {
     x = static_cast<T>(rhs.x);
     y = static_cast<T>(rhs.y);
     z = static_cast<T>(rhs.z);
@@ -217,7 +217,7 @@ public:
    * Copy operator to vector3 from vector4
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator=(vector4<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator=(vector4<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     x = rhs.x;
     y = rhs.y;
     z = rhs.z;
@@ -229,7 +229,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline vector3<T> constexpr &operator=(vector4<FromT> const &rhs) {
+  inline vector3<T> constexpr &operator=(vector4<FromT> const &rhs) noexcept {
     x = static_cast<T>(rhs.x);
     y = static_cast<T>(rhs.y);
     z = static_cast<T>(rhs.z);
@@ -240,7 +240,7 @@ public:
    * Move assignment operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator=(vector3<T> &&rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator=(vector3<T> &&rhs) noexcept __attribute__((__always_inline__)) {
     x = std::move(rhs.x);
     y = std::move(rhs.y);
     z = std::move(rhs.z);
@@ -252,7 +252,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline vector3<T> constexpr &operator=(vector3<FromT> &&rhs) {
+  inline vector3<T> constexpr &operator=(vector3<FromT> &&rhs) noexcept {
     x = static_cast<T>(std::move(rhs.x));
     y = static_cast<T>(std::move(rhs.y));
     z = static_cast<T>(std::move(rhs.z));
@@ -263,7 +263,7 @@ public:
    * Move assignment operator to vector3 from vector4
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator=(vector4<T> &&rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator=(vector4<T> &&rhs) noexcept __attribute__((__always_inline__)) {
     x = std::move(rhs.x);
     y = std::move(rhs.y);
     z = std::move(rhs.z);
@@ -275,7 +275,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline vector3<T> constexpr &operator=(vector4<FromT> &&rhs) {
+  inline vector3<T> constexpr &operator=(vector4<FromT> &&rhs) noexcept {
     x = static_cast<T>(std::move(rhs.x));
     y = static_cast<T>(std::move(rhs.y));
     z = static_cast<T>(std::move(rhs.z));
@@ -289,7 +289,7 @@ public:
    * reference to y, else reference to z
    * y coordinate.
    */
-  inline T constexpr &operator[](int n) __attribute__((__always_inline__)) {
+  inline T constexpr &operator[](int n) noexcept __attribute__((__always_inline__)) {
     return n == 0 ? x : (n == 1 ? y : z);
   }
 
@@ -300,7 +300,7 @@ public:
    * reference to y, else reference to z
    * y coordinate.
    */
-  inline T constexpr const &operator[](int n) const __attribute__((__always_inline__)) {
+  inline T constexpr const &operator[](int n) const noexcept __attribute__((__always_inline__)) {
     return n == 0 ? x : (n == 1 ? y : z);
   }
 
@@ -309,7 +309,7 @@ public:
    * Addition operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator+(vector3<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator+(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x + rhs.x, y + rhs.y, z + rhs.z);
   }
 
@@ -317,7 +317,7 @@ public:
    * Subtraction operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator-(vector3<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator-(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x - rhs.x, y - rhs.y, z - rhs.z);
   }
 
@@ -325,7 +325,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator*(vector3<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator*(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x * rhs.x, y * rhs.y, z * rhs.z);
   }
 
@@ -333,7 +333,7 @@ public:
    * Division operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator/(vector3<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator/(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x / rhs.x, y / rhs.y, z / rhs.z);
   }
 
@@ -341,7 +341,7 @@ public:
    * Addition operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator+=(vector3<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator+=(vector3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     x += rhs.x;
     y += rhs.y;
     z += rhs.z;
@@ -352,7 +352,7 @@ public:
    * Subtraction operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator-=(vector3<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator-=(vector3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     x -= rhs.x;
     y -= rhs.y;
     z -= rhs.z;
@@ -363,7 +363,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator*=(vector3<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator*=(vector3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     x *= rhs.x;
     y *= rhs.y;
     z *= rhs.z;
@@ -374,7 +374,7 @@ public:
    * Division operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator/=(vector3<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator/=(vector3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     x /= rhs.x;
     y /= rhs.y;
     z /= rhs.z;
@@ -385,7 +385,7 @@ public:
    * Addition operator with a 2-vector
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator+(vector2<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator+(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x + rhs.x, y + rhs.y, z);
   }
 
@@ -393,7 +393,7 @@ public:
    * Subtraction operator with a 2-vector
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator-(vector2<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator-(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x - rhs.x, y - rhs.y, z);
   }
 
@@ -401,7 +401,7 @@ public:
    * Multiplication operator with a 2-vector
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator*(vector2<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator*(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x * rhs.x, y * rhs.y, z);
   }
 
@@ -409,7 +409,7 @@ public:
    * Division operator with a 2-vector
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator/(vector2<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator/(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x / rhs.x, y / rhs.y, z);
   }
 
@@ -417,7 +417,7 @@ public:
    * Addition operator with a 2-vector
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator+=(vector2<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator+=(vector2<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     x += rhs.x;
     y += rhs.y;
     return *this;
@@ -427,7 +427,7 @@ public:
    * Subtraction operator with a 2-vector
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator-=(vector2<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator-=(vector2<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     x -= rhs.x;
     y -= rhs.y;
     return *this;
@@ -437,7 +437,7 @@ public:
    * Multiplication operator with a 2-vector
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator*=(vector2<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator*=(vector2<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     x *= rhs.x;
     y *= rhs.y;
     return *this;
@@ -447,7 +447,7 @@ public:
    * Division operator with a 2-vector
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator/=(vector2<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator/=(vector2<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     x /= rhs.x;
     y /= rhs.y;
     return *this;
@@ -457,7 +457,7 @@ public:
    * Dot product of two vectors.
    * @param rhs Right hand side argument of binary operator.
    */
-  inline T constexpr dotProduct(vector3<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline T constexpr dotProduct(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return x * rhs.x + y * rhs.y + z * rhs.z;
   }
 
@@ -465,7 +465,7 @@ public:
    * Cross product of two vectors
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr crossProduct(vector3<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr crossProduct(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(y * rhs.z - rhs.y * z, z * rhs.x - rhs.z * x, x * rhs.y - rhs.x * y);
   }
 
@@ -475,7 +475,7 @@ public:
    * Multiplication by quaternion operator (rotation by quaternion)
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator*(quaternion<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator*(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return *this + (rhs.v.crossProduct(*this) * static_cast<T>(2) * rhs.w) + rhs.v.crossProduct(rhs.v.crossProduct(*this) * static_cast<T>(2));
   }
 
@@ -483,7 +483,7 @@ public:
    * Multiplication by quaternion operator (rotation by quaternion)
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator*=(quaternion<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator*=(quaternion<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     vector3<T> const temp = rhs.v.crossProduct(*this) * static_cast<T>(2);
     *this += (temp * rhs.w) + rhs.v.crossProduct(temp);
     return *this;
@@ -494,7 +494,7 @@ public:
    * Addition operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator+(T rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator+(T rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x + rhs, y + rhs, z + rhs);
   }
 
@@ -502,7 +502,7 @@ public:
    * Subtraction operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator-(T rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator-(T rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x - rhs, y - rhs, z - rhs);
   }
 
@@ -510,7 +510,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator*(T rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator*(T rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x * rhs, y * rhs, z * rhs);
   }
 
@@ -518,7 +518,7 @@ public:
    * Division operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr operator/(T rhs) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator/(T rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x / rhs, y / rhs, z / rhs);
   }
 
@@ -526,7 +526,7 @@ public:
    * Addition operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator+=(T rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator+=(T rhs) noexcept __attribute__((__always_inline__)) {
     x += rhs;
     y += rhs;
     z += rhs;
@@ -537,7 +537,7 @@ public:
    * Subtraction operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator-=(T rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator-=(T rhs) noexcept __attribute__((__always_inline__)) {
     x -= rhs;
     y -= rhs;
     z -= rhs;
@@ -548,7 +548,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator*=(T rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator*=(T rhs) noexcept __attribute__((__always_inline__)) {
     x *= rhs;
     y *= rhs;
     z *= rhs;
@@ -559,7 +559,7 @@ public:
    * Division operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator/=(T rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator/=(T rhs) noexcept __attribute__((__always_inline__)) {
     x /= rhs;
     y /= rhs;
     z /= rhs;
@@ -572,7 +572,7 @@ public:
    * Multiplication by 3x3 matrix operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator*=(matrix3<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator*=(matrix3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     *this = rhs * *this;
     return *this;
   }
@@ -581,7 +581,7 @@ public:
    * Multiplication by 4x4 matrix operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr &operator*=(matrix4<T> const &rhs) __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr &operator*=(matrix4<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     *this = rhs * *this;
     return *this;
   }
@@ -594,7 +594,7 @@ public:
    * values equal, must satisfy this condition | lhs.x - rhs.y | < epsilon,
    * same for y-coordinate, and z-coordinate.
    */
-  inline bool constexpr operator==(vector3<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline bool constexpr operator==(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     #ifdef VMATH_SOFT_COMPARE
       return std::abs(x - rhs.x) < static_cast<T>(epsilon) &&
              std::abs(y - rhs.y) < static_cast<T>(epsilon) &&
@@ -611,7 +611,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    * @return not (lhs == rhs) :-P
    */
-  inline bool constexpr operator!=(vector3<T> const &rhs) const __attribute__((__always_inline__)) {
+  inline bool constexpr operator!=(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return !(*this == rhs);
   }
 
@@ -620,7 +620,7 @@ public:
    * Unary negate operator
    * @return negated vector
    */
-  inline vector3<T> constexpr operator-() const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr operator-() const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(-x, -y, -z);
   }
 
@@ -632,10 +632,10 @@ public:
    * of length of two vector can be used just this value, instead
    * of more expensive length() method.
    */
-  inline T constexpr length_sq() const __attribute__((__always_inline__)) {
+  inline T constexpr length_sq() const noexcept __attribute__((__always_inline__)) {
     return x * x + y * y + z * z;
   }
-  inline T constexpr lengthSq() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Use length_sq()"))) {
+  inline T constexpr lengthSq() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use length_sq()"))) {
     return length_sq();
   }
 
@@ -643,79 +643,79 @@ public:
    * Get length of vector.
    * @return length of vector
    */
-  inline T constexpr length() const __attribute__((__always_inline__)) {
+  inline T constexpr length() const noexcept __attribute__((__always_inline__)) {
     return static_cast<T>(std::sqrt(length_sq()));
   }
   /**
    * Get length of vector, fast approximation.
    * @return length of vector
    */
-  inline T constexpr length_fast() const __attribute__((__always_inline__)) __attribute__((__pure__)) {
+  inline T constexpr length_fast() const noexcept __attribute__((__always_inline__)) __attribute__((__pure__)) {
     return static_cast<T>(sqrt_fast(length_sq()));
   }
   /**
    * Get length of vector, rougher fast approximation.
    * @return length of vector
    */
-  inline T constexpr length_faster() const __attribute__((__always_inline__)) __attribute__((__pure__)) {
+  inline T constexpr length_faster() const noexcept __attribute__((__always_inline__)) __attribute__((__pure__)) {
     return static_cast<T>(sqrt_faster(length_sq()));
   }
 
   /**
    * normalise vector
    */
-  inline void constexpr normalise() __attribute__((__always_inline__)) {
+  inline void constexpr normalise() noexcept __attribute__((__always_inline__)) {
     T const temp = length();
     x /= temp;
     y /= temp;
     z /= temp;
   }
-  inline void constexpr normalise_fast() __attribute__((__always_inline__)) {
+  inline void constexpr normalise_fast() noexcept __attribute__((__always_inline__)) {
     T const temp = length_fast();
     x /= temp;
     y /= temp;
     z /= temp;
   }
-  inline void constexpr normalise_faster() __attribute__((__always_inline__)) {
+  inline void constexpr normalise_faster() noexcept __attribute__((__always_inline__)) {
     T const temp = length_faster();
     x /= temp;
     y /= temp;
     z /= temp;
   }
-  inline void constexpr normalize() __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  inline void constexpr normalize() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
     normalise();
   }
-  inline void constexpr normalize_fast() __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  inline void constexpr normalize_fast() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
     normalise_fast();
   }
-  inline void constexpr normalize_faster() __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  inline void constexpr normalize_faster() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
     normalise_faster();
   }
-  inline vector3<T> constexpr normalise_copy() const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr normalise_copy() const noexcept __attribute__((__always_inline__)) {
     T const temp(length());
     return vector3<T>(x / temp, y / temp, z / temp);
   }
-  inline vector3<T> constexpr normalise_copy_fast() const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr normalise_copy_fast() const noexcept __attribute__((__always_inline__)) {
     T const temp(length_fast());
     return vector3<T>(x / temp, y / temp, z / temp);
   }
-  inline vector3<T> constexpr normalise_copy_faster() const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr normalise_copy_faster() const noexcept __attribute__((__always_inline__)) {
     T const temp(length_faster());
     return vector3<T>(x / temp, y / temp, z / temp);
   }
-  inline vector3<T> constexpr normalize_copy() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  inline vector3<T> constexpr normalize_copy() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
     return normalise_copy();
   }
-  inline vector3<T> constexpr normalize_copy_fast() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  inline vector3<T> constexpr normalize_copy_fast() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
     return normalise_copy_fast();
   }
-  inline vector3<T> constexpr normalize_copy_faster() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  inline vector3<T> constexpr normalize_copy_faster() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
     return normalise_copy_faster();
   }
   /**
    * normalise vector. with added zero safety check
    */
-  inline void constexpr normalise_safe() __attribute__((__always_inline__)) {
+  inline void constexpr normalise_safe() noexcept __attribute__((__always_inline__)) {
     T const temp = length();
     if(temp == static_cast<T>(0)) {
       x = static_cast<T>(0);
@@ -727,10 +727,10 @@ public:
       z /= temp;
     }
   }
-  inline void constexpr normalize_safe() __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  inline void constexpr normalize_safe() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
     normalise_safe();
   }
-  inline vector3<T> constexpr normalise_safe_copy() const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr normalise_safe_copy() const noexcept __attribute__((__always_inline__)) {
     T const temp(length());
     if(temp == static_cast<T>(0)) {
       return vector3<T>();
@@ -738,19 +738,19 @@ public:
       return vector3<T>(x / temp, y / temp, z / temp);
     }
   }
-  inline vector3<T> constexpr normalize_safe_copy() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  inline vector3<T> constexpr normalize_safe_copy() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
     return normalise_safe_copy();
   }
 
   /**
    * Absolute vector (make all values positive)
    */
-  inline void constexpr abs() __attribute__((__always_inline__)) {
+  inline void constexpr abs() noexcept __attribute__((__always_inline__)) {
     x = std::abs(x);
     y = std::abs(y);
     z = std::abs(z);
   }
-  inline vector3<T> constexpr abs_copy() const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr abs_copy() const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(std::abs(x), std::abs(y), std::abs(z));
   }
 
@@ -761,7 +761,7 @@ public:
    * @param ay Angle (in degrees) to be rotated around Y-axis.
    * @param az Angle (in degrees) to be rotated around Z-axis.
    */
-  inline void constexpr rotate(T ax, T ay, T az) __attribute__((__always_inline__)) {
+  inline void constexpr rotate(T ax, T ay, T az) noexcept __attribute__((__always_inline__)) {
     rotate_rad(deg2rad(ax), deg2rad(ay), deg2rad(az));
   }
   /**
@@ -770,7 +770,7 @@ public:
    * @param ay Angle (in radians) to be rotated around Y-axis.
    * @param az Angle (in radians) to be rotated around Z-axis.
    */
-  inline void constexpr rotate_rad(T ax, T ay, T az) __attribute__((__always_inline__)) {
+  inline void constexpr rotate_rad(T ax, T ay, T az) noexcept __attribute__((__always_inline__)) {
     T cos_x = static_cast<T>(0);
     T sin_x = static_cast<T>(0);
     T cos_y = static_cast<T>(0);
@@ -791,28 +791,28 @@ public:
    * Rotate vector around the X axis.
    * @param ax Angle (in degrees) to be rotated around X-axis.
    */
-  inline void constexpr rotate_x(T ax) __attribute__((__always_inline__)) {
+  inline void constexpr rotate_x(T ax) noexcept __attribute__((__always_inline__)) {
     rotate_rad_x(deg2rad(ax));
   }
   /**
    * Rotate vector around the Y axis.
    * @param ay Angle (in degrees) to be rotated around Y-axis.
    */
-  inline void constexpr rotate_y(T ay) __attribute__((__always_inline__)) {
+  inline void constexpr rotate_y(T ay) noexcept __attribute__((__always_inline__)) {
     rotate_rad_y(deg2rad(ay));
   }
   /**
    * Rotate vector around the Z axis.
    * @param az Angle (in degrees) to be rotated around Z-axis.
    */
-  inline void constexpr rotate_z(T az) __attribute__((__always_inline__)) {
+  inline void constexpr rotate_z(T az) noexcept __attribute__((__always_inline__)) {
     rotate_rad_z(deg2rad(az));
   }
   /**
    * Rotate vector around the X axis, radian version.
    * @param ax Angle (in radians) to be rotated around X-axis.
    */
-  inline void constexpr rotate_rad_x(T ax) __attribute__((__always_inline__)) {
+  inline void constexpr rotate_rad_x(T ax) noexcept __attribute__((__always_inline__)) {
     T cos_x = static_cast<T>(0);
     T sin_x = static_cast<T>(0);
     sincos_any(ax, sin_x, cos_x);
@@ -825,7 +825,7 @@ public:
    * Rotate vector around the Y axis, radian version.
    * @param ay Angle (in radians) to be rotated around Y-axis.
    */
-  inline void constexpr rotate_rad_y(T ay) __attribute__((__always_inline__)) {
+  inline void constexpr rotate_rad_y(T ay) noexcept __attribute__((__always_inline__)) {
     T cos_y = static_cast<T>(0);
     T sin_y = static_cast<T>(0);
     sincos_any(ay, sin_y, cos_y);
@@ -838,7 +838,7 @@ public:
    * Rotate vector around the Z axis, radian version.
    * @param az Angle (in radians) to be rotated around Z-axis.
    */
-  inline void constexpr rotate_rad_z(T az) __attribute__((__always_inline__)) {
+  inline void constexpr rotate_rad_z(T az) noexcept __attribute__((__always_inline__)) {
     T cos_z = static_cast<T>(0);
     T sin_z = static_cast<T>(0);
     sincos_any(az, sin_z, cos_z);
@@ -851,7 +851,7 @@ public:
    * Rotate vector by a quaternion.
    * @param ax quaternion to rotate by.
    */
-  inline void constexpr rotate(quaternion<T> const &rhs) __attribute__((__always_inline__)) {
+  inline void constexpr rotate(quaternion<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     *this *= rhs;
   }
 
@@ -864,7 +864,7 @@ public:
    * [0.0 , 1.0], you can pass also values outside of this interval and you
    * can get result (extrapolation?)
    */
-  inline vector3<T> constexpr lerp(T fact, vector3<T> const &new_r) const __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr lerp(T fact, vector3<T> const &new_r) const noexcept __attribute__((__always_inline__)) {
     return (*this) + (new_r - (*this)) * fact;
   }
 
@@ -875,7 +875,7 @@ public:
    * @return Pointer to internally stored (in management of class vector3<T>)
    * used for passing vector3<T> values to gl*3[fd] functions.
    */
-  inline constexpr operator T*() __attribute__((__always_inline__)) {
+  inline constexpr operator T*() noexcept __attribute__((__always_inline__)) {
     return reinterpret_cast<T*>(this);
   }
 
@@ -884,7 +884,7 @@ public:
    * @return Constant Pointer to internally stored (in management of class vector3<T>)
    * used for passing vector3<T> values to gl*3[fd] functions.
    */
-  inline constexpr operator const T*() const __attribute__((__always_inline__)) {
+  inline constexpr operator const T*() const noexcept __attribute__((__always_inline__)) {
     return reinterpret_cast<T const*>(this);
   }
 
@@ -895,7 +895,7 @@ public:
    * @param rhs Right hand side argument of operator.
    * @return Left hand side argument - the ostream object passed to operator.
    */
-  inline friend std::ostream &operator<<(std::ostream &lhs, vector3<T> const &rhs) __attribute__((__always_inline__)) {
+  inline friend std::ostream &operator<<(std::ostream &lhs, vector3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     lhs << "[" << rhs.x << "," << rhs.y << "," << rhs.z << "]";
     return lhs;
   }
@@ -903,7 +903,7 @@ public:
   /**
    * Gets string representation.
    */
-  inline std::string constexpr toString() const __attribute__((__always_inline__)) {
+  inline std::string constexpr toString() const noexcept __attribute__((__always_inline__)) {
     std::ostringstream oss;
     oss << *this;
     return oss.str();
@@ -912,20 +912,20 @@ public:
   /**
    * Gets a 2D vector equivalent using the X and Y axes
    */
-  inline vector2<T> constexpr to_2d_xy() const __attribute__((__always_inline__)) {
+  inline vector2<T> constexpr to_2d_xy() const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x, y);
   }
-  inline vector2<T> constexpr to_2D_XY() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
+  inline vector2<T> constexpr to_2D_XY() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
     return to_2d_xy();
   }
 
   /**
    * Gets a 2D vector equivalent using the X and Z axes
    */
-  inline vector2<T> constexpr to_2d_xz() const __attribute__((__always_inline__)) {
+  inline vector2<T> constexpr to_2d_xz() const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x, z);
   }
-  inline vector2<T> constexpr to_2D_XZ() const __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
+  inline vector2<T> constexpr to_2D_XZ() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
     return to_2d_xz();
   }
 };
@@ -936,4 +936,32 @@ public:
 
 #include "vector3_types.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Standard C++ library extensions
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace std {
+
+/**
+ * Gets vector containing minimal values of @a a and @a b coordinates.
+ * @return Vector of minimal coordinates.
+ */
+template<typename T>
+constexpr vector3<T> min(vector3<T> const &a, const vector3<T> &b) noexcept {
+  return vector3<T>(::std::min(a.x, b.x), ::std::min(a.y, b.y), ::std::min(a.z, b.z));
+}
+
+/**
+ * Gets vector containing maximal values of @a a and @a b coordinates.
+ * @return Vector of maximal coordinates.
+ */
+template<typename T>
+constexpr vector3<T> max(vector3<T> const &a, const vector3<T> &b) noexcept {
+  return vector3<T>(::std::max(a.x, b.x), ::std::max(a.y, b.y), ::std::max(a.z, b.z));
+}
+
+
+}
 #endif // VECTORSTORM_VECTOR3_H_INCLUDED

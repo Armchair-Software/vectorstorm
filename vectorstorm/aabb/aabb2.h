@@ -38,7 +38,7 @@ public:
    * Constructs invalid axes-aligned bounding-box.
    * @see valid() for explanation of invalid bounding-box usage.
    */
-  inline constexpr aabb2() __attribute__((__always_inline__))
+  inline constexpr aabb2() noexcept __attribute__((__always_inline__))
     : min( 1,  1),
       max(-1, -1) {
   }
@@ -48,7 +48,7 @@ public:
    * @param point
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline constexpr explicit aabb2(vector2<SrcT> const &point)
+  inline constexpr explicit aabb2(vector2<SrcT> const &point) noexcept
     : min(point),
       max(point) {
   }
@@ -62,7 +62,7 @@ public:
    * @param y1 Y-coordinate of second point
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline constexpr aabb2(SrcT x0, SrcT y0, SrcT x1, SrcT y1)
+  inline constexpr aabb2(SrcT x0, SrcT y0, SrcT x1, SrcT y1) noexcept
     : min(std::min(x0, x1), std::min(y0, y1)),
       max(std::max(x0, x1), std::max(y0, y1)) {
   }
@@ -73,7 +73,7 @@ public:
    * @param max X-coordinate of second point
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline constexpr aabb2(vector2<SrcT> const &new_min, vector2<SrcT> const &new_max)
+  inline constexpr aabb2(vector2<SrcT> const &new_min, vector2<SrcT> const &new_max) noexcept
     : min(new_min),
       max(new_max) {
   }
@@ -84,7 +84,7 @@ public:
    * @param y Y-coordinate of point
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline constexpr aabb2(SrcT x, SrcT y)
+  inline constexpr aabb2(SrcT x, SrcT y) noexcept
     : min(x, y),
       max(x, y) {
   }
@@ -94,7 +94,7 @@ public:
    * @param src Source bounding-box
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline constexpr explicit aabb2(aabb2<SrcT> const &src)
+  inline constexpr explicit aabb2(aabb2<SrcT> const &src) noexcept
     : min(src.min),
       max(src.max) {
   }
@@ -104,7 +104,7 @@ public:
    * @param src Source bounding-box
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline constexpr explicit aabb2(aabb2<SrcT> &&src)
+  inline constexpr explicit aabb2(aabb2<SrcT> &&src) noexcept
     : min(std::move(src.min)),
       max(std::move(src.max)) {
   }
@@ -115,7 +115,7 @@ public:
    * @return reference to this
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline aabb2<T> constexpr &operator=(aabb2<SrcT> const &rhs) {
+  inline aabb2<T> constexpr &operator=(aabb2<SrcT> const &rhs) noexcept {
     min = rhs.min;
     max = rhs.max;
     return *this;
@@ -127,7 +127,7 @@ public:
    * @return reference to this
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline aabb2<T> constexpr &operator=(aabb2<SrcT> &&rhs) {
+  inline aabb2<T> constexpr &operator=(aabb2<SrcT> &&rhs) noexcept {
     min = std::move(rhs.min);
     max = std::move(rhs.max);
     return *this;
@@ -139,7 +139,7 @@ public:
    * bounding box becomes valid and contains solely the source point or bounding-box respectively.
    * @return True if box is valid, otherwise false
    */
-  inline bool constexpr valid() const __attribute__((__always_inline__)) {
+  inline bool constexpr valid() const noexcept __attribute__((__always_inline__)) {
     return min.x <= max.x && min.y <= max.y;
   }
 
@@ -147,7 +147,7 @@ public:
    * Makes this bounding-box invalid. So calling valid() gets false.
    * @see valid() method for more info on usage of invalid bounding-boxes.
    */
-  inline void constexpr invalidate() __attribute__((__always_inline__)) {
+  inline void constexpr invalidate() noexcept __attribute__((__always_inline__)) {
     min = vector2<T>( 1,  1);
     max = vector2<T>(-1, -1);
   }
@@ -157,7 +157,7 @@ public:
    * @param point A point to extend bounding-box by.
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline void constexpr extend(vector2<SrcT> const &point) {
+  inline void constexpr extend(vector2<SrcT> const &point) noexcept {
     if(!valid()) {
       min = max = point;
     } else {
@@ -171,7 +171,7 @@ public:
    * @param box A box to extend this bounding-box by.
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline void constexpr extend(aabb2<SrcT> const &box) {
+  inline void constexpr extend(aabb2<SrcT> const &box) noexcept {
     if(!valid()) {
       min = box.min;
       max = box.max;
@@ -187,7 +187,7 @@ public:
    * @return Copy of extended bounding-box
    */
   template<typename SrcT> __attribute__((__always_inline__))
-  inline constexpr aabb2<T> extended(vector2<SrcT> const &point) const {
+  inline constexpr aabb2<T> extended(vector2<SrcT> const &point) const noexcept {
     aabb2<T> ret(*this);
     ret.extend(point);
     return ret;
@@ -199,7 +199,7 @@ public:
    * @return Copy of extended bounding-box
    */
   template<typename SrcT>  __attribute__((__always_inline__))
-  inline constexpr aabb2<T> extended(aabb2<SrcT> const &box) const {
+  inline constexpr aabb2<T> extended(aabb2<SrcT> const &box) const noexcept {
     aabb2<T> ret(*this);
     ret.extend(box);
     return *this;
@@ -211,7 +211,7 @@ public:
    * @return True if point @a point lies within bounding-box, otherwise false.
    */
   template<typename SrcT>  __attribute__((__always_inline__))
-  inline bool constexpr intersects(vector2<SrcT> const &point) const {
+  inline bool constexpr intersects(vector2<SrcT> const &point) const noexcept {
     return min.x <= point.x && point.x <= max.x &&
            min.y <= point.y && point.y <= max.y;
   }
@@ -222,7 +222,7 @@ public:
    * @return True if there's intersection between boxes, otherwise false.
    */
   template<typename SrcT>  __attribute__((__always_inline__))
-  inline bool constexpr intersects(aabb2<SrcT> const &box) const {
+  inline bool constexpr intersects(aabb2<SrcT> const &box) const noexcept {
     return max.x >= box.min.x && min.x <= box.max.x &&
            max.y >= box.min.y && min.y <= box.max.y;
   }
@@ -235,7 +235,7 @@ public:
    * @see valid() method for more information on invalid bounding-boxes.
    */
   template<typename SrcT>  __attribute__((__always_inline__))
-  inline constexpr aabb2<T> intersection(aabb2<SrcT> const &other) const {
+  inline constexpr aabb2<T> intersection(aabb2<SrcT> const &other) const noexcept {
     return (max.x < other.min.x || min.x > other.max.x ||
             max.y < other.min.y || min.y > other.max.y) ? aabb2<T>() : aabb2<T>(std::max(min, other.min), std::min(max, other.max));
   }
@@ -247,7 +247,7 @@ public:
    * @return True if the ray intersects the box, otherwise false.
    */
   template<typename SrcT>  __attribute__((__always_inline__))
-  inline bool constexpr ray_intersects(vector2<SrcT> const &ray, vector2<SrcT> const &origin = vector2<SrcT>()) const {
+  inline bool constexpr ray_intersects(vector2<SrcT> const &ray, vector2<SrcT> const &origin = vector2<SrcT>()) const noexcept {
     // adapted from http://tavianator.com/2011/05/fast-branchless-raybounding-box-intersections/
     /*
     SrcT const dist_min_x = (min.x - origin.x) / ray.x;
@@ -277,7 +277,7 @@ public:
    * Gets center point of bounding-box.
    * @return A center point of bounding-box.
    */
-  inline constexpr vector2<T> center() const __attribute__((__always_inline__)) {
+  inline constexpr vector2<T> center() const noexcept __attribute__((__always_inline__)) {
     return (min + max) * static_cast<T>(0.5);
   }
 
@@ -285,7 +285,7 @@ public:
    * Gets extent of bounding-box.
    * @return Extent of bounding-box.
    */
-  inline constexpr vector2<T> extent() const __attribute__((__always_inline__)) {
+  inline constexpr vector2<T> extent() const noexcept __attribute__((__always_inline__)) {
     return (max - min) * static_cast<T>(0.5);
   }
 
@@ -293,7 +293,7 @@ public:
    * Gets diagonal size of bounding-box
    * @return Sizes for particular dimensions.
    */
-  inline constexpr vector2<T> size() const __attribute__((__always_inline__)) {
+  inline constexpr vector2<T> size() const noexcept __attribute__((__always_inline__)) {
     return max - min;
   }
 
@@ -308,7 +308,7 @@ public:
    * 4. (@c - @c - @c +)
    *
    */
-  inline constexpr vector2<T> point(unsigned int i) const __attribute__((__always_inline__)) {
+  inline constexpr vector2<T> point(unsigned int i) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>((i & 1) ? min.x : max.x,
                       (i & 2) ? min.y : max.y);
   }
@@ -322,7 +322,7 @@ public:
    * @return True if @a rhs and this bounding-boxes are equal, otherwise false
    */
   template<typename RhsT>  __attribute__((__always_inline__))
-  inline bool constexpr operator==(aabb2<RhsT> const &rhs) const {
+  inline bool constexpr operator==(aabb2<RhsT> const &rhs) const noexcept {
     return min == rhs.min && max == rhs.max;
   }
 
@@ -332,7 +332,7 @@ public:
    * @return True if @a rhs and this bounding-boxes are not equal, otherwise false
    */
   template<typename RhsT>  __attribute__((__always_inline__))
-  inline bool constexpr operator!=(aabb2<RhsT> const &rhs) const {
+  inline bool constexpr operator!=(aabb2<RhsT> const &rhs) const noexcept {
     return min != rhs.min || max != rhs.max;
   }
 
@@ -342,7 +342,7 @@ public:
    * @return Reference to this
    */
   template<typename SrcT>  __attribute__((__always_inline__))
-  inline aabb2<T> constexpr &operator<<(vector2<SrcT> const &rhs) {
+  inline aabb2<T> constexpr &operator<<(vector2<SrcT> const &rhs) noexcept {
     extend(rhs);
     return *this;
   }
@@ -353,7 +353,7 @@ public:
    * @return Reference to this
    */
   template<typename SrcT>  __attribute__((__always_inline__))
-  inline aabb2<T> constexpr &operator<<(aabb2<SrcT> const &rhs) {
+  inline aabb2<T> constexpr &operator<<(aabb2<SrcT> const &rhs) noexcept {
     extend(rhs);
     return *this;
   }
@@ -364,7 +364,7 @@ public:
    * @return A resulting bounding-box representing union
    */
   template<typename RhsT>  __attribute__((__always_inline__))
-  inline aabb2<T> constexpr operator|(aabb2<RhsT> const &rhs) const {
+  inline aabb2<T> constexpr operator|(aabb2<RhsT> const &rhs) const noexcept {
     return extended(rhs);
   }
 
@@ -374,7 +374,7 @@ public:
    * @return Resulting bounding-box representing the intersection.
    */
   template<typename RhsT>  __attribute__((__always_inline__))
-  inline aabb2<T> constexpr operator&(aabb2<RhsT> const &rhs) const {
+  inline aabb2<T> constexpr operator&(aabb2<RhsT> const &rhs) const noexcept {
     return intersection(rhs);
   }
 
@@ -384,7 +384,7 @@ public:
    * @param rhs Bounding-box to write to output stream.
    * @return Reference to output stream @a lhs
    */
-  inline friend std::ostream &operator<<(std::ostream &lhs, const aabb2<T> &rhs) __attribute__((__always_inline__)) {
+  inline friend std::ostream &operator<<(std::ostream &lhs, const aabb2<T> &rhs) noexcept __attribute__((__always_inline__)) {
     lhs << rhs.min << " x " << rhs.max;
     return lhs;
   }

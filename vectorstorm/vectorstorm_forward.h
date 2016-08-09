@@ -24,6 +24,4 @@ namespace VMATH_NAMESPACE {
 }
 #endif
 
-#include "vectorstorm/stl_extensions_forward.h"
-
 #endif // VECTORSTORM_FORWARD_H_INCLUDED

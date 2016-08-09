@@ -101,6 +101,4 @@
 #include "aabb/aabb2.h"
 #include "aabb/aabb3.h"
 
-#include "stl_extensions.h"
-
 #endif // VECTORSTORM_H_INCLUDED

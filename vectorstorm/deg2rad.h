@@ -10,9 +10,9 @@ namespace VMATH_NAMESPACE {
 #endif
 
 template<typename T>
-inline static T constexpr const deg2rad(T const angle_deg) __attribute__((__always_inline__));
+inline static T constexpr const deg2rad(T const angle_deg) noexcept __attribute__((__always_inline__));
 template<typename T>
-inline static T constexpr const deg2rad(T const angle_deg) {
+inline static T constexpr const deg2rad(T const angle_deg) noexcept {
   #ifndef VMATH_NO_BOOST
     //return (angle_deg * boost::math::constants::pi<T>()) / 180.0;
     return angle_deg * boost::math::constants::degree<T>();

@@ -9,8 +9,8 @@ namespace VMATH_NAMESPACE {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
-inline static float constexpr sqrt_inv_fast(float number) __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
-inline static float constexpr sqrt_inv_fast(float number) {
+inline static float constexpr sqrt_inv_fast(float number) noexcept __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
+inline static float constexpr sqrt_inv_fast(float number) noexcept {
   /// Adapted from Quake III's fast inverse square root approximation
   float constexpr const threehalfs = 1.5f;
 
@@ -24,8 +24,8 @@ inline static float constexpr sqrt_inv_fast(float number) {
   y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
 }
-inline static double constexpr sqrt_inv_fast(double number) __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
-inline static double constexpr sqrt_inv_fast(double number) {
+inline static double constexpr sqrt_inv_fast(double number) noexcept __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
+inline static double constexpr sqrt_inv_fast(double number) noexcept {
   /// Similar to the Quake III fast inverse square root but for doubles
   double constexpr const threehalfs = 1.5;
 
@@ -42,9 +42,9 @@ inline static double constexpr sqrt_inv_fast(double number) {
 }
 #pragma GCC diagnostic pop
 template<typename T>
-inline static T constexpr sqrt_fast(T number) __attribute__((__always_inline__));
+inline static T constexpr sqrt_fast(T number) noexcept __attribute__((__always_inline__));
 template<typename T>
-inline static T constexpr sqrt_fast(T number) {
+inline static T constexpr sqrt_fast(T number) noexcept {
   return sqrt_inv_fast(number) * number;
 }
 inline static long double constexpr sqrt_fast(long double number) __attribute__((__always_inline__));
@@ -52,16 +52,16 @@ inline static long double constexpr sqrt_fast(long double number) {
   // we don't have a way to handle long doubles with the fast approximation, so just cast to double
   return static_cast<long double>(sqrt_inv_fast(static_cast<double>(number))) * number;
 }
-inline static int constexpr sqrt_fast(int number) __attribute__((__always_inline__));
-inline static int constexpr sqrt_fast(int number) {
+inline static int constexpr sqrt_fast(int number) noexcept __attribute__((__always_inline__));
+inline static int constexpr sqrt_fast(int number) noexcept {
   // convert ints to floats and back
   return static_cast<int>(sqrt_inv_fast(static_cast<float>(number)) * static_cast<float>(number));
 }
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
-inline static float constexpr sqrt_inv_faster(float number) __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
-inline static float constexpr sqrt_inv_faster(float number) {
+inline static float constexpr sqrt_inv_faster(float number) noexcept __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
+inline static float constexpr sqrt_inv_faster(float number) noexcept {
   /// Adapted from Quake III's fast inverse square root approximation - one iteration version
   float constexpr const threehalfs = 1.5f;
 
@@ -75,8 +75,8 @@ inline static float constexpr sqrt_inv_faster(float number) {
   //y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
 }
-inline static double constexpr sqrt_inv_faster(double number) __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
-inline static double constexpr sqrt_inv_faster(double number) {
+inline static double constexpr sqrt_inv_faster(double number) noexcept __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
+inline static double constexpr sqrt_inv_faster(double number) noexcept {
   /// Similar to the Quake III fast inverse square root but for doubles
   double constexpr const threehalfs = 1.5;
 
@@ -93,9 +93,9 @@ inline static double constexpr sqrt_inv_faster(double number) {
 }
 #pragma GCC diagnostic pop
 template<typename T>
-inline static T constexpr sqrt_faster(T number) __attribute__((__always_inline__));
+inline static T constexpr sqrt_faster(T number) noexcept __attribute__((__always_inline__));
 template<typename T>
-inline static T constexpr sqrt_faster(T number) {
+inline static T constexpr sqrt_faster(T number) noexcept {
   return sqrt_inv_faster(number) * number;
 }
 inline static long double constexpr sqrt_faster(long double number) __attribute__((__always_inline__));
@@ -103,21 +103,21 @@ inline static long double constexpr sqrt_faster(long double number) {
   // we don't have a way to handle long doubles with the fast approximation, so just cast to double
   return static_cast<long double>(sqrt_inv_faster(static_cast<double>(number))) * number;
 }
-inline static int constexpr sqrt_faster(int number) __attribute__((__always_inline__));
-inline static int constexpr sqrt_faster(int number) {
+inline static int constexpr sqrt_faster(int number) noexcept __attribute__((__always_inline__));
+inline static int constexpr sqrt_faster(int number) noexcept {
   // convert ints to floats and back
   return static_cast<int>(sqrt_inv_faster(static_cast<float>(number)) * static_cast<float>(number));
 }
 
-inline static float sqrt_inv_sse(float number) __attribute__((__always_inline__));
-inline static float sqrt_inv_sse(float number) {
+inline static float sqrt_inv_sse(float number) noexcept __attribute__((__always_inline__));
+inline static float sqrt_inv_sse(float number) noexcept {
   /// Scalar SSE inverse square root approximation
   float result;
   _mm_store_ss(&result, _mm_rsqrt_ss(_mm_load_ss(&number)));
   return result;
 }
-inline static float sqrt_sse(float number) __attribute__((__always_inline__));
-inline static float sqrt_sse(float number) {
+inline static float sqrt_sse(float number) noexcept __attribute__((__always_inline__));
+inline static float sqrt_sse(float number) noexcept {
   /// Scalar SSE square root approximation
   return sqrt_inv_sse(number) * number;
 }
