@@ -113,7 +113,7 @@ public:
    * @param zDeg Angle (in degrees) of rotation around axis Z.
    */
   inline static matrix3<T> constexpr create_rotation_around_axis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) {
-    return createRotationAroundAxis_rad(deg2rad(xDeg), deg2rad(yDeg), deg2rad(zDeg));
+    return create_rotation_around_axis_rad(deg2rad(xDeg), deg2rad(yDeg), deg2rad(zDeg));
   }
   inline static matrix3<T> constexpr createRotationAroundAxis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis()"))) {
     return create_rotation_around_axis(xDeg, yDeg, zDeg);
@@ -163,7 +163,7 @@ public:
    * @param angle Angle (in degrees) of rotation around axis.
    */
   inline static matrix3<T> constexpr create_rotation_around_axis(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) {
-    return createRotationAroundAxis_rad(axis, angle);
+    return create_rotation_around_axis_rad(axis, angle);
   }
   inline static matrix3<T> constexpr createRotationAroundAxis(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis()"))) {
     return create_rotation_around_axis(axis, angle);

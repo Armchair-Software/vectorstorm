@@ -304,7 +304,7 @@ public:
                       static_cast<T>(0),
                       static_cast<T>(0),
                       static_cast<T>(0),
-                      static_cast<T>(1)) * matrix4<T>::createTranslation(-eye_pos.x, -eye_pos.y, -eye_pos.z);
+                      static_cast<T>(1)) * matrix4<T>::create_translation(-eye_pos.x, -eye_pos.y, -eye_pos.z);
     // constexpr-suitable return-only alternative, may turn out much slower when computed at runtime:
     /*
     return matrix4<T>( (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().x,
@@ -325,7 +325,7 @@ public:
                        static_cast<T>(0),
                        static_cast<T>(0),
                        static_cast<T>(0),
-                       static_cast<T>(1)) * matrix4<T>::createTranslation(-eye_pos.x, -eye_pos.y, -eye_pos.z);
+                       static_cast<T>(1)) * matrix4<T>::create_translation(-eye_pos.x, -eye_pos.y, -eye_pos.z);
     */
   }
   inline static matrix4<T> constexpr createLookAt(vector3<T> const &eye_pos, vector3<T> const &centre_pos, vector3<T> const &up_dir) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_look_at()"))) {
