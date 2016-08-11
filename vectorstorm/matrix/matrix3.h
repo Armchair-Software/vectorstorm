@@ -112,8 +112,11 @@ public:
    * @param yDeg Angle (in degrees) of rotation around axis Y.
    * @param zDeg Angle (in degrees) of rotation around axis Z.
    */
-  inline static matrix3<T> constexpr createRotationAroundAxis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) {
+  inline static matrix3<T> constexpr create_rotation_around_axis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) {
     return createRotationAroundAxis_rad(deg2rad(xDeg), deg2rad(yDeg), deg2rad(zDeg));
+  }
+  inline static matrix3<T> constexpr createRotationAroundAxis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis()"))) {
+    return create_rotation_around_axis(xDeg, yDeg, zDeg);
   }
 
   /**
@@ -122,7 +125,7 @@ public:
    * @param yRads Angle (in radians) of rotation around axis Y.
    * @param zRads Angle (in radians) of rotation around axis Z.
    */
-  inline static matrix3<T> constexpr createRotationAroundAxis_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) {
+  inline static matrix3<T> constexpr create_rotation_around_axis_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) {
     //T sin_xRads, cos_xRads, sin_yRads, cos_yRads, sin_zRads, cos_zRads;
     // zero-initialisation is required for gcc not to complain when the function is constexpr
     // the static cast is to avoid narrowing conversion warnings when used with ints
@@ -150,14 +153,20 @@ public:
                       temp_cos_z_cos_y * sin_xRads,
                       temp_cos_z_cos_y * cos_xRads);
   }
+  inline static matrix3<T> constexpr createRotationAroundAxis_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis_rad()"))) {
+    return create_rotation_around_axis_rad(xRads, yRads, zRads);
+  }
 
   /**
    * Creates rotation matrix by rotation around an axis.
    * @param axis Axis to rotate around.
    * @param angle Angle (in degrees) of rotation around axis.
    */
-  inline static matrix3<T> constexpr createRotationAroundAxis(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) {
+  inline static matrix3<T> constexpr create_rotation_around_axis(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) {
     return createRotationAroundAxis_rad(axis, angle);
+  }
+  inline static matrix3<T> constexpr createRotationAroundAxis(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis()"))) {
+    return create_rotation_around_axis(axis, angle);
   }
 
   /**
@@ -165,7 +174,7 @@ public:
    * @param axis Axis to rotate around.
    * @param angle Angle (in radians) of rotation around axis.
    */
-  inline static matrix3<T> constexpr createRotationAroundAxis_rad(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) {
+  inline static matrix3<T> constexpr create_rotation_around_axis_rad(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) {
     // adapted from Inigo Quilez: http://www.iquilezles.org/www/articles/noacos/noacos.htm
     // zero-initialisation is required for gcc not to complain when the function is constexpr
     // the static cast is to avoid narrowing conversion warnings when used with ints
@@ -185,6 +194,9 @@ public:
                       axis.y * axis.z * cos_a_inv + sin_a * axis.x,
                       axis.z * axis.z * cos_a_inv + cos_a);
   }
+  inline static matrix3<T> constexpr createRotationAroundAxis_rad(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis_rad()"))) {
+    return create_rotation_around_axis_rad(axis, angle);
+  }
 
   /**
    * Creates rotation matrix by aligning one vector to another.
@@ -193,7 +205,7 @@ public:
    * @param to Vector to rotate to.
    * @return An instance of matrix3<T> representing rotation between the two vectors.
    */
-  inline static matrix3<T> constexpr createRotationBetweenVectors(vector3<T> from, vector3<T> to) noexcept __attribute__((__always_inline__)) {
+  inline static matrix3<T> constexpr create_rotation_between_vectors(vector3<T> const &from, vector3<T> const &to) noexcept __attribute__((__always_inline__)) {
     // the static cast is to avoid narrowing conversion warnings when used with ints
     vector3<T> const cross(to.crossProduct(from));
     T const dot = from.dotProduct(to);
@@ -211,15 +223,22 @@ public:
                       cross.z * cross.z * temp_k + dot);
 
   }
+  inline static matrix3<T> constexpr createRotationBetweenVectors(vector3<T> const &from, vector3<T> const &to) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_between_vectors()"))) {
+    return create_rotation_between_vectors(from, to);
+  }
 
   /**
    * Creates rotation matrix from ODE matrix.
    */
   template<typename It> __attribute__((__always_inline__))
-  inline static matrix3<T> constexpr fromOde(It const *mat) noexcept {
+  inline static matrix3<T> constexpr from_ode(It const *mat) noexcept {
     return matrix3<T>(static_cast<T>(mat[0]), static_cast<T>(mat[4]), static_cast<T>(mat[8]),
                       static_cast<T>(mat[1]), static_cast<T>(mat[5]), static_cast<T>(mat[9]),
                       static_cast<T>(mat[2]), static_cast<T>(mat[6]), static_cast<T>(mat[10]));
+  }
+  template<typename It> __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_ode()")))
+  inline static matrix3<T> constexpr fromOde(It const *mat) noexcept {
+    return from_ode(mat);
   }
 
   /**
@@ -229,10 +248,14 @@ public:
    * @return An instance of matrix3<T> representing @a arr
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline static matrix3<T> constexpr fromRowMajorArray(FromT const *arr) noexcept {
+  inline static matrix3<T> constexpr from_row_major_array(FromT const *arr) noexcept {
     return matrix3<T>(static_cast<T>(arr[0]), static_cast<T>(arr[3]), static_cast<T>(arr[6]),
                       static_cast<T>(arr[1]), static_cast<T>(arr[4]), static_cast<T>(arr[7]),
                       static_cast<T>(arr[2]), static_cast<T>(arr[5]), static_cast<T>(arr[8]));
+  }
+  template<typename FromT> __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_row_major_array()")))
+  inline static matrix3<T> constexpr fromRowMajorArray(FromT const *arr) noexcept {
+    return from_row_major_array(arr);
   }
 
   /**
@@ -242,10 +265,14 @@ public:
    * @return An instance of matrix3<T> representing @a arr
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline static matrix3<T> constexpr fromColumnMajorArray(FromT const *arr) noexcept {
+  inline static matrix3<T> constexpr from_column_major_array(FromT const *arr) noexcept {
     return matrix3<T>(static_cast<T>(arr[0]), static_cast<T>(arr[1]), static_cast<T>(arr[2]),
                       static_cast<T>(arr[3]), static_cast<T>(arr[4]), static_cast<T>(arr[5]),
                       static_cast<T>(arr[6]), static_cast<T>(arr[7]), static_cast<T>(arr[8]));
+  }
+  template<typename FromT> __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_column_major_array()")))
+  inline static matrix3<T> constexpr fromColumnMajorArray(FromT const *arr) noexcept {
+    return from_column_major_array(arr);
   }
 
   //---------------------[ equiality operators ]------------------------------
@@ -328,13 +355,16 @@ public:
   }
 
   /**
-   * Returns transform (4x4) matrix including this as the rotationc component.
+   * Returns transform (4x4) matrix including this as the rotation component.
    */
-  inline matrix4<T> constexpr getTranslation() const noexcept __attribute__((__always_inline__)) {
+  inline matrix4<T> constexpr get_transform() const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(data[0],           data[1],           data[2],           static_cast<T>(0),
                       data[3],           data[4],           data[5],           static_cast<T>(0),
                       data[6],           data[7],           data[8],           static_cast<T>(0),
                       static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1));
+  }
+  inline matrix4<T> constexpr getTranslation() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use get_transform()"))) {
+     return get_transform();
   }
 
   /**
@@ -671,10 +701,13 @@ public:
   /**
    * Gets string representation.
    */
-  inline std::string constexpr toString() const noexcept __attribute__((__always_inline__)) {
+  inline std::string constexpr to_string() const noexcept __attribute__((__always_inline__)) {
     std::ostringstream oss;
     oss << *this;
     return oss.str();
+  }
+  inline std::string constexpr toString() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_string()"))) {
+    return to_string();
   }
 };
 
