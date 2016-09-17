@@ -19,5 +19,4 @@ template<typename T> constexpr vector3<T> min(vector3<T> const &a, const vector3
 template<typename T> constexpr vector3<T> max(vector3<T> const &a, const vector3<T> &b) noexcept;
 
 }
-
 #endif // VECTORSTORM_VECTOR3_FORWARD_H_INCLUDED

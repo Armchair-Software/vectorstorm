@@ -1,118 +1,3 @@
-#ifndef VECTORSTORM_AABB3_H_INCLUDED
-#define VECTORSTORM_AABB3_H_INCLUDED
-
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
-#endif
-
-/**
- * Three-dimensional axis-aligned bounding-box (aka AABB) class.
- *
- * This class provides functionality for:
- * - creating an AABB from a point, or another AABB,
- * - testing if a point of other AABB intersects with it,
- * - getting result of intersection with other AABB,
- * - transforming AABB with 4x4 matrix.
- *
- * There are also overloaded couple of operators to shorten common operations.
- * For instance you can use  @c operator<< on AABB to extend it with a passed point or other AABB.
- * @code
- * aabb3f aabb;
- * aabb << vector3f(1, 1, 2) << aabb3f(-3,-3,-3, 2, 2, 2);
- * @endcode
- */
-template<typename T>
-class aabb3 {
-public:
-  /**
-   * Position of Min corner of bounding box.
-   */
-  vector3<T> min;
-
-  /**
-   * Position of Max corner of bounding box
-   */
-  vector3<T> max;
-
-  /**
-   * Constructs invalid axes-aligned bounding-box.
-   * @see valid() for explanation of invalid bounding-box usage.
-   */
-  inline constexpr aabb3() noexcept __attribute__((__always_inline__))
-    : min( 1,  1,  1),
-      max(-1, -1, -1) {
-  }
-
-  /**
-   * Constructs axes-aligned bound-box containing one point @a point
-   * @param point
-   */
-  template<typename SrcT>  __attribute__((__always_inline__))
-  inline constexpr explicit aabb3(vector3<SrcT> const &point) noexcept
-    : min(point),
-      max(point) {
-  }
-
-  /**
-   * Constructs axes-aligned bounding-box from two corner points (@a x0, @a y0, @a z0)
-   * and (@a x1, @a y1, @a z1)
-   * @param x0 X-coordinate of first point
-   * @param y0 Y-coordinate of first point
-   * @param z0 Z-coordinate of first point
-   * @param x1 X-coordinate of second point
-   * @param y1 Y-coordinate of second point
-   * @param z1 Z-coordinate of second point
-   */
-  template<typename SrcT>  __attribute__((__always_inline__))
-  inline constexpr aabb3(SrcT x0, SrcT y0, SrcT z0, SrcT x1, SrcT y1, SrcT z1) noexcept
-    : min(std::min(x0, x1), std::min(y0, y1), std::min(z0, z1)),
-      max(std::max(x0, x1), std::max(y0, y1), std::max(z0, z1)) {
-  }
-
-  /**
-   * Constructs axes-aligned bounding-box from @a min and @b max
-   * @param min X-coordinate of first point
-   * @param max X-coordinate of second point
-   */
-  template<typename SrcT>  __attribute__((__always_inline__))
-  inline constexpr aabb3(vector3<SrcT> const &new_min, vector3<SrcT> const &new_max) noexcept
-    : min(new_min),
-      max(new_max) {
-  }
-
-  /**
-   * Constructs axes-aligned bounding-box containing point (@a x, @a y, @a z)
-   * @param x X-coordinate of point
-   * @param y Y-coordinate of point
-   * @param z Z-coordinate of point
-   */
-  template<typename SrcT>  __attribute__((__always_inline__))
-  inline constexpr aabb3(SrcT x, SrcT y, SrcT z) noexcept
-    : min(x, y, z),
-      max(x, y, z) {
-  }
-
-  /**
-   * Creates copy of axis-aligned bounding-box
-   * @param src Source bounding-box
-   */
-  template<typename SrcT>  __attribute__((__always_inline__))
-  inline constexpr explicit aabb3(aabb3<SrcT> const &src) noexcept
-    : min(src.min),
-      max(src.max) {
-  }
-
-  /**
-   * Move constructor from another axis-aligned bounding-box
-   * @param src Source bounding-box
-   */
-  template<typename SrcT> __attribute__((__always_inline__))
-  inline constexpr explicit aabb3(aabb3<SrcT> &&src) noexcept
-    : min(std::move(src.min)),
-      max(std::move(src.max)) {
-  }
-
-  /**
    * Assignment operator
    * @param rhs source bounding-box
    * @return reference to this
@@ -120,106 +5,207 @@ public:
   template<typename SrcT>  __attribute__((__always_inline__))
   inline aabb3<T> constexpr &operator=(aabb3<SrcT> const &rhs) noexcept {
     min = rhs.min;
+#ifndef VECTORSTORM_AABB3_H_INCLUDED
     max = rhs.max;
+#define VECTORSTORM_AABB3_H_INCLUDED
     return *this;
-  }
 
+  }
+#ifdef VMATH_NAMESPACE
+
+namespace VMATH_NAMESPACE {
   /**
+#endif
    * Copy assignment operator
+
    * @param rhs source bounding-box
+/**
    * @return reference to this
+ * Three-dimensional axis-aligned bounding-box (aka AABB) class.
    */
+ *
   template<typename SrcT>  __attribute__((__always_inline__))
+ * This class provides functionality for:
   inline aabb3<T> constexpr &operator=(aabb3<SrcT> &&rhs) noexcept {
+ * - creating an AABB from a point, or another AABB,
     min = std::move(rhs.min);
+ * - testing if a point of other AABB intersects with it,
     max = std::move(rhs.max);
+ * - getting result of intersection with other AABB,
     return *this;
+ * - transforming AABB with 4x4 matrix.
   }
+ *
 
+ * There are also overloaded couple of operators to shorten common operations.
   /**
+ * For instance you can use  @c operator<< on AABB to extend it with a passed point or other AABB.
    * Checks if bounding-box is valid. Valid bounding-box has non-negative size.
+ * @code
    * If an invalid bounding-box is extended by point or another bounding-box, the target
+ * aabb3f aabb;
    * bounding box becomes valid and contains solely the source point or bounding-box respectively.
+ * aabb << vector3f(1, 1, 2) << aabb3f(-3,-3,-3, 2, 2, 2);
    * @return True if box is valid, otherwise false
+ * @endcode
    */
+ */
   inline bool constexpr valid() const noexcept __attribute__((__always_inline__)) {
+template<typename T>
     return min.x <= max.x && min.y <= max.y && min.z <= max.z;
+class aabb3 {
   }
+public:
 
   /**
+  /**
+   * Position of Min corner of bounding box.
    * Makes this bounding-box invalid. So calling valid() gets false.
-   * @see valid() method for more info on usage of invalid bounding-boxes.
    */
-  inline void constexpr invalidate() noexcept __attribute__((__always_inline__)) {
-    min = vector3<T>(1, 1, 1);
-    max = vector3<T>(-1, -1, -1);
-  }
+   * @see valid() method for more info on usage of invalid bounding-boxes.
+  vector3<T> min;
+   */
 
+  inline void constexpr invalidate() noexcept __attribute__((__always_inline__)) {
+  /**
+    min = vector3<T>(1, 1, 1);
+   * Position of Max corner of bounding box
+    max = vector3<T>(-1, -1, -1);
+   */
+  }
+  vector3<T> max;
+
+
+  /**
   /**
    * Extends this bounding-box by a point @a point.
+   * Constructs invalid axes-aligned bounding-box.
    * @param point A point to extend bounding-box by.
+   * @see valid() for explanation of invalid bounding-box usage.
+   */
    */
   template<typename SrcT>  __attribute__((__always_inline__))
+  inline constexpr aabb3() noexcept __attribute__((__always_inline__))
   inline void constexpr extend(vector3<SrcT> const &point) noexcept {
+    : min( 1,  1,  1),
     if(!valid()) {
+      max(-1, -1, -1) {
       min = max = point;
+  }
     } else {
+
       min = std::min(min, point);
+  /**
       max = std::max(max, point);
+   * Constructs axes-aligned bound-box containing one point @a point
     }
+   * @param point
   }
+   */
 
+  template<typename SrcT>  __attribute__((__always_inline__))
   /**
+  inline constexpr explicit aabb3(vector3<SrcT> const &point) noexcept
    * Extends this bounding-box by a box @a box.
+    : min(point),
    * @param box A box to extend this bounding-box by.
+      max(point) {
    */
+  }
   template<typename SrcT>  __attribute__((__always_inline__))
+
   inline void constexpr extend(aabb3<SrcT> const &box) noexcept {
+  /**
     if(!valid()) {
+   * Constructs axes-aligned bounding-box from two corner points (@a x0, @a y0, @a z0)
       min = box.min;
+   * and (@a x1, @a y1, @a z1)
       max = box.max;
+   * @param x0 X-coordinate of first point
     } else {
+   * @param y0 Y-coordinate of first point
       min = std::min(min, box.min);
+   * @param z0 Z-coordinate of first point
       max = std::max(max, box.max);
+   * @param x1 X-coordinate of second point
     }
+   * @param y1 Y-coordinate of second point
   }
+   * @param z1 Z-coordinate of second point
 
+   */
   /**
+  template<typename SrcT>  __attribute__((__always_inline__))
    * Gets a copy of this bounding-box extend by a point @a point.
+  inline constexpr aabb3(SrcT x0, SrcT y0, SrcT z0, SrcT x1, SrcT y1, SrcT z1) noexcept
    * @param point A point to extend the box by
+    : min(std::min(x0, x1), std::min(y0, y1), std::min(z0, z1)),
    * @return Copy of extended bounding-box
+      max(std::max(x0, x1), std::max(y0, y1), std::max(z0, z1)) {
    */
+  }
   template<typename SrcT>  __attribute__((__always_inline__))
+
   inline constexpr aabb3<T> extended(vector3<SrcT> const &point) const noexcept {
+  /**
     aabb3<T> ret(*this);
+   * Constructs axes-aligned bounding-box from @a min and @b max
     ret.extend(point);
+   * @param min X-coordinate of first point
     return ret;
+   * @param max X-coordinate of second point
   }
+   */
 
+  template<typename SrcT>  __attribute__((__always_inline__))
   /**
+  inline constexpr aabb3(vector3<SrcT> const &new_min, vector3<SrcT> const &new_max) noexcept
    * Gets a copy of this bounding-box extnended by box @a box.
+    : min(new_min),
    * @param box A box to extend the copy be.
+      max(new_max) {
    * @return Copy of extended bounding-box
-   */
-  template<typename SrcT>  __attribute__((__always_inline__))
-  inline constexpr aabb3<T> extended(aabb3<SrcT> const &box) const noexcept {
-    aabb3<T> ret(*this);
-    ret.extend(box);
-    return *this;
   }
+   */
 
+  template<typename SrcT>  __attribute__((__always_inline__))
   /**
-   * Tests if the point @a point is within this bounding-box
-   * @param point A point to be tested
-   * @return True if point @a point lies within bounding-box, otherwise false.
-   */
-  template<typename SrcT>  __attribute__((__always_inline__))
-  inline bool constexpr intersects(vector3<SrcT> const &point) const noexcept {
-    return min.x <= point.x && point.x <= max.x &&
-           min.y <= point.y && point.y <= max.y &&
-           min.z <= point.z && point.z <= max.z;
+  inline constexpr aabb3<T> extended(aabb3<SrcT> const &box) const noexcept {
+   * Constructs axes-aligned bounding-box containing point (@a x, @a y, @a z)
+    aabb3<T> ret(*this);
+   * @param x X-coordinate of point
+    ret.extend(box);
+   * @param y Y-coordinate of point
+    return *this;
+   * @param z Z-coordinate of point
   }
+   */
 
+  template<typename SrcT>  __attribute__((__always_inline__))
+  /**
+  inline constexpr aabb3(SrcT x, SrcT y, SrcT z) noexcept
+   * Tests if the point @a point is within this bounding-box
+    : min(x, y, z),
+   * @param point A point to be tested
+      max(x, y, z) {
+   * @return True if point @a point lies within bounding-box, otherwise false.
+  }
+   */
+
+  template<typename SrcT>  __attribute__((__always_inline__))
+  /**
+  inline bool constexpr intersects(vector3<SrcT> const &point) const noexcept {
+   * Creates copy of axis-aligned bounding-box
+    return min.x <= point.x && point.x <= max.x &&
+   * @param src Source bounding-box
+           min.y <= point.y && point.y <= max.y &&
+   */
+           min.z <= point.z && point.z <= max.z;
+  template<typename SrcT>  __attribute__((__always_inline__))
+  }
+  inline constexpr explicit aabb3(aabb3<SrcT> const &src) noexcept
+
+    : min(src.min),
   /**
    * Tests if other bounding-box @a box intersects (even partially) with this bounding-box.
    * @param box A box to be tested for intersection.
