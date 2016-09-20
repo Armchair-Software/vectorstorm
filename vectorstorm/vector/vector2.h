@@ -675,7 +675,9 @@ namespace std {
  * @return Vector of minimal coordinates.
  */
 template<typename T>
-constexpr vector2<T> min(vector2<T> const &a, const vector2<T> &b) noexcept {
+inline constexpr vector2<T> min(vector2<T> const &a, const vector2<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
+template<typename T>
+inline constexpr vector2<T> min(vector2<T> const &a, const vector2<T> &b) noexcept {
   return vector2<T>(::std::min(a.x, b.x), ::std::min(a.y, b.y));
 }
 
@@ -684,7 +686,9 @@ constexpr vector2<T> min(vector2<T> const &a, const vector2<T> &b) noexcept {
  * @return Vector of maximal coordinates.
  */
 template<typename T>
-constexpr vector2<T> max(vector2<T> const &a, const vector2<T> &b) noexcept {
+inline constexpr vector2<T> max(vector2<T> const &a, const vector2<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
+template<typename T>
+inline constexpr vector2<T> max(vector2<T> const &a, const vector2<T> &b) noexcept {
   return vector2<T>(::std::max(a.x, b.x), ::std::max(a.y, b.y));
 }
 
