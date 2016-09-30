@@ -421,6 +421,14 @@ public:
   inline T constexpr length_faster() const noexcept __attribute__((__always_inline__)) __attribute__((__pure__)) {
     return static_cast<T>(sqrt_faster(length_sq()));
   }
+  /**
+   * Return whether the vector is zero length - this is much faster than a full length calculation
+   * @return whether vector is zero length
+   */
+  inline bool constexpr length_zero() const noexcept __attribute__((__always_inline__)) {
+    return x == static_cast<T>(0) &&
+           y == static_cast<T>(0);
+  }
 
   /**
    * normalise vector
@@ -474,24 +482,20 @@ public:
    * normalise vector. with added zero safety check
    */
   inline void constexpr normalise_safe() noexcept __attribute__((__always_inline__)) {
-    T const temp = length();
-    if(temp == static_cast<T>(0)) {
-      x = static_cast<T>(0);
-      y = static_cast<T>(0);
+    if(length_zero()) {
+      assign();
     } else {
-      x /= temp;
-      y /= temp;
+      *this /= length();
     }
   }
   inline void constexpr normalize_safe() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
     normalise_safe();
   }
   inline vector2<T> constexpr normalise_safe_copy() const noexcept __attribute__((__always_inline__)) {
-    T const temp(length());
-    if(temp == static_cast<T>(0)) {
+    if(length_zero()) {
       return vector2<T>();
     } else {
-      return vector2<T>(x / temp, y / temp);
+      return *this / length();
     }
   }
   inline vector2<T> constexpr normalize_safe_copy() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
