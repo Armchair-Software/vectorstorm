@@ -433,8 +433,8 @@ public:
    */
   template<typename FromT> __attribute__((__always_inline__))
   inline static matrix4<T> constexpr from_row_major_array(FromT const *arr) noexcept {
-    return matrix4<T>(static_cast<T>(arr[0]), static_cast<T>(arr[4]), static_cast<T>(arr[8]),  static_cast<T>(arr[12]),
-                      static_cast<T>(arr[1]), static_cast<T>(arr[5]), static_cast<T>(arr[9]),  static_cast<T>(arr[13]),
+    return matrix4<T>(static_cast<T>(arr[0]), static_cast<T>(arr[4]), static_cast<T>(arr[ 8]), static_cast<T>(arr[12]),
+                      static_cast<T>(arr[1]), static_cast<T>(arr[5]), static_cast<T>(arr[ 9]), static_cast<T>(arr[13]),
                       static_cast<T>(arr[2]), static_cast<T>(arr[6]), static_cast<T>(arr[10]), static_cast<T>(arr[14]),
                       static_cast<T>(arr[3]), static_cast<T>(arr[7]), static_cast<T>(arr[11]), static_cast<T>(arr[15]));
   }
@@ -451,14 +451,28 @@ public:
    */
   template<typename FromT> __attribute__((__always_inline__))
   inline static matrix4<T> constexpr from_column_major_array(FromT const *arr) noexcept {
-    return matrix4<T>(static_cast<T>(arr[0]),  static_cast<T>(arr[1]),  static_cast<T>(arr[2]),  static_cast<T>(arr[3]),
-                      static_cast<T>(arr[4]),  static_cast<T>(arr[5]),  static_cast<T>(arr[6]),  static_cast<T>(arr[7]),
-                      static_cast<T>(arr[8]),  static_cast<T>(arr[9]),  static_cast<T>(arr[10]), static_cast<T>(arr[11]),
+    return matrix4<T>(static_cast<T>(arr[ 0]), static_cast<T>(arr[ 1]), static_cast<T>(arr[ 2]), static_cast<T>(arr[ 3]),
+                      static_cast<T>(arr[ 4]), static_cast<T>(arr[ 5]), static_cast<T>(arr[ 6]), static_cast<T>(arr[ 7]),
+                      static_cast<T>(arr[ 8]), static_cast<T>(arr[ 9]), static_cast<T>(arr[10]), static_cast<T>(arr[11]),
                       static_cast<T>(arr[12]), static_cast<T>(arr[13]), static_cast<T>(arr[14]), static_cast<T>(arr[15]));
   }
   template<typename FromT> __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_column_major_array()")))
   inline static matrix4<T> constexpr fromColumnMajorArray(FromT const *arr) noexcept {
     return from_column_major_array(arr);
+  }
+
+  /**
+   * Creates new matrix 4x4 from array that represents such matrix 4x3
+   * as array of tightly packed elements in row major order.
+   * @param arr An array of elements for 4x3 matrix in row major order.
+   * @return An instance of matrix4<T> representing @a arr
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline static matrix4<T> constexpr from_row_major_43_array(FromT const *arr) noexcept {
+    return matrix4<T>(static_cast<T>(arr[0]), static_cast<T>(arr[4]), static_cast<T>(arr[ 8]), static_cast<T>(0),
+                      static_cast<T>(arr[1]), static_cast<T>(arr[5]), static_cast<T>(arr[ 9]), static_cast<T>(0),
+                      static_cast<T>(arr[2]), static_cast<T>(arr[6]), static_cast<T>(arr[10]), static_cast<T>(0),
+                      static_cast<T>(arr[3]), static_cast<T>(arr[7]), static_cast<T>(arr[11]), static_cast<T>(1));
   }
 
   //---------------------[ Equality operators ]------------------------------
