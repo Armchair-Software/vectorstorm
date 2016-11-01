@@ -104,11 +104,11 @@ public:
   //  : data(dt) noexcept __attribute__((__always_inline__)) {
   //}
   // see http://stackoverflow.com/a/5549918/1678468
-  template<class... FromT> __attribute__((__always_inline__))
+  template<typename... FromT> __attribute__((__always_inline__))
   inline constexpr explicit matrix4(FromT... dt) noexcept
     : data{dt...} {
   }
-  //template<class... FromT>  __attribute__((__always_inline__))
+  //template<typename... FromT>  __attribute__((__always_inline__))
   //inline constexpr explicit matrix4(FromT&&... dt)
   //  : data{std::forward<FromT>(dt)...} {
   //}
