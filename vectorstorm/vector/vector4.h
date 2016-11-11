@@ -129,6 +129,11 @@ public:
       w(static_cast<T>(src.w)) {
   }
 
+  /**
+   * Copy constructor from a vector3.
+   * @param src Source of x,y,z data for new created vector4 instance.
+   * @param new_w Source of data for w element.
+   */
   inline constexpr vector4(vector3<T> const &src, T new_w) noexcept __attribute__((__always_inline__))
     : x(src.x),
       y(src.y),
@@ -136,11 +141,43 @@ public:
       w(new_w) {
   }
 
+  /**
+   * Copy casting constructor from a vector3.
+   * @param src Source of x,y,z data for new created vector4 instance.
+   * @param new_w Source of data for w element.
+   */
   template<typename FromT> __attribute__((__always_inline__))
   inline constexpr vector4(vector3<FromT> const &src, FromT new_w) noexcept
     : x(static_cast<T>(src.x)),
       y(static_cast<T>(src.y)),
       z(static_cast<T>(src.z)),
+      w(static_cast<T>(new_w)) {
+  }
+
+  /**
+   * Copy constructor from a vector2.
+   * @param src Source of x,y data for new created vector4 instance.
+   * @param new_z Source of data for z element.
+   * @param new_w Source of data for w element.
+   */
+  inline constexpr vector4(vector2<T> const &src, T new_z, T new_w) noexcept __attribute__((__always_inline__))
+    : x(src.x),
+      y(src.y),
+      z(new_z),
+      w(new_w) {
+  }
+
+  /**
+   * Copy casting constructor from a vector2.
+   * @param src Source of x,y data for new created vector4 instance.
+   * @param new_z Source of data for z element.
+   * @param new_w Source of data for w element.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr vector4(vector2<FromT> const &src, FromT new_z, FromT new_w) noexcept
+    : x(static_cast<T>(src.x)),
+      y(static_cast<T>(src.y)),
+      z(static_cast<T>(new_z)),
       w(static_cast<T>(new_w)) {
   }
 
@@ -165,6 +202,58 @@ public:
       y(static_cast<T>(std::move(src.y))),
       z(static_cast<T>(std::move(src.z))),
       w(static_cast<T>(std::move(src.w))) {
+  }
+
+  /**
+   * Move constructor from a vector3.
+   * @param src Source of x,y,z data for new created vector4 instance.
+   * @param new_w Source of data for w element.
+   */
+  inline constexpr vector4(vector3<T> &&src, T new_w) noexcept __attribute__((__always_inline__))
+    : x(std::move(src.x)),
+      y(std::move(src.y)),
+      z(std::move(src.z)),
+      w(std::move(new_w)) {
+  }
+
+  /**
+   * Move casting constructor from a vector3.
+   * @param src Source of x,y,z data for new created vector4 instance.
+   * @param new_w Source of data for w element.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr vector4(vector3<FromT> &&src, FromT new_w) noexcept
+    : x(static_cast<T>(std::move(src.x))),
+      y(static_cast<T>(std::move(src.y))),
+      z(static_cast<T>(std::move(src.z))),
+      w(static_cast<T>(std::move(new_w))) {
+  }
+
+  /**
+   * Move constructor from a vector2.
+   * @param src Source of x,y data for new created vector4 instance.
+   * @param new_z Source of data for z element.
+   * @param new_w Source of data for w element.
+   */
+  inline constexpr vector4(vector2<T> &&src, T new_z, T new_w) noexcept __attribute__((__always_inline__))
+    : x(std::move(src.x)),
+      y(std::move(src.y)),
+      z(std::move(new_z)),
+      w(std::move(new_w)) {
+  }
+
+  /**
+   * Move casting constructor from a vector2.
+   * @param src Source of x,y data for new created vector4 instance.
+   * @param new_z Source of data for z element.
+   * @param new_w Source of data for w element.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr vector4(vector2<FromT> &&src, FromT new_z, FromT new_w) noexcept
+    : x(static_cast<T>(std::move(src.x))),
+      y(static_cast<T>(std::move(src.y))),
+      z(static_cast<T>(std::move(new_z))),
+      w(static_cast<T>(std::move(new_w))) {
   }
 
   //----------------[ assignment ]-------------------------

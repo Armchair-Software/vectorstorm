@@ -7,6 +7,7 @@
 #include "vectorstorm/sincos.h"
 #include "vectorstorm/deg2rad.h"
 #include "vector3_forward.h"
+#include "vector4_forward.h"
 
 #ifdef VMATH_NAMESPACE
 namespace VMATH_NAMESPACE {
@@ -95,6 +96,44 @@ public:
   }
 
   /**
+   * Copy constructor from a vector3.
+   * @param src Source of x,y data for new created vector2 instance.
+   */
+  inline constexpr vector2(vector3<T> const &src) noexcept __attribute__((__always_inline__))
+    : x(src.x),
+      y(src.y) {
+  }
+
+  /**
+   * Copy casting constructor from a vector3.
+   * @param src Source of x,y,z data for new created vector2 instance.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr vector2(vector3<FromT> const &src) noexcept
+    : x(static_cast<T>(src.x)),
+      y(static_cast<T>(src.y)) {
+  }
+
+  /**
+   * Copy constructor from a vector4.
+   * @param src Source of x,y,z data for new created vector2 instance.
+   */
+  inline constexpr vector2(vector4<T> const &src) noexcept __attribute__((__always_inline__))
+    : x(src.x),
+      y(src.y) {
+  }
+
+  /**
+   * Copy casting constructor from a vector4.
+   * @param src Source of x,y,z data for new created vector2 instance.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr vector2(vector4<FromT> const &src) noexcept
+    : x(static_cast<T>(src.x)),
+      y(static_cast<T>(src.y)) {
+  }
+
+  /**
    * Move constructor.
    * @param src Source of data for new created vector2 instance.
    */
@@ -109,6 +148,44 @@ public:
    */
   template<typename FromT> __attribute__((__always_inline__))
   inline constexpr vector2(vector2<FromT> &&src) noexcept
+    : x(static_cast<T>(std::move(src.x))),
+      y(static_cast<T>(std::move(src.y))) {
+  }
+
+  /**
+   * Move constructor from a vector3.
+   * @param src Source of x,y data for new created vector2 instance.
+   */
+  inline constexpr vector2(vector3<T> const &&src) noexcept __attribute__((__always_inline__))
+    : x(std::move(src.x)),
+      y(std::move(src.y)) {
+  }
+
+  /**
+   * Move casting constructor from a vector3.
+   * @param src Source of x,y,z data for new created vector2 instance.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr vector2(vector3<FromT> const &&src) noexcept
+    : x(static_cast<T>(std::move(src.x))),
+      y(static_cast<T>(std::move(src.y))) {
+  }
+
+  /**
+   * Move constructor from a vector4.
+   * @param src Source of x,y,z data for new created vector2 instance.
+   */
+  inline constexpr vector2(vector4<T> const &&src) noexcept __attribute__((__always_inline__))
+    : x(std::move(src.x)),
+      y(std::move(src.y)) {
+  }
+
+  /**
+   * Move casting constructor from a vector4.
+   * @param src Source of x,y,z data for new created vector2 instance.
+   */
+  template<typename FromT> __attribute__((__always_inline__))
+  inline constexpr vector2(vector4<FromT> const &&src) noexcept
     : x(static_cast<T>(std::move(src.x))),
       y(static_cast<T>(std::move(src.y))) {
   }
