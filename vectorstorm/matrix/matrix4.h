@@ -339,18 +339,17 @@ public:
    * @param right Specify the coordinate for the right vertical clipping plane.
    * @param bottom Specify the coordinate for the bottom horizontal clipping plane,
    * @param top Specify the coordinate for the top horizontal clipping plane.
-   * @param zNear Specify the distance to the near clipping plane.  Distance must be positive.
-   * @param zFar Specify the distance to the far depth clipping plane.  Distance must be positive.
-   *
+   * @param near Specify the distance to the near clipping plane.  Distance must be positive.
+   * @param far Specify the distance to the far depth clipping plane.  Distance must be positive.
    * @return Projection matrix for specified frustum.
    */
-  inline static matrix4<T> constexpr create_frustum(T left, T right, T bottom, T top, T zNear, T zFar) noexcept __attribute__((__always_inline__)) {
+  inline static matrix4<T> constexpr create_frustum(T left, T right, T bottom, T top, T near, T far) noexcept __attribute__((__always_inline__)) {
     /*
-     *    2 zNear
+     *    2 near
      *  ------------       0              A              0
      *  right - left
      *
-     *                  2 zNear
+     *                  2 near
      *      0         ------------        B              0
      *                top - bottom
      *
@@ -360,46 +359,44 @@ public:
      *
      *  A =   (right + left) / (right - left)
      *  B =   (top + bottom) / (top - bottom)
-     *  C = - (zFar + zNear) / (zFar - zNear)
-     *  D = - (2 zFar zNear) / (zFar - zNear)
+     *  C = - (far + near) / (far - near)
+     *  D = - (2 far near) / (far - near)
      */
-    return matrix4<T>(static_cast<T>(2) * zNear / (right - left),
+    return matrix4<T>((static_cast<T>(2) * near) / (right - left),
                       static_cast<T>(0),
                       static_cast<T>(0),
                       static_cast<T>(0),
 
                       static_cast<T>(0),
-                      static_cast<T>(2) * zNear / (top - bottom),
+                      (static_cast<T>(2) * near) / (top - bottom),
                       static_cast<T>(0),
                       static_cast<T>(0),
 
-                       (right + left) / (right - left),
-                       (top + bottom) / (top - bottom),
-                      -(zFar + zNear) / (zFar - zNear),
+                       (right + left)   / (right - left),
+                       (top   + bottom) / (top   - bottom),
+                      -(far   + near)   / (far   - near),
                       static_cast<T>(-1),
 
                       static_cast<T>(0),
                       static_cast<T>(0),
-                      static_cast<T>(-2) * zNear * zFar / (zFar - zNear),
-                      static_cast<T>(1));
+                      (static_cast<T>(-2) * far * near) / (far - near),
+                      static_cast<T>(0));
   }
-  inline static matrix4<T> constexpr createFrustum(T left, T right, T bottom, T top, T zNear, T zFar) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_frustum()"))) {
-    return create_frustum(left, right, bottom, top, zNear, zFar);
+  inline static matrix4<T> constexpr createFrustum(T left, T right, T bottom, T top, T near, T far) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_frustum()"))) {
+    return create_frustum(left, right, bottom, top, near, far);
   }
 
   /**
    * Creates OpenGL compatible orthographic projection matrix.
    * @param left Specify the coordinate for the left vertical clipping plane,
    * @param right Specify the coordinate for the right vertical clipping plane.
-   * @param bottom Specify the coordinate for the bottom horizontal clipping plane,
+   * @param bottom Specify the coordinate for the bottom horizontal clipping plane.
    * @param top Specify the coordinate for the top horizontal clipping plane.
-   * @param zNear Specify the distance to the nearer depth clipping plane.
-   *       This value is negative if the plane is to be behind the viewer,
-   * @param zFar Specify the distance to the farther depth clipping plane.
-   *       This value is negative if the plane is to be behind the viewer.
+   * @param near Specify the distance to the nearer depth clipping plane. This value is negative if the plane is to be behind the viewer.
+   * @param far Specify the distance to the farther depth clipping plane. This value is negative if the plane is to be behind the viewer.
    * @return Othrographic projection matrix.
    */
-  inline static matrix4<T> constexpr create_ortho(T left, T right, T bottom, T top, T zNear, T zFar) noexcept __attribute__((__always_inline__)) {
+  inline static matrix4<T> constexpr create_ortho(T left, T right, T bottom, T top, T near, T far) noexcept __attribute__((__always_inline__)) {
     /*      2
      *  ------------       0              0              tx
      *  right - left
@@ -408,21 +405,36 @@ public:
      *                top - bottom
      *                                    -2
      *      0              0         ------------        tz
-     *                                zFar-zNear
+     *                                far - near
      *
      *      0              0              0              1
      *
      *    tx = - (right + left) / (right - left)
      *    ty = - (top + bottom) / (top - bottom)
-     *    tz = - (zFar + zNear) / (zFar - zNear)
+     *    tz = - (far + near) / (far - near)
      */
-    return matrix4<T>(static_cast<T>(2) / (right - left), static_cast<T>(0),                  static_cast<T>(0),                   static_cast<T>(0),
-                      static_cast<T>(0),                  static_cast<T>(2) / (top - bottom), static_cast<T>(0),                   static_cast<T>(0),
-                      static_cast<T>(0),                  static_cast<T>(0),                  static_cast<T>(-2) / (zFar - zNear), static_cast<T>(0),
-                      -(right + left)   / (right - left), -(top + bottom)   / (top - bottom), -(zFar + zNear)    / (zFar - zNear), static_cast<T>(1));
+    return matrix4<T>(static_cast<T>(2) / (right - left),
+                      static_cast<T>(0),
+                      static_cast<T>(0),
+                      static_cast<T>(0),
+
+                      static_cast<T>(0),
+                      static_cast<T>(2) / (top - bottom),
+                      static_cast<T>(0),
+                      static_cast<T>(0),
+
+                      static_cast<T>(0),
+                      static_cast<T>(0),
+                      static_cast<T>(-2) / (far - near),
+                      static_cast<T>(0),
+
+                      -(right + left)   / (right - left),
+                      -(top   + bottom) / (top   - bottom),
+                      -(far   + near)   / (far   - near),
+                      static_cast<T>(1));
   }
-  inline static matrix4<T> constexpr createOrtho(T left, T right, T bottom, T top, T zNear, T zFar) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_ortho()"))) {
-    return create_ortho(left, right, bottom, top, zNear, zFar);
+  inline static matrix4<T> constexpr createOrtho(T left, T right, T bottom, T top, T near, T far) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_ortho()"))) {
+    return create_ortho(left, right, bottom, top, near, far);
   }
 
   /**
