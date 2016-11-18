@@ -341,16 +341,22 @@ public:
    * Dot product of two vectors.
    * @param rhs Right hand side argument of binary operator.
    */
-  inline T constexpr dotProduct(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+  inline T constexpr dot(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return x * rhs.x + y * rhs.y;
+  }
+  inline T constexpr dotProduct(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use dot()"))) {
+    return dot(rhs);
   }
 
   /**
    * Cross product of two vectors
    * @param rhs Right hand side argument of binary operator.
    */
-  inline T constexpr crossProduct(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+  inline T constexpr cross(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return x * rhs.y - y * rhs.x;
+  }
+  inline T constexpr crossProduct(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use cross()"))) {
+    return cross(rhs);
   }
 
   //--------------[ scalar vector operator ]--------------------

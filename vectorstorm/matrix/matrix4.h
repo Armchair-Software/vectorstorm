@@ -280,11 +280,11 @@ public:
     forward.normalise();
 
     // Side = forward x up
-    vector3<T> side = forward.crossProduct(up_dir);
+    vector3<T> side = forward.cross(up_dir);
     side.normalise();
 
     // Recompute up as: up = side x forward
-    vector3<T> const up = side.crossProduct(forward);
+    vector3<T> const up = side.cross(forward);
 
     return matrix4<T>(static_cast<T>(side.x),
                       static_cast<T>(up.x),
@@ -307,18 +307,18 @@ public:
                       static_cast<T>(1)) * matrix4<T>::create_translation(-eye_pos.x, -eye_pos.y, -eye_pos.z);
     // constexpr-suitable return-only alternative, may turn out much slower when computed at runtime:
     /*
-    return matrix4<T>( (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().x,
-                       (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().crossProduct((centre_pos - eye_pos).normalise_copy()).x,
+    return matrix4<T>( (centre_pos - eye_pos).normalise_copy().cross(up_dir).normalise_copy().x,
+                       (centre_pos - eye_pos).normalise_copy().cross(up_dir).normalise_copy().cross((centre_pos - eye_pos).normalise_copy()).x,
                       -(centre_pos - eye_pos).normalise_copy().x,
                        static_cast<T>(0),
 
-                       (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().y,
-                       (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().crossProduct((centre_pos - eye_pos).normalise_copy()).y,
+                       (centre_pos - eye_pos).normalise_copy().cross(up_dir).normalise_copy().y,
+                       (centre_pos - eye_pos).normalise_copy().cross(up_dir).normalise_copy().cross((centre_pos - eye_pos).normalise_copy()).y,
                       -(centre_pos - eye_pos).normalise_copy().y,
                        static_cast<T>(0),
 
-                       (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().z,
-                       (centre_pos - eye_pos).normalise_copy().crossProduct(up_dir).normalise_copy().crossProduct((centre_pos - eye_pos).normalise_copy()).z,
+                       (centre_pos - eye_pos).normalise_copy().cross(up_dir).normalise_copy().z,
+                       (centre_pos - eye_pos).normalise_copy().cross(up_dir).normalise_copy().cross((centre_pos - eye_pos).normalise_copy()).z,
                       -(centre_pos - eye_pos).normalise_copy().z,
                        static_cast<T>(0),
 

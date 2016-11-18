@@ -207,8 +207,8 @@ public:
    */
   inline static matrix3<T> constexpr create_rotation_between_vectors(vector3<T> const &from, vector3<T> const &to) noexcept __attribute__((__always_inline__)) {
     // the static cast is to avoid narrowing conversion warnings when used with ints
-    vector3<T> const cross(to.crossProduct(from));
-    T const dot = from.dotProduct(to);
+    vector3<T> const cross(to.cross(from));
+    T const dot = from.dot(to);
     T const temp_k = static_cast<T>(1) / (static_cast<T>(1) + dot);
     return matrix3<T>(cross.x * cross.x * temp_k + dot,
                       cross.y * cross.x * temp_k - cross.z,

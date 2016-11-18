@@ -522,16 +522,22 @@ public:
    * Dot product of two vectors.
    * @param rhs Right hand side argument of binary operator.
    */
-  inline T constexpr dotProduct(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+  inline T constexpr dot(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return x * rhs.x + y * rhs.y + z * rhs.z;
+  }
+  inline T constexpr dotProduct(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use dot()"))) {
+    return dot(rhs);
   }
 
   /**
    * Cross product of two vectors
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector3<T> constexpr crossProduct(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+  inline vector3<T> constexpr cross(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(y * rhs.z - rhs.y * z, z * rhs.x - rhs.z * x, x * rhs.y - rhs.x * y);
+  }
+  inline vector3<T> constexpr crossProduct(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use cross()"))) {
+    return cross(rhs);
   }
 
   //--------------[ rotation with quaternions ]-----------------
@@ -541,7 +547,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   inline vector3<T> constexpr operator*(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    return *this + (rhs.v.crossProduct(*this) * static_cast<T>(2) * rhs.w) + rhs.v.crossProduct(rhs.v.crossProduct(*this) * static_cast<T>(2));
+    return *this + (rhs.v.cross(*this) * static_cast<T>(2) * rhs.w) + rhs.v.cross(rhs.v.cross(*this) * static_cast<T>(2));
   }
 
   /**
@@ -549,8 +555,8 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   inline vector3<T> constexpr &operator*=(quaternion<T> const &rhs) noexcept __attribute__((__always_inline__)) {
-    vector3<T> const temp = rhs.v.crossProduct(*this) * static_cast<T>(2);
-    *this += (temp * rhs.w) + rhs.v.crossProduct(temp);
+    vector3<T> const temp = rhs.v.cross(*this) * static_cast<T>(2);
+    *this += (temp * rhs.w) + rhs.v.cross(temp);
     return *this;
   }
 
