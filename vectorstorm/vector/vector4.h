@@ -809,10 +809,17 @@ public:
    * @return whether vector is zero length
    */
   inline bool constexpr length_zero() const noexcept __attribute__((__always_inline__)) {
+    /*
     return x == static_cast<T>(0) &&
            y == static_cast<T>(0) &&
            z == static_cast<T>(0) &&
            w == static_cast<T>(0);
+    */
+    // the above may fail to detect cases where the sqrt of three tiny numbers would be zero
+    return std::abs(x) < epsilon &&
+           std::abs(y) < epsilon &&
+           std::abs(z) < epsilon &&
+           std::abs(w) < epsilon;
   }
 
   /**
