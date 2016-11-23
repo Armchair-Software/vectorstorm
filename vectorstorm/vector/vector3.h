@@ -667,9 +667,9 @@ public:
    */
   inline bool constexpr operator==(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     #ifdef VMATH_SOFT_COMPARE
-      return std::abs(x - rhs.x) < static_cast<T>(epsilon) &&
-             std::abs(y - rhs.y) < static_cast<T>(epsilon) &&
-             std::abs(z - rhs.z) < static_cast<T>(epsilon);
+      return std::abs(x - rhs.x) < epsilon<T> &&
+             std::abs(y - rhs.y) < epsilon<T> &&
+             std::abs(z - rhs.z) < epsilon<T>;
     #else
       return x == rhs.x &&
              y == rhs.y &&
@@ -742,9 +742,9 @@ public:
            z == static_cast<T>(0);
     */
     // the above may fail to detect cases where the sqrt of three tiny numbers would be zero
-    return std::abs(x) < epsilon &&
-           std::abs(y) < epsilon &&
-           std::abs(z) < epsilon;
+    return std::abs(x) < epsilon<T> &&
+           std::abs(y) < epsilon<T> &&
+           std::abs(z) < epsilon<T>;
   }
 
   /**

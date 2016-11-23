@@ -336,7 +336,7 @@ public:
    */
   inline bool constexpr operator==(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     #ifdef VMATH_SOFT_COMPARE
-      return (std::abs(w - rhs.w) < static_cast<T>(epsilon)) && v == rhs.v;
+      return (std::abs(w - rhs.w) < epsilon<T>) && v == rhs.v;
     #else
       return w == rhs.w && v == rhs.v;
     #endif // VMATH_SOFT_COMPARE
@@ -626,7 +626,7 @@ public:
     quaternion<T> q;
 
     T const tr = m(1, 1) + m(2, 2) + m(3, 3);
-    if(tr >= static_cast<T>(epsilon)) {
+    if(tr >= epsilon<T>) {
       T const s = static_cast<T>(0.5) / static_cast<T>(std::sqrt(tr + static_cast<T>(1.0)));
       q.w = static_cast<T>(0.25) / s;
       q.v.x = (m(3, 2) - m(2, 3)) * s;
@@ -677,7 +677,7 @@ public:
     quaternion<T> q;
 
     T const tr = m(1, 1) + m(2, 2) + m(3, 3);
-    if(tr >= static_cast<T>(epsilon)) {
+    if(tr >= epsilon<T>) {
       T const s = static_cast<T>(0.5) / static_cast<T>(std::sqrt(tr + static_cast<T>(1.0)));
       q.w = static_cast<T>(0.25) / s;
       q.v.x = (m(3, 2) - m(2, 3)) * s;
@@ -728,11 +728,11 @@ public:
     quaternion<T> ret;
     T const cosTheta = w * q2.w + v.x * q2.v.x + v.y * q2.v.y + v.z * q2.v.z;
     T const theta = static_cast<T>(std::acos(cosTheta));
-    if(std::abs(theta) < static_cast<T>(epsilon)) {
+    if(std::abs(theta) < epsilon<T>) {
       ret = *this;
     } else {
       T sinTheta = static_cast<T>(std::sqrt(static_cast<T>(1.0) - cosTheta * cosTheta));
-      if(std::abs(sinTheta) < static_cast<T>(epsilon)) {
+      if(std::abs(sinTheta) < epsilon<T>) {
         ret.w = static_cast<T>(0.5) * w + static_cast<T>(0.5) * q2.w;
         ret.v = v.lerp(static_cast<T>(0.5), q2.v);
       } else {

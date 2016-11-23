@@ -286,15 +286,15 @@ public:
    */
   inline bool constexpr operator==(matrix3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     #ifdef VMATH_SOFT_COMPARE
-      return std::abs(data[0] - rhs.data[0]) < static_cast<T>(epsilon) &&
-             std::abs(data[1] - rhs.data[1]) < static_cast<T>(epsilon) &&
-             std::abs(data[2] - rhs.data[2]) < static_cast<T>(epsilon) &&
-             std::abs(data[3] - rhs.data[3]) < static_cast<T>(epsilon) &&
-             std::abs(data[4] - rhs.data[4]) < static_cast<T>(epsilon) &&
-             std::abs(data[5] - rhs.data[5]) < static_cast<T>(epsilon) &&
-             std::abs(data[6] - rhs.data[6]) < static_cast<T>(epsilon) &&
-             std::abs(data[7] - rhs.data[7]) < static_cast<T>(epsilon) &&
-             std::abs(data[8] - rhs.data[8]) < static_cast<T>(epsilon);
+      return std::abs(data[0] - rhs.data[0]) < epsilon<T> &&
+             std::abs(data[1] - rhs.data[1]) < epsilon<T> &&
+             std::abs(data[2] - rhs.data[2]) < epsilon<T> &&
+             std::abs(data[3] - rhs.data[3]) < epsilon<T> &&
+             std::abs(data[4] - rhs.data[4]) < epsilon<T> &&
+             std::abs(data[5] - rhs.data[5]) < epsilon<T> &&
+             std::abs(data[6] - rhs.data[6]) < epsilon<T> &&
+             std::abs(data[7] - rhs.data[7]) < epsilon<T> &&
+             std::abs(data[8] - rhs.data[8]) < epsilon<T>;
     #else
       return data[0] == rhs.data[0] &&
              data[1] == rhs.data[1] &&
