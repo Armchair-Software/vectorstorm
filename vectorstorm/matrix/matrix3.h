@@ -112,11 +112,14 @@ public:
    * @param yDeg Angle (in degrees) of rotation around axis Y.
    * @param zDeg Angle (in degrees) of rotation around axis Z.
    */
-  inline static matrix3<T> constexpr create_rotation_around_axis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) {
-    return create_rotation_around_axis_rad(deg2rad(xDeg), deg2rad(yDeg), deg2rad(zDeg));
+  inline static matrix3<T> constexpr create_rotation_from_euler_angles(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) {
+    return create_rotation_from_euler_angles_rad(deg2rad(xDeg), deg2rad(yDeg), deg2rad(zDeg));
   }
-  inline static matrix3<T> constexpr createRotationAroundAxis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis()"))) {
-    return create_rotation_around_axis(xDeg, yDeg, zDeg);
+  inline static matrix3<T> constexpr create_rotation_around_axis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_from_euler_angles()"))) {
+    return create_rotation_from_euler_angles(xDeg, yDeg, zDeg);
+  }
+  inline static matrix3<T> constexpr createRotationAroundAxis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_from_euler_angles()"))) {
+    return create_rotation_from_euler_angles(xDeg, yDeg, zDeg);
   }
 
   /**
@@ -125,7 +128,8 @@ public:
    * @param yRads Angle (in radians) of rotation around axis Y.
    * @param zRads Angle (in radians) of rotation around axis Z.
    */
-  inline static matrix3<T> constexpr create_rotation_around_axis_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) {
+  inline static matrix3<T> constexpr create_rotation_from_euler_angles_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) {
+    // adapted from Inigo Quilez: http://www.iquilezles.org/www/articles/noacos/noacos.htm
     //T sin_xRads, cos_xRads, sin_yRads, cos_yRads, sin_zRads, cos_zRads;
     // zero-initialisation is required for gcc not to complain when the function is constexpr
     // the static cast is to avoid narrowing conversion warnings when used with ints
@@ -135,9 +139,9 @@ public:
     T cos_yRads = static_cast<T>(0);
     T sin_zRads = static_cast<T>(0);
     T cos_zRads = static_cast<T>(0);
-    sincos_any(xRads, sin_xRads, cos_xRads);
-    sincos_any(yRads, sin_yRads, cos_yRads);
-    sincos_any(zRads, sin_zRads, cos_zRads);
+    sincos_any(-xRads, sin_xRads, cos_xRads);
+    sincos_any(-yRads, sin_yRads, cos_yRads);
+    sincos_any(-zRads, sin_zRads, cos_zRads);
     T const temp_sin_z_sin_y = sin_zRads * sin_yRads;
     T const temp_cos_z_sin_y = cos_zRads * sin_yRads;
     T const temp_cos_z_cos_y = cos_zRads * cos_yRads;
@@ -153,8 +157,11 @@ public:
                       temp_cos_z_cos_y * sin_xRads,
                       temp_cos_z_cos_y * cos_xRads);
   }
-  inline static matrix3<T> constexpr createRotationAroundAxis_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis_rad()"))) {
-    return create_rotation_around_axis_rad(xRads, yRads, zRads);
+  inline static matrix3<T> constexpr create_rotation_around_axis_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_from_euler_angles_rad()"))) {
+    return create_rotation_from_euler_angles_rad(xRads, yRads, zRads);
+  }
+  inline static matrix3<T> constexpr createRotationAroundAxis_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_from_euler_angles_rad()"))) {
+    return create_rotation_from_euler_angles_rad(xRads, yRads, zRads);
   }
 
   /**
@@ -163,7 +170,7 @@ public:
    * @param angle Angle (in degrees) of rotation around axis.
    */
   inline static matrix3<T> constexpr create_rotation_around_axis(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) {
-    return create_rotation_around_axis_rad(axis, angle);
+    return create_rotation_around_axis_rad(axis, deg2rad(angle));
   }
   inline static matrix3<T> constexpr createRotationAroundAxis(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis()"))) {
     return create_rotation_around_axis(axis, angle);
@@ -180,7 +187,7 @@ public:
     // the static cast is to avoid narrowing conversion warnings when used with ints
     T sin_a = static_cast<T>(0);
     T cos_a = static_cast<T>(0);
-    sincos_any(angle, sin_a, cos_a);
+    sincos_any(-angle, sin_a, cos_a);
     T const cos_a_inv = static_cast<T>(1) - cos_a;
     return matrix3<T>(axis.x * axis.x * cos_a_inv + cos_a,
                       axis.y * axis.x * cos_a_inv - sin_a * axis.z,
@@ -225,6 +232,36 @@ public:
   }
   inline static matrix3<T> constexpr createRotationBetweenVectors(vector3<T> const &from, vector3<T> const &to) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_between_vectors()"))) {
     return create_rotation_between_vectors(from, to);
+  }
+
+  /**
+   * Creates a rotation matrix to align with a target vector direction @a target
+   * @param target Vector that the rotation should point at
+   * @param up_dir Direction of up vector
+   * @return Resulting matrix that's oriented to the target vector
+   */
+  inline static matrix3<T> constexpr create_rotation_aligned_to_vector(vector3<T> const &target, vector3<T> const &up_dir) noexcept __attribute__((__always_inline__)) {
+    vector3<T> forward(target);
+    forward.normalise();
+
+    // Side = forward x up
+    vector3<T> side = forward.cross(up_dir);
+    side.normalise();
+
+    // Recompute up as: up = side x forward
+    vector3<T> const up = side.cross(forward);
+
+    return matrix3<T>(static_cast<T>(side.x),
+                      static_cast<T>(up.x),
+                      static_cast<T>(forward.x),
+
+                      static_cast<T>(side.y),
+                      static_cast<T>(up.y),
+                      static_cast<T>(forward.y),
+
+                      static_cast<T>(side.z),
+                      static_cast<T>(up.z),
+                      static_cast<T>(forward.z));
   }
 
   /**

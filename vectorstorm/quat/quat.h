@@ -350,6 +350,13 @@ public:
   inline bool constexpr operator!=(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return !(*this == rhs);
   }
+  /**
+   * Dot product of two quaternions.
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline T constexpr dot(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+    return (w * rhs.w) + v.dot(rhs.v);
+  }
 
   //-------------[ unary operations ]--------------------------
   /**
@@ -545,17 +552,17 @@ public:
    * @param angle The angle of rotation
    * @param axis The axis around which the rotation is
    */
-  inline void constexpr to_angle_axis(T &angle, vector3<T> &axis) noexcept __attribute__((__always_inline__)) {
+  inline void constexpr to_angle_axis(T &angle, vector3<T> &axis) const noexcept __attribute__((__always_inline__)) {
     T const squareLength = v.length_sq();
     if(squareLength != 0) {
-      angle = static_cast<T>(2.0) * std::acos(w);
+      angle = static_cast<T>(2) * std::acos(w);
       axis = v / std::pow(squareLength, static_cast<T>(0.5));
     } else {
-      angle = static_cast<T>(0.0);
-      axis.assign(static_cast<T>(1.0), static_cast<T>(0.0), static_cast<T>(0.0));
+      angle = static_cast<T>(0);
+      axis.assign(static_cast<T>(1), static_cast<T>(0), static_cast<T>(0));
     }
   }
-  inline void constexpr toAngleAxis(T &angle, vector3<T> &axis) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_angle_axis()"))) {
+  inline void constexpr toAngleAxis(T &angle, vector3<T> &axis) const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_angle_axis()"))) {
     to_angle_axis(angle, axis);
   }
 
@@ -563,10 +570,18 @@ public:
    * Converts quaternion into rotation matrix.
    * @return Rotation matrix expressing this quaternion.
    */
-  inline matrix3<T> constexpr rotmatrix() noexcept __attribute__((__always_inline__)) {
-    return matrix3<T>(1 - 2 * (v.y * v.y + v.z * v.z),     2 * (v.x * v.y + v.z * w),       2 * (v.x * v.z - v.y * w),
-                          2 * (v.x * v.y - v.z * w),   1 - 2 * (v.x * v.x + v.z * v.z),     2 * (v.y * v.z + v.x * w),
-                          2 * (v.x * v.z + v.y * w),       2 * (v.y * v.z - v.x * w),   1 - 2 * (v.x * v.x + v.y * v.y));
+  inline matrix3<T> constexpr rotmatrix() const noexcept __attribute__((__always_inline__)) {
+    return matrix3<T>(static_cast<T>(1) - static_cast<T>(2) * (v.y * v.y + v.z * v.z),
+                      static_cast<T>(2)                     * (v.x * v.y + v.z * w),
+                      static_cast<T>(2)                     * (v.x * v.z - v.y * w),
+
+                      static_cast<T>(2)                     * (v.x * v.y - v.z * w),
+                      static_cast<T>(1) - static_cast<T>(2) * (v.x * v.x + v.z * v.z),
+                      static_cast<T>(2)                     * (v.y * v.z + v.x * w),
+
+                      static_cast<T>(2)                     * (v.x * v.z + v.y * w),
+                      static_cast<T>(2)                     * (v.y * v.z - v.x * w),
+                      static_cast<T>(1) - static_cast<T>(2) * (v.x * v.x + v.y * v.y));
   }
 
   /**
@@ -576,10 +591,25 @@ public:
    * @return Transformation matrix expressing this quaternion.
    */
   inline matrix4<T> constexpr transform() const noexcept __attribute__((__always_inline__)) {
-    return matrix4<T>(1 - 2 * (v.y * v.y + v.z * v.z),     2 * (v.x * v.y + v.z * w),       2 * (v.x * v.z - v.y * w),   0.0f,
-                          2 * (v.x * v.y - v.z * w),   1 - 2 * (v.x * v.x + v.z * v.z),     2 * (v.y * v.z + v.x * w),   0.0f,
-                          2 * (v.x * v.z + v.y * w),       2 * (v.y * v.z - v.x * w),   1 - 2 * (v.x * v.x + v.y * v.y), 0.0f,
-                      0.0f,                            0.0f,                            0.0f,                            1.0f);
+    return matrix4<T>(static_cast<T>(1) - static_cast<T>(2) * (v.y * v.y + v.z * v.z),
+                      static_cast<T>(2)                     * (v.x * v.y + v.z * w),
+                      static_cast<T>(2)                     * (v.x * v.z - v.y * w),
+                      static_cast<T>(0),
+
+                      static_cast<T>(2)                     * (v.x * v.y - v.z * w),
+                      static_cast<T>(1) - static_cast<T>(2) * (v.x * v.x + v.z * v.z),
+                      static_cast<T>(2)                     * (v.y * v.z + v.x * w),
+                      static_cast<T>(0),
+
+                      static_cast<T>(2)                     * (v.x * v.z + v.y * w),
+                      static_cast<T>(2)                     * (v.y * v.z - v.x * w),
+                      static_cast<T>(1) - static_cast<T>(2) * (v.x * v.x + v.y * v.y),
+                      static_cast<T>(0),
+
+                      static_cast<T>(0),
+                      static_cast<T>(0),
+                      static_cast<T>(0),
+                      static_cast<T>(1));
   }
 
   /**
@@ -593,6 +623,39 @@ public:
    */
   inline quaternion<T> constexpr lerp(T fact, quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return quaternion<T>((1 - fact) * w + fact * rhs.w, v.lerp(fact, rhs.v));
+  }
+
+  /**
+   * Computes spherical interpolation between quaternions (this, q2)
+   * using coefficient of interpolation r (in [0, 1]).
+   *
+   * @param r The ratio of interpolation form this (r = 0) to q2 (r = 1).
+   * @param q2 Second quaternion for interpolation.
+   * @return Result of interpolation.
+   */
+  inline quaternion<T> constexpr slerp(T r, quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+    T cos_theta = dot(rhs);
+    quaternion<T> rhs_temp(rhs);
+    // dot(lhs, rhs) must be positive for smooth interpolation around poles; if not, flip rhs
+    if(cos_theta < static_cast<T>(0)) {
+      cos_theta = -cos_theta;
+      rhs_temp = -rhs_temp;
+    }
+    T const theta = static_cast<T>(std::acos(cos_theta));
+    if(std::abs(theta) < epsilon<T>) {
+      return quaternion<T>(*this);
+    } else {
+      T const sin_theta = static_cast<T>(std::sqrt(static_cast<T>(1.0) - cos_theta * cos_theta));
+      if(std::abs(sin_theta) < epsilon<T>) {
+        quaternion<T> ret;
+        return quaternion<T>(static_cast<T>(0.5) * w + static_cast<T>(0.5) * rhs_temp.w, v.lerp(static_cast<T>(0.5), rhs_temp.v));
+      } else {
+        T const temp_a = static_cast<T>(std::sin((static_cast<T>(1.0) - r) * theta)) / sin_theta;
+        T const temp_b = static_cast<T>(std::sin(r * theta)) / sin_theta;
+        return quaternion<T>((w * temp_a) + (rhs_temp.w * temp_b),
+                             (v * temp_a) + (rhs_temp.v * temp_b));
+      }
+    }
   }
 
   /**
@@ -621,50 +684,15 @@ public:
    * @param m Transform matrix used to compute quaternion.
    * @return quaternion representing rotation of matrix m.
    */
-  // 2011-07-02: Davide Bacchet: changed formula to fix degenerate cases
+  // matrix4 is convertible to matrix3 so the below is not useful
+  /*
   inline static quaternion<T> constexpr from_matrix(matrix4<T> const &m) noexcept __attribute__((__always_inline__)) {
-    quaternion<T> q;
-
-    T const tr = m(1, 1) + m(2, 2) + m(3, 3);
-    if(tr >= epsilon<T>) {
-      T const s = static_cast<T>(0.5) / static_cast<T>(std::sqrt(tr + static_cast<T>(1.0)));
-      q.w = static_cast<T>(0.25) / s;
-      q.v.x = (m(3, 2) - m(2, 3)) * s;
-      q.v.y = (m(1, 3) - m(3, 1)) * s;
-      q.v.z = (m(2, 1) - m(1, 2)) * s;
-    } else {
-      T d0 = m(1, 1);
-      T d1 = m(2, 2);
-      T d2 = m(3, 3);
-
-      char bigIdx = (d0 > d1) ? ((d0 > d2) ? 0 : 2) : ((d1 > d2) ? 1 : 2);
-
-      if(bigIdx == 0) {
-        T const s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + m(1, 1) - m(2, 2) - m(3, 3)));
-        q.w = (m(3, 2) - m(2, 3)) / s;
-        q.v.x = static_cast<T>(0.25) * s;
-        q.v.y = (m(1, 2) + m(2, 1)) / s;
-        q.v.z = (m(1, 3) + m(3, 1)) / s;
-      } else if(bigIdx == 1) {
-        T s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + m(2, 2) - m(1, 1) - m(3, 3)));
-        q.w = (m(1, 3) - m(3, 1)) / s;
-        q.v.x = (m(1, 2) + m(2, 1)) / s;
-        q.v.y = static_cast<T>(0.25) * s;
-        q.v.z = (m(2, 3) + m(3, 2)) / s;
-      } else {
-        T s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + m(3, 3) - m(1, 1) - m(2, 2)));
-        q.w = (m(2, 1) - m(1, 2)) / s;
-        q.v.x = (m(1, 3) + m(3, 1)) / s;
-        q.v.y = (m(2, 3) + m(3, 2)) / s;
-        q.v.z = static_cast<T>(0.25) * s;
-      }
-    }
-
-    return q;
+    return from_matrix(m.get_rotation());
   }
   inline static quaternion<T> constexpr fromMatrix(matrix4<T> const &m) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
     return from_matrix(m);
   }
+  */
 
   /**
    * Creates quaternion from rotation matrix.
@@ -672,80 +700,41 @@ public:
    * @param m Rotation matrix used to compute quaternion.
    * @return quaternion representing rotation of matrix m.
    */
-  // 2011-07-02: Davide Bacchet: changed formula to fix degenerate cases
-  inline static quaternion<T> constexpr from_matrix(matrix3<T> const &m) noexcept __attribute__((__always_inline__)) {
-    quaternion<T> q;
-
-    T const tr = m(1, 1) + m(2, 2) + m(3, 3);
+  inline static quaternion<T> constexpr from_matrix(matrix3<T> const &mat) noexcept __attribute__((__always_inline__)) {
+    T const tr = mat(1, 1) + mat(2, 2) + mat(3, 3);
     if(tr >= epsilon<T>) {
       T const s = static_cast<T>(0.5) / static_cast<T>(std::sqrt(tr + static_cast<T>(1.0)));
-      q.w = static_cast<T>(0.25) / s;
-      q.v.x = (m(3, 2) - m(2, 3)) * s;
-      q.v.y = (m(1, 3) - m(3, 1)) * s;
-      q.v.z = (m(2, 1) - m(1, 2)) * s;
+      return quaternion<T>(static_cast<T>(0.25)    / s,
+                           (mat(3, 2) - mat(2, 3)) * s,
+                           (mat(1, 3) - mat(3, 1)) * s,
+                           (mat(2, 1) - mat(1, 2)) * s);
     } else {
-      T d0 = m(1, 1);
-      T d1 = m(2, 2);
-      T d2 = m(3, 3);
-
-      char bigIdx = (d0 > d1) ? ((d0 > d2) ? 0 : 2) : ((d1 > d2) ? 1 : 2);
-
-      if(bigIdx == 0) {
-        T const s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + m(1, 1) - m(2, 2) - m(3, 3)));
-        q.w = (m(3, 2) - m(2, 3)) / s;
-        q.v.x = static_cast<T>(0.25) * s;
-        q.v.y = (m(1, 2) + m(2, 1)) / s;
-        q.v.z = (m(1, 3) + m(3, 1)) / s;
-      } else if(bigIdx == 1) {
-        T const s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + m(2, 2) - m(1, 1) - m(3, 3)));
-        q.w = (m(1, 3) - m(3, 1)) / s;
-        q.v.x = (m(1, 2) + m(2, 1)) / s;
-        q.v.y = static_cast<T>(0.25) * s;
-        q.v.z = (m(2, 3) + m(3, 2)) / s;
+      if(mat(1, 1) > mat(2, 2)) {
+        if(mat(1, 1) > mat(3, 3)) {
+          T const s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + mat(1, 1) - mat(2, 2) - mat(3, 3)));
+          return quaternion<T>((mat(3, 2) - mat(2, 3)) / s,
+                               static_cast<T>(0.25)    * s,
+                               (mat(1, 2) + mat(2, 1)) / s,
+                               (mat(1, 3) + mat(3, 1)) / s);
+        }
       } else {
-        T const s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + m(3, 3) - m(1, 1) - m(2, 2)));
-        q.w = (m(2, 1) - m(1, 2)) / s;
-        q.v.x = (m(1, 3) + m(3, 1)) / s;
-        q.v.y = (m(2, 3) + m(3, 2)) / s;
-        q.v.z = static_cast<T>(0.25) * s;
+        if(mat(2, 2) > mat(3, 3)) {
+          T const s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + mat(2, 2) - mat(1, 1) - mat(3, 3)));
+          return quaternion<T>((mat(1, 3) - mat(3, 1)) / s,
+                               (mat(1, 2) + mat(2, 1)) / s,
+                               static_cast<T>(0.25)    * s,
+                               (mat(2, 3) + mat(3, 2)) / s);
+        }
       }
+      T const s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + mat(3, 3) - mat(1, 1) - mat(2, 2)));
+      return quaternion<T>((mat(2, 1) - mat(1, 2)) / s,
+                           (mat(1, 3) + mat(3, 1)) / s,
+                           (mat(2, 3) + mat(3, 2)) / s,
+                           static_cast<T>(0.25)    * s);
     }
-    return q;
   }
   inline static quaternion<T> constexpr fromMatrix(matrix3<T> const &m) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
     return from_matrix(m);
-  }
-
-  /**
-   * Computes spherical interpolation between quaternions (this, q2)
-   * using coefficient of interpolation r (in [0, 1]).
-   *
-   * @param r The ratio of interpolation form this (r = 0) to q2 (r = 1).
-   * @param q2 Second quaternion for interpolation.
-   * @return Result of interpolation.
-   */
-  inline quaternion<T> constexpr slerp(T r, quaternion<T> const &q2) const noexcept __attribute__((__always_inline__)) {
-    quaternion<T> ret;
-    T const cosTheta = w * q2.w + v.x * q2.v.x + v.y * q2.v.y + v.z * q2.v.z;
-    T const theta = static_cast<T>(std::acos(cosTheta));
-    if(std::abs(theta) < epsilon<T>) {
-      ret = *this;
-    } else {
-      T sinTheta = static_cast<T>(std::sqrt(static_cast<T>(1.0) - cosTheta * cosTheta));
-      if(std::abs(sinTheta) < epsilon<T>) {
-        ret.w = static_cast<T>(0.5) * w + static_cast<T>(0.5) * q2.w;
-        ret.v = v.lerp(static_cast<T>(0.5), q2.v);
-      } else {
-        T rA = static_cast<T>(std::sin((static_cast<T>(1.0) - r) * theta)) / sinTheta;
-        T rB = static_cast<T>(std::sin(r * theta)) / sinTheta;
-
-        ret.w = w * rA + q2.w * rB;
-        ret.v.x = v.x * rA + q2.v.x * rB;
-        ret.v.y = v.y * rA + q2.v.y * rB;
-        ret.v.z = v.z * rA + q2.v.z * rB;
-      }
-    }
-    return ret;
   }
 };
 

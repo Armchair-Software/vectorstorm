@@ -624,6 +624,17 @@ public:
     return *this;
   }
 
+  /**
+   * Dot product of two vectors.
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline T constexpr dot(vector4<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+    return (x * rhs.x) +
+           (y * rhs.y) +
+           (z * rhs.z) +
+           (w * rhs.w);
+  }
+
   //-------------[ matrix operations ]-------------------------
 
   /**

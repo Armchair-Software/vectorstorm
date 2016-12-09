@@ -523,7 +523,9 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   inline T constexpr dot(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    return x * rhs.x + y * rhs.y + z * rhs.z;
+    return (x * rhs.x) +
+           (y * rhs.y) +
+           (z * rhs.z);
   }
   inline T constexpr dotProduct(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use dot()"))) {
     return dot(rhs);
@@ -534,7 +536,9 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   inline vector3<T> constexpr cross(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    return vector3<T>(y * rhs.z - rhs.y * z, z * rhs.x - rhs.z * x, x * rhs.y - rhs.x * y);
+    return {(y * rhs.z) - (rhs.y * z),
+            (z * rhs.x) - (rhs.z * x),
+            (x * rhs.y) - (rhs.x * y)};
   }
   inline vector3<T> constexpr crossProduct(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use cross()"))) {
     return cross(rhs);
