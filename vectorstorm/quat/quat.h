@@ -415,17 +415,17 @@ public:
    * normalise quaternion
    */
   inline void constexpr normalise() noexcept __attribute__((__always_inline__)) {
-    T len = length();
+    T const len = length();
     w /= len;
     v /= len;
   }
   inline void constexpr normalise_fast() noexcept __attribute__((__always_inline__)) {
-    T len = length_fast();
+    T const len = length_fast();
     w /= len;
     v /= len;
   }
   inline void constexpr normalise_faster() noexcept __attribute__((__always_inline__)) {
-    T len = length_faster();
+    T const len = length_faster();
     w /= len;
     v /= len;
   }
@@ -439,16 +439,16 @@ public:
     normalise_faster();
   }
   inline quaternion<T> constexpr normalise_copy() const noexcept __attribute__((__always_inline__)) {
-    T const temp(length());
-    return quaternion<T>(w / temp, v / temp);
+    T const len(length());
+    return {w / len, v / len};
   }
   inline quaternion<T> constexpr normalise_copy_fast() const noexcept __attribute__((__always_inline__)) {
-    T const temp(length_fast());
-    return quaternion<T>(w / temp, v / temp);
+    T const len(length_fast());
+    return {w / len, v / len};
   }
   inline quaternion<T> constexpr normalise_copy_faster() const noexcept __attribute__((__always_inline__)) {
-    T const temp(length_faster());
-    return quaternion<T>(w / temp, v / temp);
+    T const len(length_faster());
+    return {w / len, v / len};
   }
   inline quaternion<T> constexpr normalize_copy() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
     return normalise_copy();
@@ -634,26 +634,26 @@ public:
    * @return Result of interpolation.
    */
   inline quaternion<T> constexpr slerp(T r, quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    T cos_theta = dot(rhs);
+    T cos_theta = std::max(std::min(dot(rhs), static_cast<T>(1)), static_cast<T>(-1)); // clamp the dot product, as it can sometimes exceed 1.0 and cause acos to return NaN
     quaternion<T> rhs_temp(rhs);
-    // dot(lhs, rhs) must be positive for smooth interpolation around poles; if not, flip rhs
-    if(cos_theta < static_cast<T>(0)) {
+    if(cos_theta < static_cast<T>(0)) {                                         // dot(lhs, rhs) must be positive for smooth interpolation around poles; if not, flip rhs
       cos_theta = -cos_theta;
       rhs_temp = -rhs_temp;
     }
     T const theta = static_cast<T>(std::acos(cos_theta));
-    if(std::abs(theta) < epsilon<T>) {
-      return quaternion<T>(*this);
+    if(std::abs(theta) <= epsilon<T>) {
+      return quaternion<T>{*this};
     } else {
-      T const sin_theta = static_cast<T>(std::sqrt(static_cast<T>(1.0) - cos_theta * cos_theta));
-      if(std::abs(sin_theta) < epsilon<T>) {
-        quaternion<T> ret;
-        return quaternion<T>(static_cast<T>(0.5) * w + static_cast<T>(0.5) * rhs_temp.w, v.lerp(static_cast<T>(0.5), rhs_temp.v));
+      T const sin_theta = static_cast<T>(std::sqrt(static_cast<T>(1) - cos_theta * cos_theta));
+      //if(std::abs(sin_theta) <= epsilon<T>) {
+      if(sin_theta == static_cast<T>(0)) {                                      // we only need to avoid division by zero, no need to check for epsilon
+        // this point may only be reached extremely rarely?
+        return quaternion<T>{static_cast<T>(0.5) * w + static_cast<T>(0.5) * rhs_temp.w, v.lerp(static_cast<T>(0.5), rhs_temp.v)};
       } else {
-        T const temp_a = static_cast<T>(std::sin((static_cast<T>(1.0) - r) * theta)) / sin_theta;
+        T const temp_a = static_cast<T>(std::sin((static_cast<T>(1) - r) * theta)) / sin_theta;
         T const temp_b = static_cast<T>(std::sin(r * theta)) / sin_theta;
-        return quaternion<T>((w * temp_a) + (rhs_temp.w * temp_b),
-                             (v * temp_a) + (rhs_temp.v * temp_b));
+        return quaternion<T>{(w * temp_a) + (rhs_temp.w * temp_b),
+                             (v * temp_a) + (rhs_temp.v * temp_b)};
       }
     }
   }

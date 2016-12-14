@@ -216,7 +216,11 @@ public:
     // the static cast is to avoid narrowing conversion warnings when used with ints
     vector3<T> const cross(to.cross(from));
     T const dot = from.dot(to);
-    T const temp_k = static_cast<T>(1) / (static_cast<T>(1) + dot);
+    T temp1 = static_cast<T>(1) + dot;
+    if(temp1 == static_cast<T>(0)) {                                            // a safety check is required to avoid a divide by zero
+      temp1 = epsilon<T>;
+    }
+    T const temp_k = static_cast<T>(1) / temp1;
     return matrix3<T>(cross.x * cross.x * temp_k + dot,
                       cross.y * cross.x * temp_k - cross.z,
                       cross.z * cross.x * temp_k + cross.y,
