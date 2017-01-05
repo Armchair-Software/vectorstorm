@@ -11,6 +11,9 @@
 #include "vectorstorm/quat/quat_forward.h"
 #include "vectorstorm/matrix/matrix3_forward.h"
 #include "vectorstorm/matrix/matrix4_forward.h"
+#ifndef VMATH_NO_BOOST
+  #include <boost/functional/hash_fwd.hpp>
+#endif // VMATH_NO_BOOST
 
 #ifdef VMATH_NAMESPACE
 namespace VMATH_NAMESPACE {
@@ -1050,6 +1053,42 @@ inline constexpr vector3<T> max(vector3<T> const &a, const vector3<T> &b) noexce
   return vector3<T>(::std::max(a.x, b.x), ::std::max(a.y, b.y), ::std::max(a.z, b.z));
 }
 
+#ifndef VMATH_NO_BOOST
+/**
+ * Gets a hash value taking account of all dimensions of this vector, for use
+ * in standard container maps etc.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * @return Hash value
+ */
+template<typename T>
+struct hash<vector3<T>> {
+  size_t operator()(const vector3<T> &value) const {
+    size_t hashvalue = 0;
+    boost::hash_combine(hashvalue, value.x);
+    boost::hash_combine(hashvalue, value.y);
+    boost::hash_combine(hashvalue, value.z);
+    return hashvalue;
+  }
+};
+#endif // VMATH_NO_BOOST
 
 }
+
+#ifndef VMATH_NO_BOOST
+/**
+ * Gets a hash value taking account of all dimensions of this vector, for use
+ * in standard container maps etc.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * @return Hash value
+ */
+template<typename T>
+size_t hash_value(vector3<T> const &value) {
+  size_t hashvalue = 0;
+  boost::hash_combine(hashvalue, value.x);
+  boost::hash_combine(hashvalue, value.y);
+  boost::hash_combine(hashvalue, value.z);
+  return hashvalue;
+}
+#endif // VMATH_NO_BOOST
+
 #endif // VECTORSTORM_VECTOR3_H_INCLUDED

@@ -8,6 +8,9 @@
 #include "vectorstorm/deg2rad.h"
 #include "vector3_forward.h"
 #include "vector4_forward.h"
+#ifndef VMATH_NO_BOOST
+  #include <boost/functional/hash_fwd.hpp>
+#endif // VMATH_NO_BOOST
 
 #ifdef VMATH_NAMESPACE
 namespace VMATH_NAMESPACE {
@@ -786,6 +789,40 @@ inline constexpr vector2<T> max(vector2<T> const &a, const vector2<T> &b) noexce
   return vector2<T>(::std::max(a.x, b.x), ::std::max(a.y, b.y));
 }
 
+#ifndef VMATH_NO_BOOST
+/**
+ * Gets a hash value taking account of all dimensions of this vector, for use
+ * in standard container maps etc.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * @return Hash value
+ */
+template<typename T>
+struct hash<vector2<T>> {
+  size_t operator()(const vector2<T> &value) const {
+    size_t hashvalue = 0;
+    boost::hash_combine(hashvalue, value.x);
+    boost::hash_combine(hashvalue, value.y);
+    return hashvalue;
+  }
+};
+#endif // VMATH_NO_BOOST
+
 }
+
+#ifndef VMATH_NO_BOOST
+/**
+ * Gets a hash value taking account of all dimensions of this vector, for use
+ * in standard container maps etc.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * @return Hash value
+ */
+template<typename T>
+size_t hash_value(vector2<T> const &value) {
+  size_t hashvalue = 0;
+  boost::hash_combine(hashvalue, value.x);
+  boost::hash_combine(hashvalue, value.y);
+  return hashvalue;
+}
+#endif // VMATH_NO_BOOST
 
 #endif // VECTORSTORM_VECTOR2_H_INCLUDED

@@ -8,6 +8,9 @@
 #include "vectorstorm/vector/vector3_forward.h"
 #include "vectorstorm/vector/vector4_forward.h"
 #include "matrix3_forward.h"
+#ifndef VMATH_NO_BOOST
+  #include <boost/functional/hash_fwd.hpp>
+#endif // VMATH_NO_BOOST
 
 #ifdef VMATH_NAMESPACE
 namespace VMATH_NAMESPACE {
@@ -1026,5 +1029,109 @@ public:
 #endif //VMATH_NAMESPACE
 
 #include "matrix4_types.h"
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Standard C++ library extensions
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace std {
+
+/**
+ * Gets matrix containing minimal values of @a a and @a b coordinates.
+ * @return Matrix of minimal coordinates.
+ */
+template<typename T>
+inline constexpr matrix4<T> min(matrix4<T> const &a, const matrix4<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
+template<typename T>
+inline constexpr matrix4<T> min(matrix4<T> const &a, const matrix4<T> &b) noexcept {
+  return {::std::min(a.data[0], b.data[0]),
+          ::std::min(a.data[1], b.data[1]),
+          ::std::min(a.data[2], b.data[2]),
+
+          ::std::min(a.data[3], b.data[3]),
+          ::std::min(a.data[4], b.data[4]),
+          ::std::min(a.data[5], b.data[5]),
+
+          ::std::min(a.data[6], b.data[6]),
+          ::std::min(a.data[7], b.data[7]),
+          ::std::min(a.data[8], b.data[8])};
+}
+
+/**
+ * Gets matrix containing maximal values of @a a and @a b coordinates.
+ * @return Matrix of maximal coordinates.
+ */
+template<typename T>
+inline constexpr matrix4<T> max(matrix4<T> const &a, const matrix4<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
+template<typename T>
+inline constexpr matrix4<T> max(matrix4<T> const &a, const matrix4<T> &b) noexcept {
+  return {::std::max(a.data[0], b.data[0]),
+          ::std::max(a.data[1], b.data[1]),
+          ::std::max(a.data[2], b.data[2]),
+
+          ::std::max(a.data[3], b.data[3]),
+          ::std::max(a.data[4], b.data[4]),
+          ::std::max(a.data[5], b.data[5]),
+
+          ::std::max(a.data[6], b.data[6]),
+          ::std::max(a.data[7], b.data[7]),
+          ::std::max(a.data[8], b.data[8])};
+}
+
+#ifndef VMATH_NO_BOOST
+/**
+ * Gets a hash value taking account of all dimensions of this matrix, for use
+ * in standard container maps etc.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * @return Hash value
+ */
+template<typename T>
+struct hash<matrix4<T>> {
+  size_t operator()(const matrix4<T> &value) const {
+    size_t hashvalue = 0;
+    boost::hash_combine(hashvalue, value.data[0]);
+    boost::hash_combine(hashvalue, value.data[1]);
+    boost::hash_combine(hashvalue, value.data[2]);
+
+    boost::hash_combine(hashvalue, value.data[3]);
+    boost::hash_combine(hashvalue, value.data[4]);
+    boost::hash_combine(hashvalue, value.data[5]);
+
+    boost::hash_combine(hashvalue, value.data[6]);
+    boost::hash_combine(hashvalue, value.data[7]);
+    boost::hash_combine(hashvalue, value.data[8]);
+    return hashvalue;
+  }
+};
+#endif // VMATH_NO_BOOST
+
+}
+
+#ifndef VMATH_NO_BOOST
+/**
+ * Gets a hash value taking account of all dimensions of this matrix, for use
+ * in standard container maps etc.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * @return Hash value
+ */
+template<typename T>
+size_t hash_value(matrix4<T> const &value) {
+  size_t hashvalue = 0;
+  boost::hash_combine(hashvalue, value.data[0]);
+  boost::hash_combine(hashvalue, value.data[1]);
+  boost::hash_combine(hashvalue, value.data[2]);
+
+  boost::hash_combine(hashvalue, value.data[3]);
+  boost::hash_combine(hashvalue, value.data[4]);
+  boost::hash_combine(hashvalue, value.data[5]);
+
+  boost::hash_combine(hashvalue, value.data[6]);
+  boost::hash_combine(hashvalue, value.data[7]);
+  boost::hash_combine(hashvalue, value.data[8]);
+  return hashvalue;
+}
+#endif // VMATH_NO_BOOST
 
 #endif // VECTORSTORM_MATRIX4_H_INCLUDED

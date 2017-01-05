@@ -744,4 +744,50 @@ public:
 
 #include "quat_types.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Standard C++ library extensions
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifndef VMATH_NO_BOOST
+namespace std {
+
+/**
+ * Gets a hash value taking account of all dimensions of this quaternion, for use
+ * in standard container maps etc.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * @return Hash value
+ */
+template<typename T>
+struct hash<quaternion<T>> {
+  size_t operator()(const quaternion<T> &value) const {
+    size_t hashvalue = 0;
+    boost::hash_combine(hashvalue, value.v.x);
+    boost::hash_combine(hashvalue, value.v.y);
+    boost::hash_combine(hashvalue, value.v.z);
+    boost::hash_combine(hashvalue, value.w);
+    return hashvalue;
+  }
+};
+
+}
+
+/**
+ * Gets a hash value taking account of all dimensions of this quaternion, for use
+ * in standard container maps etc.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * @return Hash value
+ */
+template<typename T>
+size_t hash_value(quaternion<T> const &value) {
+  size_t hashvalue = 0;
+  boost::hash_combine(hashvalue, value.v.x);
+  boost::hash_combine(hashvalue, value.v.y);
+  boost::hash_combine(hashvalue, value.v.z);
+  boost::hash_combine(hashvalue, value.w);
+  return hashvalue;
+}
+#endif // VMATH_NO_BOOST
+
 #endif // VECTORSTORM_QUAT_H_INCLUDED
