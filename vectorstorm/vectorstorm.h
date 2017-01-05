@@ -8,6 +8,7 @@
  * @section Features
  * <ul>
  *    <li> basic arithmetic operations - using operators </li>
+ *    <li> basic linear algebra operations - such as transpose, dot product, etc. </li>
  *    <li> aliases for vertex coordinates - it means:
  *    <pre>
  *  vector3f v;

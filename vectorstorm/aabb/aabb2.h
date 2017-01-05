@@ -1,97 +1,43 @@
-    extend(rhs);
-    return *this;
-  }
-
-  /**
-   * Extends this bounding-box by box @a rhs.
-   * @param rhs A box to extend this bounding-box by
-   * @return Reference to this
-   */
-  template<typename SrcT>  __attribute__((__always_inline__))
-  inline aabb2<T> constexpr &operator<<(aabb2<SrcT> const &rhs) noexcept {
-    extend(rhs);
-    return *this;
-  }
-
-  /**
 #ifndef VECTORSTORM_AABB2_H_INCLUDED
-   * Union of this and @a rhs bounding-boxes
 #define VECTORSTORM_AABB2_H_INCLUDED
-   * @param rhs Right-hand side of union
 
-   * @return A resulting bounding-box representing union
 #ifdef VMATH_NAMESPACE
-   */
 namespace VMATH_NAMESPACE {
-  template<typename RhsT>  __attribute__((__always_inline__))
 #endif
-  inline aabb2<T> constexpr operator|(aabb2<RhsT> const &rhs) const noexcept {
 
-    return extended(rhs);
 /**
-  }
  * Two-dimensional axis-aligned bounding-box (aka AABB) class.
-
  *
-  /**
  * This class provides functionality for:
-   * Intersection of this and @a rhs bounding-boxed
  * - creating an AABB from a point, or another AABB,
-   * @param rhs Right-hand side
  * - testing if a point of other AABB intersects with it,
-   * @return Resulting bounding-box representing the intersection.
  * - getting result of intersection with other AABB,
-   */
  * - transforming AABB with 4x4 matrix.
  *
-  template<typename RhsT>  __attribute__((__always_inline__))
  * There are also overloaded couple of operators to shorten common operations.
-  inline aabb2<T> constexpr operator&(aabb2<RhsT> const &rhs) const noexcept {
  * For instance you can use  @c operator<< on AABB to extend it with a passed point or other AABB.
-    return intersection(rhs);
  * @code
-  }
  * aabb2f aabb;
-
  * aabb << vector2f(1, 2) << aabb2f(-3,-3, 2, 2);
-  /**
  * @endcode
-   * Outputs string representation of bounding-box @a rhs to output stream @a lhs
  */
-   * @param lhs Output stream to write to
 template<typename T>
-   * @param rhs Bounding-box to write to output stream.
 class aabb2 {
-   * @return Reference to output stream @a lhs
 public:
-   */
   /**
-  inline friend std::ostream &operator<<(std::ostream &lhs, const aabb2<T> &rhs) noexcept __attribute__((__always_inline__)) {
    * Position of Min corner of bounding box.
-    lhs << rhs.min << " x " << rhs.max;
    */
-    return lhs;
   vector2<T> min;
-  }
 
-};
   /**
-
    * Position of Max corner of bounding box
-#ifdef VMATH_NAMESPACE
    */
-}
   vector2<T> max;
 
-#endif //VMATH_NAMESPACE
   /**
-
    * Constructs invalid axes-aligned bounding-box.
-#include "aabb2_types.h"
    * @see valid() for explanation of invalid bounding-box usage.
-
    */
-#endif // VECTORSTORM_AABB2_H_INCLUDED
   inline constexpr aabb2() noexcept __attribute__((__always_inline__))
     : min( 1,  1),
       max(-1, -1) {
@@ -360,3 +306,94 @@ public:
    * 2. (@c - @c + @c +)
    * 3. (@c + @c - @c +)
    * 4. (@c - @c - @c +)
+   *
+   */
+  inline constexpr vector2<T> point(unsigned int i) const noexcept __attribute__((__always_inline__)) {
+    return vector2<T>((i & 1) ? min.x : max.x,
+                      (i & 2) ? min.y : max.y);
+  }
+
+  //-------------------------------------------------------------------------------------------------------------
+  // operators
+  //-------------------------------------------------------------------------------------------------------------
+  /**
+   * Tests if @a rhs is equal to this bounding-box
+   * @param rhs Right-hand side
+   * @return True if @a rhs and this bounding-boxes are equal, otherwise false
+   */
+  template<typename RhsT>  __attribute__((__always_inline__))
+  inline bool constexpr operator==(aabb2<RhsT> const &rhs) const noexcept {
+    return min == rhs.min && max == rhs.max;
+  }
+
+  /**
+   * Tests if @a rhs is not equal to this bounding-box
+   * @param rhs Right-hand side
+   * @return True if @a rhs and this bounding-boxes are not equal, otherwise false
+   */
+  template<typename RhsT>  __attribute__((__always_inline__))
+  inline bool constexpr operator!=(aabb2<RhsT> const &rhs) const noexcept {
+    return min != rhs.min || max != rhs.max;
+  }
+
+  /**
+   * Extends this bounding-box by point @a rhs.
+   * @param rhs A point to extend this bounding-box by
+   * @return Reference to this
+   */
+  template<typename SrcT>  __attribute__((__always_inline__))
+  inline aabb2<T> constexpr &operator<<(vector2<SrcT> const &rhs) noexcept {
+    extend(rhs);
+    return *this;
+  }
+
+  /**
+   * Extends this bounding-box by box @a rhs.
+   * @param rhs A box to extend this bounding-box by
+   * @return Reference to this
+   */
+  template<typename SrcT>  __attribute__((__always_inline__))
+  inline aabb2<T> constexpr &operator<<(aabb2<SrcT> const &rhs) noexcept {
+    extend(rhs);
+    return *this;
+  }
+
+  /**
+   * Union of this and @a rhs bounding-boxes
+   * @param rhs Right-hand side of union
+   * @return A resulting bounding-box representing union
+   */
+  template<typename RhsT>  __attribute__((__always_inline__))
+  inline aabb2<T> constexpr operator|(aabb2<RhsT> const &rhs) const noexcept {
+    return extended(rhs);
+  }
+
+  /**
+   * Intersection of this and @a rhs bounding-boxed
+   * @param rhs Right-hand side
+   * @return Resulting bounding-box representing the intersection.
+   */
+  template<typename RhsT>  __attribute__((__always_inline__))
+  inline aabb2<T> constexpr operator&(aabb2<RhsT> const &rhs) const noexcept {
+    return intersection(rhs);
+  }
+
+  /**
+   * Outputs string representation of bounding-box @a rhs to output stream @a lhs
+   * @param lhs Output stream to write to
+   * @param rhs Bounding-box to write to output stream.
+   * @return Reference to output stream @a lhs
+   */
+  inline friend std::ostream &operator<<(std::ostream &lhs, const aabb2<T> &rhs) noexcept __attribute__((__always_inline__)) {
+    lhs << rhs.min << " x " << rhs.max;
+    return lhs;
+  }
+};
+
+#ifdef VMATH_NAMESPACE
+}
+#endif //VMATH_NAMESPACE
+
+#include "aabb2_types.h"
+
+#endif // VECTORSTORM_AABB2_H_INCLUDED
