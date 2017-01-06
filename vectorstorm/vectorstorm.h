@@ -86,6 +86,7 @@
 #include "sigmoid.h"
 
 #include "sqrt_fast.h"
+#include "floor_fast.h"
 
 #include "vectorstorm_forward.h"
 
