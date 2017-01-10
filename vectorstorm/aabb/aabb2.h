@@ -274,11 +274,14 @@ public:
   }
 
   /**
-   * Gets center point of bounding-box.
-   * @return A center point of bounding-box.
+   * Gets centre point of bounding box.
+   * @return The centre point of the bounding box.
    */
-  inline constexpr vector2<T> center() const noexcept __attribute__((__always_inline__)) {
-    return (min + max) * static_cast<T>(0.5);
+  inline constexpr vector2<T> centre() const noexcept __attribute__((__always_inline__)) {
+    return (min + max) / static_cast<T>(2);
+  }
+  inline vector2<T> constexpr center() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+    return centre();
   }
 
   /**
@@ -286,7 +289,7 @@ public:
    * @return Extent of bounding-box.
    */
   inline constexpr vector2<T> extent() const noexcept __attribute__((__always_inline__)) {
-    return (max - min) * static_cast<T>(0.5);
+    return (max - min) / static_cast<T>(2);
   }
 
   /**
