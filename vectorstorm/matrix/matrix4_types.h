@@ -1,8 +1,10 @@
 #ifndef VECTORSTORM_MATRIX4_TYPES_H_INCLUDED
 #define VECTORSTORM_MATRIX4_TYPES_H_INCLUDED
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#include "vectorstorm/deprecated_macros.h"
+
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 //-------------------------------------
@@ -33,8 +35,8 @@ using Matrix4d  __attribute__((deprecated("Use matrix4 or mat4 instead."))) = ma
 using Matrix4ld __attribute__((deprecated("Use matrix4 or mat4 instead."))) = matrix4ld;
 using Matrix4i  __attribute__((deprecated("Use matrix4 or mat4 instead."))) = matrix4i;
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #endif // VECTORSTORM_MATRIX4_TYPES_H_INCLUDED

@@ -1,10 +1,14 @@
 #ifndef VECTORSTORM_SQRT_FAST_H_INCLUDED
 #define VECTORSTORM_SQRT_FAST_H_INCLUDED
 
+#include "vectorstorm/deprecated_macros.h"
 #include <xmmintrin.h>
+#ifdef VECTORSTORM_NO_BOOST
+  #include <cstdint>
+#endif // VECTORSTORM_NO_BOOST
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 #pragma GCC diagnostic push
@@ -122,7 +126,7 @@ inline static float sqrt_sse(float number) noexcept {
   return sqrt_inv_sse(number) * number;
 }
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
 #endif
 

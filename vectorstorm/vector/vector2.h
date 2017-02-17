@@ -1,6 +1,7 @@
 #ifndef VECTORSTORM_VECTOR2_H_INCLUDED
 #define VECTORSTORM_VECTOR2_H_INCLUDED
 
+#include "vectorstorm/deprecated_macros.h"
 #include <cmath>
 #include <sstream>
 #include "vectorstorm/epsilon.h"
@@ -8,12 +9,12 @@
 #include "vectorstorm/deg2rad.h"
 #include "vector3_forward.h"
 #include "vector4_forward.h"
-#ifndef VMATH_NO_BOOST
+#ifndef VECTORSTORM_NO_BOOST
   #include <boost/functional/hash_fwd.hpp>
-#endif // VMATH_NO_BOOST
+#endif // VECTORSTORM_NO_BOOST
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 /**
@@ -348,7 +349,8 @@ public:
     return (x * rhs.x) +
            (y * rhs.y);
   }
-  inline T constexpr dotProduct(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use dot()"))) {
+  [[deprecated("Use dot()")]]
+  inline T constexpr dotProduct(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return dot(rhs);
   }
 
@@ -360,7 +362,8 @@ public:
     return (x * rhs.y) -
            (y * rhs.x);
   }
-  inline T constexpr crossProduct(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use cross()"))) {
+  [[deprecated("Use cross()")]]
+  inline T constexpr crossProduct(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return cross(rhs);
   }
 
@@ -446,7 +449,7 @@ public:
    * same for y-coordinate.
    */
   inline bool constexpr operator==(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    #ifdef VMATH_SOFT_COMPARE
+    #ifdef VECTORSTORM_SOFT_COMPARE
       return (std::abs(x - rhs.x) < epsilon<T>) &&
              (std::abs(y - rhs.y) < epsilon<T>);
     #else
@@ -484,7 +487,8 @@ public:
   inline T constexpr length_sq() const noexcept __attribute__((__always_inline__)) {
     return x * x + y * y;
   }
-  inline T constexpr lengthSq() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use length_sq()"))) {
+  [[deprecated("Use length_sq()")]]
+  inline T constexpr lengthSq() const noexcept __attribute__((__always_inline__)) {
     return length_sq();
   }
 
@@ -541,13 +545,16 @@ public:
     x /= temp;
     y /= temp;
   }
-  inline void constexpr normalize() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  [[deprecated("Proper English, please!")]]
+  inline void constexpr normalize() noexcept __attribute__((__always_inline__)) {
     normalise();
   }
-  inline void constexpr normalize_fast() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  [[deprecated("Proper English, please!")]]
+  inline void constexpr normalize_fast() noexcept __attribute__((__always_inline__)) {
     normalise_fast();
   }
-  inline void constexpr normalize_faster() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  [[deprecated("Proper English, please!")]]
+  inline void constexpr normalize_faster() noexcept __attribute__((__always_inline__)) {
     normalise_faster();
   }
   inline vector2<T> constexpr normalise_copy() const noexcept __attribute__((__always_inline__)) {
@@ -562,13 +569,16 @@ public:
     T const temp(length_faster());
     return vector2<T>(x / temp, y / temp);
   }
-  inline vector2<T> constexpr normalize_copy() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  [[deprecated("Proper English, please!")]]
+  inline vector2<T> constexpr normalize_copy() const noexcept __attribute__((__always_inline__)) {
     return normalise_copy();
   }
-  inline vector2<T> constexpr normalize_copy_fast() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  [[deprecated("Proper English, please!")]]
+  inline vector2<T> constexpr normalize_copy_fast() const noexcept __attribute__((__always_inline__)) {
     return normalise_copy_fast();
   }
-  inline vector2<T> constexpr normalize_copy_faster() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  [[deprecated("Proper English, please!")]]
+  inline vector2<T> constexpr normalize_copy_faster() const noexcept __attribute__((__always_inline__)) {
     return normalise_copy_faster();
   }
   /**
@@ -581,7 +591,8 @@ public:
       *this /= length();
     }
   }
-  inline void constexpr normalize_safe() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  [[deprecated("Proper English, please!")]]
+  inline void constexpr normalize_safe() noexcept __attribute__((__always_inline__)) {
     normalise_safe();
   }
   inline vector2<T> constexpr normalise_safe_copy() const noexcept __attribute__((__always_inline__)) {
@@ -591,7 +602,8 @@ public:
       return *this / length();
     }
   }
-  inline vector2<T> constexpr normalize_safe_copy() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
+  [[deprecated("Proper English, please!")]]
+  inline vector2<T> constexpr normalize_safe_copy() const noexcept __attribute__((__always_inline__)) {
     return normalise_safe_copy();
   }
 
@@ -738,7 +750,8 @@ public:
   inline vector3<T> constexpr to_3d_xy() const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x, y, 0);
   }
-  inline vector3<T> constexpr to_3D_XY() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
+  [[deprecated("Use lowercase version.")]]
+  inline vector3<T> constexpr to_3D_XY() const noexcept __attribute__((__always_inline__)) {
     return to_3d_xy();
   }
 
@@ -748,14 +761,15 @@ public:
   inline vector3<T> constexpr to_3d_xz() const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x, 0, z);
   }
-  inline vector3<T> constexpr to_3D_XZ() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
+  [[deprecated("Use lowercase version.")]]
+  inline vector3<T> constexpr to_3D_XZ() const noexcept __attribute__((__always_inline__)) {
     return to_3d_xz();
   }
 };
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #include "vector2_types.h"
 
@@ -764,6 +778,8 @@ public:
 // Standard C++ library extensions
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include "hash_combine.h"
 
 namespace std {
 
@@ -789,40 +805,36 @@ inline constexpr vector2<T> max(vector2<T> const &a, const vector2<T> &b) noexce
   return vector2<T>(::std::max(a.x, b.x), ::std::max(a.y, b.y));
 }
 
-#ifndef VMATH_NO_BOOST
 /**
  * Gets a hash value taking account of all dimensions of this vector, for use
  * in standard container maps etc.
- * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this if VECTORSTORM_NO_BOOST is not defined.
  * @return Hash value
  */
 template<typename T>
 struct hash<vector2<T>> {
   size_t operator()(const vector2<T> &value) const {
     size_t hashvalue = 0;
-    boost::hash_combine(hashvalue, value.x);
-    boost::hash_combine(hashvalue, value.y);
+    HASH_COMBINE(hashvalue, value.x);
+    HASH_COMBINE(hashvalue, value.y);
     return hashvalue;
   }
 };
-#endif // VMATH_NO_BOOST
 
 }
 
-#ifndef VMATH_NO_BOOST
 /**
  * Gets a hash value taking account of all dimensions of this vector, for use
  * in standard container maps etc.
- * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this if VECTORSTORM_NO_BOOST is not defined.
  * @return Hash value
  */
 template<typename T>
 size_t hash_value(vector2<T> const &value) {
   size_t hashvalue = 0;
-  boost::hash_combine(hashvalue, value.x);
-  boost::hash_combine(hashvalue, value.y);
+  HASH_COMBINE(hashvalue, value.x);
+  HASH_COMBINE(hashvalue, value.y);
   return hashvalue;
 }
-#endif // VMATH_NO_BOOST
 
 #endif // VECTORSTORM_VECTOR2_H_INCLUDED

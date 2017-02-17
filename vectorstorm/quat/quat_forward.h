@@ -1,15 +1,17 @@
 #ifndef VECTORSTORM_QUAT_FORWARD_H_INCLUDED
 #define VECTORSTORM_QUAT_FORWARD_H_INCLUDED
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#include "vectorstorm/deprecated_macros.h"
+
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 template<typename T> class quaternion;
 #include "quat_types.h"
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #endif // VECTORSTORM_QUAT_FORWARD_H_INCLUDED

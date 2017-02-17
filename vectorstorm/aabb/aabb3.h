@@ -1,12 +1,14 @@
 #ifndef VECTORSTORM_AABB3_H_INCLUDED
 #define VECTORSTORM_AABB3_H_INCLUDED
 
+#include "vectorstorm/deprecated_macros.h"
+
 #include "vectorstorm/vector/vector3_forward.h"
 #include "vectorstorm/vector/vector4_forward.h"
 #include "vectorstorm/matrix/matrix4_forward.h"
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 /**
@@ -450,9 +452,9 @@ public:
   }
 };
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #include "aabb3_types.h"
 

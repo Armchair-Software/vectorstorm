@@ -1,15 +1,17 @@
 #ifndef AABB3_FORWARD_H_INCLUDED
 #define AABB3_FORWARD_H_INCLUDED
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#include "vectorstorm/deprecated_macros.h"
+
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 template<typename T> class aabb3;
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #include "aabb3_types.h"
 

@@ -1,6 +1,7 @@
 #ifndef VECTORSTORM_VECTOR3_H_INCLUDED
 #define VECTORSTORM_VECTOR3_H_INCLUDED
 
+#include "vectorstorm/deprecated_macros.h"
 #include <cmath>
 #include <sstream>
 #include "vectorstorm/epsilon.h"
@@ -11,12 +12,12 @@
 #include "vectorstorm/quat/quat_forward.h"
 #include "vectorstorm/matrix/matrix3_forward.h"
 #include "vectorstorm/matrix/matrix4_forward.h"
-#ifndef VMATH_NO_BOOST
+#ifndef VECTORSTORM_NO_BOOST
   #include <boost/functional/hash_fwd.hpp>
-#endif // VMATH_NO_BOOST
+#endif // VECTORSTORM_NO_BOOST
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 /**
@@ -673,7 +674,7 @@ public:
    * same for y-coordinate, and z-coordinate.
    */
   inline bool constexpr operator==(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    #ifdef VMATH_SOFT_COMPARE
+    #ifdef VECTORSTORM_SOFT_COMPARE
       return std::abs(x - rhs.x) < epsilon<T> &&
              std::abs(y - rhs.y) < epsilon<T> &&
              std::abs(z - rhs.z) < epsilon<T>;
@@ -681,7 +682,7 @@ public:
       return x == rhs.x &&
              y == rhs.y &&
              z == rhs.z;
-    #endif // VMATH_SOFT_COMPARE
+    #endif // VECTORSTORM_SOFT_COMPARE
   }
 
   /**
@@ -1017,9 +1018,9 @@ public:
   }
 };
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #include "vector3_types.h"
 
@@ -1028,6 +1029,8 @@ public:
 // Standard C++ library extensions
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include "hash_combine.h"
 
 namespace std {
 
@@ -1053,42 +1056,38 @@ inline constexpr vector3<T> max(vector3<T> const &a, const vector3<T> &b) noexce
   return vector3<T>(::std::max(a.x, b.x), ::std::max(a.y, b.y), ::std::max(a.z, b.z));
 }
 
-#ifndef VMATH_NO_BOOST
 /**
  * Gets a hash value taking account of all dimensions of this vector, for use
  * in standard container maps etc.
- * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this if VECTORSTORM_NO_BOOST is not defined.
  * @return Hash value
  */
 template<typename T>
 struct hash<vector3<T>> {
   size_t operator()(const vector3<T> &value) const {
     size_t hashvalue = 0;
-    boost::hash_combine(hashvalue, value.x);
-    boost::hash_combine(hashvalue, value.y);
-    boost::hash_combine(hashvalue, value.z);
+    HASH_COMBINE(hashvalue, value.x);
+    HASH_COMBINE(hashvalue, value.y);
+    HASH_COMBINE(hashvalue, value.z);
     return hashvalue;
   }
 };
-#endif // VMATH_NO_BOOST
 
 }
 
-#ifndef VMATH_NO_BOOST
 /**
  * Gets a hash value taking account of all dimensions of this vector, for use
  * in standard container maps etc.
- * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+ * Note: You need to #include <boost/functional/hash.hpp> before instantiating this if VECTORSTORM_NO_BOOST is not defined.
  * @return Hash value
  */
 template<typename T>
 size_t hash_value(vector3<T> const &value) {
   size_t hashvalue = 0;
-  boost::hash_combine(hashvalue, value.x);
-  boost::hash_combine(hashvalue, value.y);
-  boost::hash_combine(hashvalue, value.z);
+  HASH_COMBINE(hashvalue, value.x);
+  HASH_COMBINE(hashvalue, value.y);
+  HASH_COMBINE(hashvalue, value.z);
   return hashvalue;
 }
-#endif // VMATH_NO_BOOST
 
 #endif // VECTORSTORM_VECTOR3_H_INCLUDED

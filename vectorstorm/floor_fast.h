@@ -1,8 +1,10 @@
 #ifndef VECTORSTORM_FLOOR_FAST_H_INCLUDED
 #define VECTORSTORM_FLOOR_FAST_H_INCLUDED
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#include "vectorstorm/deprecated_macros.h"
+
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 inline int constexpr floor_fast(float value) noexcept __attribute__((__const__)) __attribute__((__always_inline__));
@@ -21,7 +23,7 @@ inline int constexpr floor_fast(double value) noexcept {
   return i - (static_cast<double>(i) > value);                                  // convert truncation to floor
 }
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
 #endif
 

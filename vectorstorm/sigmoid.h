@@ -1,11 +1,12 @@
 #ifndef VECTORSTORM_SIGMOID_H_INCLUDED
 #define VECTORSTORM_SIGMOID_H_INCLUDED
 
+#include "vectorstorm/deprecated_macros.h"
 #include <cmath>
 #include "pi.h"
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 /// Multiple sigmoid functions: http://www.wolframalpha.com/input/?i=plot+of+y%3D0.5+-+%280.5+*+cos%28x+*+pi%29%29+and+y%3D0.5+%2B+%28%280.5+%2F+tanh%282.0%29%29+*+tanh%28%28x+*+4.0%29+-+2.0%29%29+and+y%3D%28%28%281+%2F+%281+%2B+e^%28%280.5+-+x%29+*+8%29%29+-+0.5%29+*+%281+%2F+%281+%2F+%281+%2B+e^%28-4%29%29+-+0.5%29%29%29+*+0.5%29+%2B+0.5++for+x%3D0+to1+
@@ -17,11 +18,11 @@ inline static T constexpr sigmoid_sin(T value) noexcept __attribute__((__always_
 template<typename T>
 inline static T constexpr sigmoid_sin(T value) noexcept {
   /// Scale a 0-1 value to a sinusoidal sigmoid - https://www.wolframalpha.com/input/?i=plot+0.5+-+%280.5+*+cos%28x+*+pi%29%29+from+0+to+1
-  #ifndef VMATH_NO_BOOST
+  #ifndef VECTORSTORM_NO_BOOST
     return static_cast<T>(0.5) - (static_cast<T>(0.5) * std::cos(value * boost::math::constants::pi<T>()));
-  #else  // VMATH_NO_BOOST
-    return static_cast<T>(0.5) - (static_cast<T>(0.5) * std::cos(value * M_PI));
-  #endif // VMATH_NO_BOOST
+  #else  // VECTORSTORM_NO_BOOST
+    return static_cast<T>(0.5) - (static_cast<T>(0.5) * std::cos(value * static_cast<T>(M_PI)));
+  #endif // VECTORSTORM_NO_BOOST
 };
 
 template<typename T>
@@ -46,7 +47,7 @@ inline static T constexpr sigmoid_log(T value) noexcept {
   return ((((static_cast<T>(1) / (static_cast<T>(1) + std::exp((static_cast<T>(0.5) - value) * static_cast<T>(8)))) - static_cast<T>(0.5)) * scale) * static_cast<T>(0.5)) + static_cast<T>(0.5);
 };
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
 #endif
 

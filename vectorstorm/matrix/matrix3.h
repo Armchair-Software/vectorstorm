@@ -1,13 +1,17 @@
 #ifndef VECTORSTORM_MATRIX3_H_INCLUDED
 #define VECTORSTORM_MATRIX3_H_INCLUDED
 
+#include "vectorstorm/deprecated_macros.h"
 #include "vectorstorm/epsilon.h"
-#ifndef VMATH_NO_BOOST
+#ifdef VECTORSTORM_NO_BOOST
+  #include <array>
+  #include <cstring>
+#else
   #include <boost/functional/hash_fwd.hpp>
-#endif // VMATH_NO_BOOST
+#endif // VECTORSTORM_NO_BOOST
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 /**
@@ -329,7 +333,7 @@ public:
    * same for y-coordinate, z-coordinate, and w-coordinate.
    */
   inline bool constexpr operator==(matrix3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    #ifdef VMATH_SOFT_COMPARE
+    #ifdef VECTORSTORM_SOFT_COMPARE
       return std::abs(data[0] - rhs.data[0]) < epsilon<T> &&
              std::abs(data[1] - rhs.data[1]) < epsilon<T> &&
              std::abs(data[2] - rhs.data[2]) < epsilon<T> &&
@@ -349,7 +353,7 @@ public:
              data[6] == rhs.data[6] &&
              data[7] == rhs.data[7] &&
              data[8] == rhs.data[8];
-    #endif // VMATH_SOFT_COMPARE
+    #endif // VECTORSTORM_SOFT_COMPARE
   }
 
   /**
@@ -755,9 +759,9 @@ public:
   }
 };
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #include "matrix3_types.h"
 
@@ -811,7 +815,7 @@ inline constexpr matrix3<T> max(matrix3<T> const &a, const matrix3<T> &b) noexce
           ::std::max(a.data[8], b.data[8])};
 }
 
-#ifndef VMATH_NO_BOOST
+#ifndef VECTORSTORM_NO_BOOST
 /**
  * Gets a hash value taking account of all dimensions of this matrix, for use
  * in standard container maps etc.
@@ -836,11 +840,11 @@ struct hash<matrix3<T>> {
     return hashvalue;
   }
 };
-#endif // VMATH_NO_BOOST
+#endif // VECTORSTORM_NO_BOOST
 
 }
 
-#ifndef VMATH_NO_BOOST
+#ifndef VECTORSTORM_NO_BOOST
 /**
  * Gets a hash value taking account of all dimensions of this matrix, for use
  * in standard container maps etc.
@@ -863,6 +867,6 @@ size_t hash_value(matrix3<T> const &value) {
   boost::hash_combine(hashvalue, value.data[8]);
   return hashvalue;
 }
-#endif // VMATH_NO_BOOST
+#endif // VECTORSTORM_NO_BOOST
 
 #endif // VECTORSTORM_MATRIX3_H_INCLUDED

@@ -1,8 +1,10 @@
 #ifndef VECTORSTORM_VECTOR3_TYPES_H_INCLUDED
 #define VECTORSTORM_VECTOR3_TYPES_H_INCLUDED
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#include "vectorstorm/deprecated_macros.h"
+
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 //-------------------------------------
@@ -33,8 +35,8 @@ using Vector3d  __attribute__((deprecated("Use vector3 or vec3 instead."))) = ve
 using Vector3ld __attribute__((deprecated("Use vector3 or vec3 instead."))) = vector3ld;
 using Vector3i  __attribute__((deprecated("Use vector3 or vec3 instead."))) = vector3i;
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #endif // VECTORSTORM_VECTOR3_TYPES_H_INCLUDED

@@ -69,7 +69,7 @@
  *      <li>int &mdash; matrix4i</li>
  *    </ul>
  *  </li>
-  *   <li> quaternion
+ *    <li> quaternion
  *    <ul>
  *      <li>float &mdash; quatf</li>
  *      <li>double &mdash; quatd</li>
@@ -77,6 +77,15 @@
  *    </li>
  *  </li>
  * </ul>
+ *
+ * Defines:
+ *   VECTORSTORM_NAMESPACE - what namespace to use, if any, defaults to none
+ *   VECTORSTORM_NO_BOOST - avoid using boost headers, may have some performance
+ *     penalty
+ *   VECTORSTORM_SOFT_COMPARE - enable fuzzy matching for different types, with
+ *     epsilon used to match within a range of rounding error - but doing this
+ *     can be very expensive in some cases.
+ *
  */
 
 #include "deg2rad.h"

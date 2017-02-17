@@ -1,10 +1,11 @@
 #ifndef VECTORSTORM_SINCOS_H_INCLUDED
 #define VECTORSTORM_SINCOS_H_INCLUDED
 
+#include "vectorstorm/deprecated_macros.h"
 #include "pi.h"
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 template<typename T>
@@ -31,7 +32,7 @@ inline static void constexpr sincos_any(long double const angle_rad, long double
   __builtin_sincosl(angle_rad, &out_sin, &out_cos);
 }
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
 #endif
 

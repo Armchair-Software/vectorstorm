@@ -1,7 +1,7 @@
 #include "vectorstorm.h"
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 template class vector2<float>;
@@ -36,6 +36,6 @@ template class aabb3<double>;
 template class aabb3<long double>;
 template class aabb3<int>;
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
 #endif

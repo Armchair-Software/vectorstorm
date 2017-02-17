@@ -4,10 +4,11 @@
 /// Cut-down header alternative for vectorstorm.h including only forward declarations
 /// Include this in other headers instead of vectorstorm.h wherever possible
 
+#include "vectorstorm/deprecated_macros.h"
 #define _USE_MATH_DEFINES
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 /// Forward declarations
@@ -20,7 +21,7 @@ namespace VMATH_NAMESPACE {
 #include "aabb/aabb2_forward.h"
 #include "aabb/aabb3_forward.h"
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
 #endif
 

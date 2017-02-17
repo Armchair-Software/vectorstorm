@@ -1,6 +1,7 @@
 #ifndef VECTORSTORM_QUAT_H_INCLUDED
 #define VECTORSTORM_QUAT_H_INCLUDED
 
+#include "vectorstorm/deprecated_macros.h"
 #include "vectorstorm/epsilon.h"
 #include "vectorstorm/sincos.h"
 #include "vectorstorm/deg2rad.h"
@@ -8,8 +9,8 @@
 #include "vectorstorm/matrix/matrix3_forward.h"
 #include "vectorstorm/matrix/matrix4_forward.h"
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 /**
@@ -335,11 +336,11 @@ public:
    * for all quaternion coordinates.
    */
   inline bool constexpr operator==(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    #ifdef VMATH_SOFT_COMPARE
+    #ifdef VECTORSTORM_SOFT_COMPARE
       return (std::abs(w - rhs.w) < epsilon<T>) && v == rhs.v;
     #else
       return w == rhs.w && v == rhs.v;
-    #endif // VMATH_SOFT_COMPARE
+    #endif // VECTORSTORM_SOFT_COMPARE
   }
 
   /**
@@ -738,9 +739,9 @@ public:
   }
 };
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #include "quat_types.h"
 
@@ -750,7 +751,7 @@ public:
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef VMATH_NO_BOOST
+#ifndef VECTORSTORM_NO_BOOST
 namespace std {
 
 /**
@@ -788,6 +789,6 @@ size_t hash_value(quaternion<T> const &value) {
   boost::hash_combine(hashvalue, value.w);
   return hashvalue;
 }
-#endif // VMATH_NO_BOOST
+#endif // VECTORSTORM_NO_BOOST
 
 #endif // VECTORSTORM_QUAT_H_INCLUDED

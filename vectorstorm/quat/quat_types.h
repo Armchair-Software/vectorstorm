@@ -1,8 +1,10 @@
 #ifndef VECTORSTORM_QUAT_TYPES_H_INCLUDED
 #define VECTORSTORM_QUAT_TYPES_H_INCLUDED
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#include "vectorstorm/deprecated_macros.h"
+
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 //-------------------------------------
@@ -31,8 +33,8 @@ using Quatf  __attribute__((deprecated("Use quaternion or quat instead."))) = qu
 using Quatd  __attribute__((deprecated("Use quaternion or quat instead."))) = quaterniond;
 using Quatld __attribute__((deprecated("Use quaternion or quat instead."))) = quaternionld;
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #endif // VECTORSTORM_QUAT_TYPES_H_INCLUDED

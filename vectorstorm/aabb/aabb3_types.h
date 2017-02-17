@@ -1,8 +1,10 @@
 #ifndef VECTORSTORM_AABB3_TYPES_H_INCLUDED
 #define VECTORSTORM_AABB3_TYPES_H_INCLUDED
 
-#ifdef VMATH_NAMESPACE
-namespace VMATH_NAMESPACE {
+#include "vectorstorm/deprecated_macros.h"
+
+#ifdef VECTORSTORM_NAMESPACE
+namespace VECTORSTORM_NAMESPACE {
 #endif
 
 /// 3D axis-aligned bounding box of floats
@@ -22,8 +24,8 @@ using Aabb3d  __attribute__((deprecated("Use aabb3 instead."))) = aabb3d;
 using Aabb3ld __attribute__((deprecated("Use aabb3 instead."))) = aabb3ld;
 using Aabb3i  __attribute__((deprecated("Use aabb3 instead."))) = aabb3i;
 
-#ifdef VMATH_NAMESPACE
+#ifdef VECTORSTORM_NAMESPACE
 }
-#endif //VMATH_NAMESPACE
+#endif //VECTORSTORM_NAMESPACE
 
 #endif // VECTORSTORM_AABB3_TYPES_H_INCLUDED
