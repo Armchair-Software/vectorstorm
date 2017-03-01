@@ -346,7 +346,7 @@ public:
    * @param far Specify the distance to the far depth clipping plane.  Distance must be positive.
    * @return Projection matrix for specified frustum.
    */
-  inline static matrix4<T> constexpr create_frustum(T left, T right, T bottom, T top, T near, T far) noexcept __attribute__((__always_inline__)) {
+  inline static matrix4<T> constexpr create_frustum(T left, T right, T bottom, T top, T near_plane, T far_plane) noexcept __attribute__((__always_inline__)) {
     /*
      *    2 near
      *  ------------       0              A              0
@@ -365,28 +365,28 @@ public:
      *  C = - (far + near) / (far - near)
      *  D = - (2 far near) / (far - near)
      */
-    return matrix4<T>((static_cast<T>(2) * near) / (right - left),
+    return matrix4<T>((static_cast<T>(2) * near_plane) / (right - left),
                       static_cast<T>(0),
                       static_cast<T>(0),
                       static_cast<T>(0),
 
                       static_cast<T>(0),
-                      (static_cast<T>(2) * near) / (top - bottom),
+                      (static_cast<T>(2) * near_plane) / (top - bottom),
                       static_cast<T>(0),
                       static_cast<T>(0),
 
-                       (right + left)   / (right - left),
-                       (top   + bottom) / (top   - bottom),
-                      -(far   + near)   / (far   - near),
+                       (right     + left)       / (right     - left),
+                       (top       + bottom)     / (top       - bottom),
+                      -(far_plane + near_plane) / (far_plane - near_plane),
                       static_cast<T>(-1),
 
                       static_cast<T>(0),
                       static_cast<T>(0),
-                      (static_cast<T>(-2) * far * near) / (far - near),
+                      (static_cast<T>(-2) * far_plane * near_plane) / (far_plane - near_plane),
                       static_cast<T>(0));
   }
-  inline static matrix4<T> constexpr createFrustum(T left, T right, T bottom, T top, T near, T far) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_frustum()"))) {
-    return create_frustum(left, right, bottom, top, near, far);
+  inline static matrix4<T> constexpr createFrustum(T left, T right, T bottom, T top, T near_plane, T far_plane) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_frustum()"))) {
+    return create_frustum(left, right, bottom, top, near_plane, far_plane);
   }
 
   /**
@@ -399,7 +399,7 @@ public:
    * @param far Specify the distance to the farther depth clipping plane. This value is negative if the plane is to be behind the viewer.
    * @return Othrographic projection matrix.
    */
-  inline static matrix4<T> constexpr create_ortho(T left, T right, T bottom, T top, T near, T far) noexcept __attribute__((__always_inline__)) {
+  inline static matrix4<T> constexpr create_ortho(T left, T right, T bottom, T top, T near_plane, T far_plane) noexcept __attribute__((__always_inline__)) {
     /*      2
      *  ------------       0              0              tx
      *  right - left
@@ -428,16 +428,16 @@ public:
 
                       static_cast<T>(0),
                       static_cast<T>(0),
-                      static_cast<T>(-2) / (far - near),
+                      static_cast<T>(-2) / (far_plane - near_plane),
                       static_cast<T>(0),
 
-                      -(right + left)   / (right - left),
-                      -(top   + bottom) / (top   - bottom),
-                      -(far   + near)   / (far   - near),
+                      -(right     + left)       / (right     - left),
+                      -(top       + bottom)     / (top       - bottom),
+                      -(far_plane + near_plane) / (far_plane - near_plane),
                       static_cast<T>(1));
   }
-  inline static matrix4<T> constexpr createOrtho(T left, T right, T bottom, T top, T near, T far) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_ortho()"))) {
-    return create_ortho(left, right, bottom, top, near, far);
+  inline static matrix4<T> constexpr createOrtho(T left, T right, T bottom, T top, T near_plane, T far_plane) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_ortho()"))) {
+    return create_ortho(left, right, bottom, top, near_plane, far_plane);
   }
 
   /**
