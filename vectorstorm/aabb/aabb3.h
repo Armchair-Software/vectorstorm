@@ -4,7 +4,7 @@
 #include "vectorstorm/deprecated_macros.h"
 
 #include "vectorstorm/vector/vector3_forward.h"
-#include "vectorstorm/vector/vector4_forward.h"
+#include "vectorstorm/vector/vector4.h"
 #include "vectorstorm/matrix/matrix4_forward.h"
 
 #ifdef VECTORSTORM_NAMESPACE

@@ -79,12 +79,14 @@
  * </ul>
  *
  * Defines:
- *   VECTORSTORM_NAMESPACE - what namespace to use, if any, defaults to none
- *   VECTORSTORM_NO_BOOST - avoid using boost headers, may have some performance
- *     penalty
- *   VECTORSTORM_SOFT_COMPARE - enable fuzzy matching for different types, with
+ *   VECTORSTORM_NAMESPACE - What namespace to use, if any.  Defaults to none.
+ *   VECTORSTORM_NO_BOOST - Avoid using boost headers, may have some performance
+ *     penalty.
+ *   VECTORSTORM_SOFT_COMPARE - Enable fuzzy matching for different types, with
  *     epsilon used to match within a range of rounding error - but doing this
  *     can be very expensive in some cases.
+ *   VECTORSTORM_PREINSTANTIATE - Instantiate all templates with common
+ *     numerical types.
  *
  */
 

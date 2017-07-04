@@ -2,6 +2,7 @@
 #define VECTORSTORM_AABB2_H_INCLUDED
 
 #include "vectorstorm/deprecated_macros.h"
+#include "vectorstorm/vector/vector2.h"
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {

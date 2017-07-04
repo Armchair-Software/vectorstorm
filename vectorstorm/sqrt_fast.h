@@ -1,11 +1,9 @@
 #ifndef VECTORSTORM_SQRT_FAST_H_INCLUDED
 #define VECTORSTORM_SQRT_FAST_H_INCLUDED
 
+#include <cstdint>
 #include "vectorstorm/deprecated_macros.h"
 #include <xmmintrin.h>
-#ifdef VECTORSTORM_NO_BOOST
-  #include <cstdint>
-#endif // VECTORSTORM_NO_BOOST
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {

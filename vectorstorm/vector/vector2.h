@@ -9,6 +9,7 @@
 #include "vectorstorm/deg2rad.h"
 #include "vector3_forward.h"
 #include "vector4_forward.h"
+#include "vectorstorm/sqrt_fast.h"
 #ifndef VECTORSTORM_NO_BOOST
   #include <boost/functional/hash_fwd.hpp>
 #endif // VECTORSTORM_NO_BOOST

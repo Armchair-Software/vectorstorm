@@ -5,9 +5,14 @@
 #include "vectorstorm/epsilon.h"
 #include "vectorstorm/sincos.h"
 #include "vectorstorm/deg2rad.h"
+#include "vectorstorm/vector/vector3_forward.h"
 #include "vectorstorm/vector/vector3.h"
 #include "vectorstorm/matrix/matrix3_forward.h"
 #include "vectorstorm/matrix/matrix4_forward.h"
+#include "vectorstorm/sqrt_fast.h"
+#ifndef VECTORSTORM_NO_BOOST
+  #include <boost/functional/hash_fwd.hpp>
+#endif // VECTORSTORM_NO_BOOST
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {

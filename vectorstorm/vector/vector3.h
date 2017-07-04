@@ -10,8 +10,10 @@
 #include "vector2_forward.h"
 #include "vector4_forward.h"
 #include "vectorstorm/quat/quat_forward.h"
-#include "vectorstorm/matrix/matrix3_forward.h"
-#include "vectorstorm/matrix/matrix4_forward.h"
+#include "vectorstorm/quat/quat.h"
+#include "vectorstorm/matrix/matrix3.h"
+#include "vectorstorm/matrix/matrix4.h"
+#include "vectorstorm/sqrt_fast.h"
 #ifndef VECTORSTORM_NO_BOOST
   #include <boost/functional/hash_fwd.hpp>
 #endif // VECTORSTORM_NO_BOOST
