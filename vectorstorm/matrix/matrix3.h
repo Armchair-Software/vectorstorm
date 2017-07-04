@@ -252,15 +252,9 @@ public:
    * @return Resulting matrix that's oriented to the target vector
    */
   inline static matrix3<T> constexpr create_rotation_aligned_to_vector(vector3<T> const &target, vector3<T> const &up_dir) noexcept __attribute__((__always_inline__)) {
-    vector3<T> forward(target);
-    forward.normalise();
-
-    // Side = forward x up
-    vector3<T> side = forward.cross(up_dir);
-    side.normalise();
-
-    // Recompute up as: up = side x forward
-    vector3<T> const up = side.cross(forward);
+    vector3<T> const forward{target.normalise_copy()};
+    vector3<T> const side{forward.cross(up_dir).normalise_safe_copy()};         // Side = forward x up
+    vector3<T> const up{side.cross(forward)};                                   // Recompute up as: up = side x forward
 
     return matrix3<T>(static_cast<T>(side.x),
                       static_cast<T>(up.x),

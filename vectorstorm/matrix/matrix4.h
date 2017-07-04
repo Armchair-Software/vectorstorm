@@ -301,15 +301,9 @@ public:
    * @return Resulting view matrix that's looking at the target point
    */
   inline static matrix4<T> constexpr create_look_at(vector3<T> const &eye_pos, vector3<T> const &target_pos, vector3<T> const &up_dir) noexcept __attribute__((__always_inline__)) {
-    vector3<T> forward(target_pos - eye_pos);
-    forward.normalise();
-
-    // Side = forward x up
-    vector3<T> side(forward.cross(up_dir));
-    side.normalise();
-
-    // Recompute up as: up = side x forward
-    vector3<T> const up = side.cross(forward);
+    vector3<T> const forward((target_pos - eye_pos).normalise_copy());
+    vector3<T> const side(forward.cross(up_dir).normalise_safe_copy());         // Side = forward x up
+    vector3<T> const up = side.cross(forward);                                  // Recompute up as: up = side x forward
 
     return matrix4<T>(static_cast<T>(side.x),
                       static_cast<T>(up.x),
