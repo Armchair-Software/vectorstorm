@@ -3,6 +3,7 @@
 
 #include "vectorstorm/deprecated_macros.h"
 #include "vectorstorm/epsilon.h"
+#include "matrix4_forward.h"
 #ifdef VECTORSTORM_NO_BOOST
   #include <array>
   #include <cstring>
