@@ -667,13 +667,14 @@ public:
     return *this;
   }
 
-  //-------------[ equality operator ]-------------------------
+  //-------------[ comparison operators ]----------------------
   /**
    * Equality test operator
    * @param rhs Right hand side argument of binary operator.
-   * @note Test of equality is based of threshold epsilon value. To be two
-   * values equal, must satisfy this condition | lhs.x - rhs.y | < epsilon,
-   * same for y-coordinate, and z-coordinate.
+   * @note If VECTORSTORM_SOFT_COMPARE is defined, the test of equality is based
+   * on the threshold epsilon value. For two values to be equal, the condition
+   * | lhs.x - rhs.y | < epsilon must be satisfied for each coordinate.
+   * Otherwise, direct equality comparison is used.
    */
   inline bool constexpr operator==(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     #ifdef VECTORSTORM_SOFT_COMPARE
@@ -694,6 +695,50 @@ public:
    */
   inline bool constexpr operator!=(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return !(*this == rhs);
+  }
+
+  /**
+   * Less than test operator
+   * @param rhs Right hand side argument of binary operator.
+   * @note Returns true if all components are less than rhs' components.
+   */
+  inline bool constexpr operator<(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+    return (x < rhs.x) &&
+           (y < rhs.y) &&
+           (z < rhs.z);
+  }
+
+  /**
+   * Greater than test operator
+   * @param rhs Right hand side argument of binary operator.
+   * @note Returns true if all components are greater than rhs' components.
+   */
+  inline bool constexpr operator>(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+    return (x > rhs.x) &&
+           (y > rhs.y) &&
+           (z > rhs.z);
+  }
+
+  /**
+   * Less than or equal test operator
+   * @param rhs Right hand side argument of binary operator.
+   * @note Returns true if all components are less than or equal to rhs' components.
+   */
+  inline bool constexpr operator<=(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+    return (x <= rhs.x) &&
+           (y <= rhs.y) &&
+           (z <= rhs.z);
+  }
+
+  /**
+   * Greater than or equal test operator
+   * @param rhs Right hand side argument of binary operator.
+   * @note Returns true if all components are greater than or equal to rhs' components.
+   */
+  inline bool constexpr operator>=(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+    return (x >= rhs.x) &&
+           (y >= rhs.y) &&
+           (z >= rhs.z);
   }
 
   //-------------[ unary operations ]--------------------------
