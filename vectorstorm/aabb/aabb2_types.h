@@ -15,6 +15,8 @@ using aabb2d  = aabb2<double>;
 using aabb2ld = aabb2<long double>;
 /// 2D axis-aligned bounding box of integers
 using aabb2i  = aabb2<int>;
+/// 2D axis-aligned bounding box of unsigned integers
+using aabb2ui = aabb2<unsigned int>;
 
 // deprecated transitional declarations
 template<typename T>

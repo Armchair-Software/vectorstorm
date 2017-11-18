@@ -15,6 +15,8 @@ using aabb3d  = aabb3<double>;
 using aabb3ld = aabb3<long double>;
 /// 2D axis-aligned bounding box of integers
 using aabb3i  = aabb3<int>;
+/// 2D axis-aligned bounding box of unsigned integers
+using aabb3ui = aabb3<unsigned int>;
 
 // deprecated transitional declarations
 template<typename T>

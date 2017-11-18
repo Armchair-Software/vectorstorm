@@ -16,8 +16,10 @@ using vector4f  = vector4<float>;
 using vector4d  = vector4<double>;
 /// Four dimensional vector of long doubles
 using vector4ld = vector4<long double>;
-/// Four dimensional vector of ints
+/// Four dimensional vector of integers
 using vector4i  = vector4<int>;
+/// Four dimensional vector of unsigned integers
+using vector4ui = vector4<unsigned int>;
 
 // abbreviated aliases
 template<typename T>
@@ -26,6 +28,7 @@ using vec4f  = vector4f;
 using vec4d  = vector4d;
 using vec4ld = vector4ld;
 using vec4i  = vector4i;
+using vec4ui = vector4ui;
 
 // deprecated transitional declarations
 template<typename T>
