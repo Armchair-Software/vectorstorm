@@ -67,8 +67,8 @@ public:
    * Creates and sets to (0,0)
    */
   inline constexpr vector2() noexcept __attribute__((__always_inline__))
-    : x(0),
-      y(0) {
+    : x{T{}},
+      y{T{}} {
   }
 
   /**

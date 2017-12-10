@@ -91,10 +91,10 @@ public:
    * Creates and sets to (0,0,0,0)
    */
   inline constexpr vector4() noexcept __attribute__((__always_inline__))
-    : x(0),
-      y(0),
-      z(0),
-      w(0) {
+    : x{T{}},
+      y{T{}},
+      z{T{}},
+      w{T{}} {
   }
 
   /**
