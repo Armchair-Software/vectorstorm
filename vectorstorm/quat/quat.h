@@ -50,7 +50,7 @@ public:
    * quaternion constructor, sets quaternion to (0 + 0i + 0j + 0k).
    */
   inline constexpr quaternion() noexcept __attribute__((__always_inline__))
-    : w(0),
+    : w(1),
       v(0, 0, 0) {
   }
 
