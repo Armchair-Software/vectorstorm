@@ -132,7 +132,7 @@ public:
    * @param src Data source for new created instance of matrix4.
    */
   /*
-  inline constexpr matrix4(matrix3<T> &&src) noexcept __attribute__((__always_inline__))
+  inline constexpr explicit matrix4(matrix3<T> &&src) noexcept __attribute__((__always_inline__))
     : data{std::move(src.data[0]), std::move(src.data[1]), std::move(src.data[2]), static_cast<T>(0),
            std::move(src.data[3]), std::move(src.data[4]), std::move(src.data[5]), static_cast<T>(0),
            std::move(src.data[6]), std::move(src.data[7]), std::move(src.data[8]), static_cast<T>(0),
@@ -146,7 +146,7 @@ public:
    */
   /*
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr matrix4(matrix3<FromT> &&src) noexcept
+  inline constexpr explicit matrix4(matrix3<FromT> &&src) noexcept
     : data{static_cast<T>(std::move(src.data[0])), static_cast<T>(std::move(src.data[1])), static_cast<T>(std::move(src.data[2])), static_cast<T>(0),
            static_cast<T>(std::move(src.data[3])), static_cast<T>(std::move(src.data[4])), static_cast<T>(std::move(src.data[5])), static_cast<T>(0),
            static_cast<T>(std::move(src.data[6])), static_cast<T>(std::move(src.data[7])), static_cast<T>(std::move(src.data[8])), static_cast<T>(0),

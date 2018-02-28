@@ -104,7 +104,7 @@ public:
    * Copy constructor from a vector3.
    * @param src Source of x,y data for new created vector2 instance.
    */
-  inline constexpr vector2(vector3<T> const &src) noexcept __attribute__((__always_inline__))
+  inline constexpr explicit vector2(vector3<T> const &src) noexcept __attribute__((__always_inline__))
     : x(src.x),
       y(src.y) {
   }
@@ -114,7 +114,7 @@ public:
    * @param src Source of x,y,z data for new created vector2 instance.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr vector2(vector3<FromT> const &src) noexcept
+  inline constexpr explicit vector2(vector3<FromT> const &src) noexcept
     : x(static_cast<T>(src.x)),
       y(static_cast<T>(src.y)) {
   }
@@ -123,7 +123,7 @@ public:
    * Copy constructor from a vector4.
    * @param src Source of x,y,z data for new created vector2 instance.
    */
-  inline constexpr vector2(vector4<T> const &src) noexcept __attribute__((__always_inline__))
+  inline constexpr explicit vector2(vector4<T> const &src) noexcept __attribute__((__always_inline__))
     : x(src.x),
       y(src.y) {
   }
@@ -133,7 +133,7 @@ public:
    * @param src Source of x,y,z data for new created vector2 instance.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr vector2(vector4<FromT> const &src) noexcept
+  inline constexpr explicit vector2(vector4<FromT> const &src) noexcept
     : x(static_cast<T>(src.x)),
       y(static_cast<T>(src.y)) {
   }
@@ -161,7 +161,7 @@ public:
    * Move constructor from a vector3.
    * @param src Source of x,y data for new created vector2 instance.
    */
-  inline constexpr vector2(vector3<T> const &&src) noexcept __attribute__((__always_inline__))
+  inline constexpr explicit vector2(vector3<T> const &&src) noexcept __attribute__((__always_inline__))
     : x(std::move(src.x)),
       y(std::move(src.y)) {
   }
@@ -171,7 +171,7 @@ public:
    * @param src Source of x,y,z data for new created vector2 instance.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr vector2(vector3<FromT> const &&src) noexcept
+  inline constexpr explicit vector2(vector3<FromT> const &&src) noexcept
     : x(static_cast<T>(std::move(src.x))),
       y(static_cast<T>(std::move(src.y))) {
   }
@@ -180,7 +180,7 @@ public:
    * Move constructor from a vector4.
    * @param src Source of x,y,z data for new created vector2 instance.
    */
-  inline constexpr vector2(vector4<T> const &&src) noexcept __attribute__((__always_inline__))
+  inline constexpr explicit vector2(vector4<T> const &&src) noexcept __attribute__((__always_inline__))
     : x(std::move(src.x)),
       y(std::move(src.y)) {
   }
@@ -190,7 +190,7 @@ public:
    * @param src Source of x,y,z data for new created vector2 instance.
    */
   template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr vector2(vector4<FromT> const &&src) noexcept
+  inline constexpr explicit vector2(vector4<FromT> const &&src) noexcept
     : x(static_cast<T>(std::move(src.x))),
       y(static_cast<T>(std::move(src.y))) {
   }
@@ -740,10 +740,13 @@ public:
   /**
    * Gets string representation.
    */
-  inline std::string constexpr toString() const noexcept __attribute__((__always_inline__)) {
+  inline std::string constexpr to_string() const noexcept __attribute__((__always_inline__)) {
     std::ostringstream oss;
     oss << *this;
     return oss.str();
+  }
+  inline std::string constexpr toString() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_string()"))) {
+    return to_string();
   }
 
   /**
