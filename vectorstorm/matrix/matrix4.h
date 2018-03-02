@@ -158,8 +158,8 @@ public:
    * Variadic initialisation constructor
    * @param dt Initialiser list containing raw data for each element in order.
    */
-  //inline constexpr explicit matrix4(std::initializer_list<T> dt)
-  //  : data(dt) noexcept __attribute__((__always_inline__)) {
+  //inline constexpr explicit matrix4(std::initializer_list<T> dt) noexcept __attribute__((__always_inline__))
+  //  : data(dt) {
   //}
   // see http://stackoverflow.com/a/5549918/1678468
   template<typename... FromT> __attribute__((__always_inline__))

@@ -703,6 +703,51 @@ public:
     orthonormalise();
   }
 
+  /**
+   * Returns a quaternion such that its corresponding matrix can be used to diagonalise the input matrix.
+   * Must be called on a symmetrical matrix.
+   * @return Diagonalising quaternion.
+   */
+  inline quaternion<T> constexpr diagonaliser() {
+    // Based loosely on Jacobi Transformations of a Symmetric Matrix, via S Melax.
+    // Adapted from http://melax.github.io/diag.html
+    // Diagonal matrix D = Q * A * Transpose(Q);  and  A = QT*D*Q
+    // The rows of q are the eigenvectors D's diagonal is the eigenvalues
+    // As per 'row' convention if float3x3 Q = q.getmatrix(); then v*Q = q*v*conj(q)
+    unsigned int constexpr const maxsteps = 24;                                 // certainly wont need that many.
+    quaternion<T> q(1, 0, 0, 0);
+    for(unsigned int i = 0; i != maxsteps; ++i) {
+      matrix3<T> const Q{q.rotmatrix()};                                        // v*Q == q*v*conj(q)
+      matrix3<T> const D{Q * *this * Q.transpose()};                            // A = Q^T*D*Q
+      vector3<T> offdiag(D.at(1, 2), D.at(0, 2), D.at(0, 1));                   // elements not on the diagonal
+      vector3<T> om(std::fabs(offdiag.x), std::fabs(offdiag.y), std::fabs(offdiag.z)); // mag of each offdiag elem
+      unsigned int const k = (om.x > om.y && om.x > om.z) ? 0 : (om.y > om.z) ? 1 : 2; // index of largest element of offdiag
+      unsigned int const k1 = (k + 1) % 3;
+      unsigned int const k2 = (k + 2) % 3;
+      if(offdiag[k] == 0.0f) {
+        break;                                                                  // diagonal already
+      }
+      T thet = (D.at(k2, k2) - D.at(k1, k1)) / (2 * offdiag[k]);
+      T const sgn = std::signbit(thet) ? -1 : 1;
+      thet *= sgn;                                                              // make it positive
+      T const t = sgn / (thet + ((thet < 1.E6) ? std::sqrt((thet * thet) + 1) : thet)); // sign(T)/(|T|+sqrt(T^2+1))
+      T const c = 1 / std::sqrt((t * t) + 1);                                   //  c= 1/(t^2+1) , t=s/c
+      if(c == 1.0f) {
+        break;
+      }                                                                         // no room for improvement - reached machine precision.
+      quaternion<T> jr(0, 0, 0, 0);                                             // jacobi rotation for this iteration.
+      jr.vector[k] = sgn * std::sqrt((1.0f - c) / 2.0f);                        // using 1/2 angle identity sin(a/2) = sqrt((1-cos(a))/2)
+      jr.vector[k] *= -1.0f;                                                    // since our quat-to-matrix convention was for v*M instead of M*v
+      jr.w  = std::sqrt(1.0f - (jr.vector[k] * jr.vector[k]));
+      if(jr.w == 1.0f) {
+        break;                                                                  // reached limits of floating point precision
+      }
+      q =  q * jr;
+      q.normalise();
+    }
+    return q;
+  }
+
   //-------------[ conversion ]-----------------------------
 
   /**
