@@ -635,6 +635,25 @@ public:
   }
 
   /**
+   * Sets scale part of matrix.
+   *
+   * @param v Vector of scale to be set.
+   */
+  inline void constexpr set_scale(vector3<T> const &v) noexcept __attribute__((__always_inline__)) {
+    data[ 0] = v.x;
+    data[ 5] = v.y;
+    data[10] = v.z;
+    data[15] = 1;
+  }
+
+  /**
+   * Returns scale part of matrix.
+   */
+  inline vector3<T> constexpr get_scale() const noexcept __attribute__((__always_inline__)) {
+    return vector3<T>(data[0], data[5], data[10]);
+  }
+
+  /**
    * Copy operator
    * @param rhs Right hand side argument of binary operator.
    */
@@ -838,9 +857,9 @@ public:
    * @param rhs Right hand side argument of binary operator.
    */
   inline vector3<T> constexpr operator*(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    return vector3<T>(data[0] * rhs.x + data[4] * rhs.y + data[8]  * rhs.z,
-                      data[1] * rhs.x + data[5] * rhs.y + data[9]  * rhs.z,
-                      data[2] * rhs.x + data[6] * rhs.y + data[10] * rhs.z);
+    return vector3<T>(data[0] * rhs.x + data[4] * rhs.y + data[ 8] * rhs.z + data[12],
+                      data[1] * rhs.x + data[5] * rhs.y + data[ 9] * rhs.z + data[13],
+                      data[2] * rhs.x + data[6] * rhs.y + data[10] * rhs.z + data[14]);
   }
 
   /**
