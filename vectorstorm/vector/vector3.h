@@ -224,29 +224,6 @@ public:
       z(static_cast<T>(std::move(new_z))) {
   }
 
-  /**
-   * Move constructor from a vector4.
-   * @param src Source of x,y,z data for new created vector3 instance.
-   * @param new_z Source of data for z element.
-   */
-  inline constexpr explicit vector3(vector4<T> &&src) noexcept __attribute__((__always_inline__))
-    : x(std::move(src.x)),
-      y(std::move(src.y)),
-      z(std::move(src.z)) {
-  }
-
-  /**
-   * Move casting constructor from a vector4.
-   * @param src Source of x,y,z data for new created vector3 instance.
-   * @param new_z Source of data for z element.
-   */
-  template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr explicit vector3(vector4<FromT> &&src) noexcept
-    : x(static_cast<T>(std::move(src.x))),
-      y(static_cast<T>(std::move(src.y))),
-      z(static_cast<T>(std::move(src.z))) {
-  }
-
   //----------------[ assignment ]-------------------------
   /**
    * Sets to (x,y,z)
@@ -1114,7 +1091,7 @@ inline constexpr vector3<T> max(vector3<T> const &a, const vector3<T> &b) noexce
  */
 template<typename T>
 struct hash<vector3<T>> {
-  size_t operator()(const vector3<T> &value) const {
+  size_t operator()(vector3<T> const &value) const {
     size_t hashvalue = 0;
     HASH_COMBINE(hashvalue, value.x);
     HASH_COMBINE(hashvalue, value.y);

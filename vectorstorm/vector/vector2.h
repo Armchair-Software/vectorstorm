@@ -158,25 +158,6 @@ public:
   }
 
   /**
-   * Move constructor from a vector3.
-   * @param src Source of x,y data for new created vector2 instance.
-   */
-  inline constexpr explicit vector2(vector3<T> const &&src) noexcept __attribute__((__always_inline__))
-    : x(std::move(src.x)),
-      y(std::move(src.y)) {
-  }
-
-  /**
-   * Move casting constructor from a vector3.
-   * @param src Source of x,y,z data for new created vector2 instance.
-   */
-  template<typename FromT> __attribute__((__always_inline__))
-  inline constexpr explicit vector2(vector3<FromT> const &&src) noexcept
-    : x(static_cast<T>(std::move(src.x))),
-      y(static_cast<T>(std::move(src.y))) {
-  }
-
-  /**
    * Move constructor from a vector4.
    * @param src Source of x,y,z data for new created vector2 instance.
    */
@@ -869,7 +850,7 @@ inline constexpr vector2<T> max(vector2<T> const &a, const vector2<T> &b) noexce
  */
 template<typename T>
 struct hash<vector2<T>> {
-  size_t operator()(const vector2<T> &value) const {
+  size_t operator()(vector2<T> const &value) const {
     size_t hashvalue = 0;
     HASH_COMBINE(hashvalue, value.x);
     HASH_COMBINE(hashvalue, value.y);

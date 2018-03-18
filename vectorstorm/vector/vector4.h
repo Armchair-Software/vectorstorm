@@ -1100,7 +1100,7 @@ inline constexpr vector4<T> max(vector4<T> const &a, const vector4<T> &b) noexce
  */
 template<typename T>
 struct hash<vector4<T>> {
-  size_t operator()(const vector4<T> &value) const {
+  size_t operator()(vector4<T> const &value) const {
     size_t hashvalue = 0;
     HASH_COMBINE(hashvalue, value.x);
     HASH_COMBINE(hashvalue, value.y);
