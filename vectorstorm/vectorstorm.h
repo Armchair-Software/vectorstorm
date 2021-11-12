@@ -99,6 +99,8 @@
 #include "sqrt_fast.h"
 #include "floor_fast.h"
 
+#include "lerp.h"
+
 #include "vectorstorm_forward.h"
 
 #include "vector/vector2.h"
