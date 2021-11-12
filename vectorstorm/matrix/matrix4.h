@@ -13,6 +13,12 @@
   #include <boost/functional/hash_fwd.hpp>
 #endif // VECTORSTORM_NO_BOOST
 
+#ifdef __clang__
+  #define CONSTEXPR_IF_NO_CLANG
+#else
+  #define CONSTEXPR_IF_NO_CLANG constexpr
+#endif // __clang__ - see https://stackoverflow.com/questions/46576847/clang-vs-gcc-crtp-constexpr-variable-cannot-have-non-literal-type
+
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {
 #endif
@@ -1028,12 +1034,12 @@ public:
   /**
    * Gets string representation.
    */
-  inline std::string constexpr to_string() const noexcept __attribute__((__always_inline__)) {
+  inline std::string CONSTEXPR_IF_NO_CLANG to_string() const noexcept __attribute__((__always_inline__)) {
     std::ostringstream oss;
     oss << *this;
     return oss.str();
   }
-  inline std::string constexpr toString() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_string()"))) {
+  inline std::string CONSTEXPR_IF_NO_CLANG toString() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_string()"))) {
     return to_string();
   }
 };

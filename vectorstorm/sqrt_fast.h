@@ -3,7 +3,21 @@
 
 #include <cstdint>
 #include "vectorstorm/deprecated_macros.h"
-#include <xmmintrin.h>
+#ifdef __SSE__
+  #include <xmmintrin.h>
+#endif // __SSE__
+
+#ifdef __clang__
+  #define CONSTEXPR_IF_NO_CLANG
+#else
+  #define CONSTEXPR_IF_NO_CLANG constexpr
+#endif // __clang__ - see https://stackoverflow.com/questions/46576847/clang-vs-gcc-crtp-constexpr-variable-cannot-have-non-literal-type
+
+#if __has_cpp_attribute(__optimise__)
+  #define OPTIMISE_NO_STRICT_ALIASING __attribute__((__optimize__("no-strict-aliasing"))
+#else
+  #define OPTIMISE_NO_STRICT_ALIASING
+#endif
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {
@@ -11,8 +25,8 @@ namespace VECTORSTORM_NAMESPACE {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
-inline static float constexpr sqrt_inv_fast(float number) noexcept __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
-inline static float constexpr sqrt_inv_fast(float number) noexcept {
+inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(float number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
+inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(float number) noexcept {
   /// Adapted from Quake III's fast inverse square root approximation
   float constexpr const threehalfs = 1.5f;
 
@@ -26,8 +40,8 @@ inline static float constexpr sqrt_inv_fast(float number) noexcept {
   y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
 }
-inline static double constexpr sqrt_inv_fast(double number) noexcept __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
-inline static double constexpr sqrt_inv_fast(double number) noexcept {
+inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(double number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
+inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(double number) noexcept {
   /// Similar to the Quake III fast inverse square root but for doubles
   double constexpr const threehalfs = 1.5;
 
@@ -62,8 +76,8 @@ inline static int constexpr sqrt_fast(int number) noexcept {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
-inline static float constexpr sqrt_inv_faster(float number) noexcept __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
-inline static float constexpr sqrt_inv_faster(float number) noexcept {
+inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
+inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept {
   /// Adapted from Quake III's fast inverse square root approximation - one iteration version
   float constexpr const threehalfs = 1.5f;
 
@@ -77,8 +91,8 @@ inline static float constexpr sqrt_inv_faster(float number) noexcept {
   //y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
 }
-inline static double constexpr sqrt_inv_faster(double number) noexcept __attribute__((__always_inline__)) __attribute__((__optimize__("no-strict-aliasing")));
-inline static double constexpr sqrt_inv_faster(double number) noexcept {
+inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(double number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
+inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(double number) noexcept {
   /// Similar to the Quake III fast inverse square root but for doubles
   double constexpr const threehalfs = 1.5;
 
@@ -111,6 +125,7 @@ inline static int constexpr sqrt_faster(int number) noexcept {
   return static_cast<int>(sqrt_inv_faster(static_cast<float>(number)) * static_cast<float>(number));
 }
 
+#ifdef __SSE__
 inline static float sqrt_inv_sse(float number) noexcept __attribute__((__always_inline__));
 inline static float sqrt_inv_sse(float number) noexcept {
   /// Scalar SSE inverse square root approximation
@@ -123,6 +138,9 @@ inline static float sqrt_sse(float number) noexcept {
   /// Scalar SSE square root approximation
   return sqrt_inv_sse(number) * number;
 }
+#else
+#warning "SSE is not available, performance may be impacted - check your compilation flags."
+#endif // __SSE__
 
 #ifdef VECTORSTORM_NAMESPACE
 }
