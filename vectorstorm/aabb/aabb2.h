@@ -42,8 +42,8 @@ public:
    * @see valid() for explanation of invalid bounding-box usage.
    */
   inline constexpr aabb2() noexcept __attribute__((__always_inline__))
-    : min( 1,  1),
-      max(-1, -1) {
+    : min(1, 1),
+      max(0, 0) {
   }
 
   /**
@@ -151,8 +151,8 @@ public:
    * @see valid() method for more info on usage of invalid bounding-boxes.
    */
   inline void constexpr invalidate() noexcept __attribute__((__always_inline__)) {
-    min = vector2<T>( 1,  1);
-    max = vector2<T>(-1, -1);
+    min = vector2<T>(1, 1);
+    max = vector2<T>(0, 0);
   }
 
   /**
