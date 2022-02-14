@@ -785,7 +785,7 @@ public:
     for(int i = 0; i != 3; ++i) {
       lhs << "|\t";
       for(int j = 0; j != 3; ++j) {
-        lhs << rhs.at(j, i) << "\t";
+        lhs << +rhs.at(j, i) << "\t";
       }
       lhs << "|" << std::endl;
     }

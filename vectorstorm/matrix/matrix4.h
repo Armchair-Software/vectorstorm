@@ -1024,7 +1024,7 @@ public:
     for(int i = 0; i != 4; ++i) {
       lhs << "|\t";
       for(int j = 0; j != 4; ++j) {
-        lhs << rhs.at(j, i) << "\t";
+        lhs << +rhs.at(j, i) << "\t";
       }
       lhs << "|" << std::endl;
     }

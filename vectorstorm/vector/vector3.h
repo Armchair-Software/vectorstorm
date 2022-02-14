@@ -1014,7 +1014,7 @@ public:
    * @return Left hand side argument - the ostream object passed to operator.
    */
   inline friend std::ostream &operator<<(std::ostream &lhs, vector3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
-    lhs << "[" << rhs.x << "," << rhs.y << "," << rhs.z << "]";
+    lhs << "[" << +rhs.x << "," << +rhs.y << "," << +rhs.z << "]";
     return lhs;
   }
 
