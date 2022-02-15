@@ -520,6 +520,14 @@ public:
   }
 
   /**
+   * Modulo operator with 3-vector
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline vector4<T> constexpr operator%(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+    return vector4<T>(x % rhs.x, y % rhs.y, z % rhs.z, w);
+  }
+
+  /**
    * Addition operator with 3-vector
    * @param rhs Right hand side argument of binary operator.
    */
@@ -560,6 +568,17 @@ public:
     x /= rhs.x;
     y /= rhs.y;
     z /= rhs.z;
+    return *this;
+  }
+
+  /**
+   * Modulo operator with 3-vector
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline vector4<T> constexpr &operator%=(vector3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
+    x %= rhs.x;
+    y %= rhs.y;
+    z %= rhs.z;
     return *this;
   }
 
@@ -791,6 +810,14 @@ public:
   }
 
   /**
+   * Modulo operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline vector4<T> constexpr operator%(T rhs) const noexcept __attribute__((__always_inline__)) {
+    return vector4<T>(x % rhs, y % rhs, z % rhs, w % rhs);
+  }
+
+  /**
    * Addition operator
    * @param rhs Right hand side argument of binary operator.
    */
@@ -835,6 +862,18 @@ public:
     y /= rhs;
     z /= rhs;
     w /= rhs;
+    return *this;
+  }
+
+  /**
+   * Modulo operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline vector4<T> constexpr &operator%=(T rhs) noexcept __attribute__((__always_inline__)) {
+    x %= rhs;
+    y %= rhs;
+    z %= rhs;
+    w %= rhs;
     return *this;
   }
 
