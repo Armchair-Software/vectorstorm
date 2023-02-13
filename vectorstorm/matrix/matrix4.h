@@ -172,7 +172,7 @@ public:
   inline constexpr explicit matrix4(FromT... dt) noexcept
     : data{dt...} {
   }
-  //template<typename... FromT>  __attribute__((__always_inline__))
+  //template<typename... FromT> __attribute__((__always_inline__))
   //inline constexpr explicit matrix4(FromT&&... dt)
   //  : data{std::forward<FromT>(dt)...} {
   //}

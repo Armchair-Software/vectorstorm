@@ -71,7 +71,7 @@ public:
   /**
    * Copy casting constructor.
    */
-  template<typename FromT>  __attribute__((__always_inline__))
+  template<typename FromT> __attribute__((__always_inline__))
   inline constexpr explicit quaternion(quaternion<FromT> const &q) noexcept
     : w(static_cast<T>(q.w)),
       v(q.v) {
@@ -88,7 +88,7 @@ public:
   /**
    * Move casting constructor.
    */
-  template<typename FromT>  __attribute__((__always_inline__))
+  template<typename FromT> __attribute__((__always_inline__))
   inline constexpr quaternion(quaternion<FromT> &&q) noexcept
     : w(static_cast<T>(std::move(q.w))),
       v(std::move(q.v)) {
