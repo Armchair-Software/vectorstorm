@@ -322,9 +322,9 @@ public:
   // operators
   //-------------------------------------------------------------------------------------------------------------
   /**
-   * Tests if @a rhs is equal to this bounding-box
-   * @param rhs Right-hand side
-   * @return True if @a rhs and this bounding-boxes are equal, otherwise false
+   * Tests if @a rhs is equal to this bounding-box.
+   * @param rhs Right-hand side.
+   * @return True if @a rhs and this bounding-boxes are equal, otherwise false.
    */
   template<typename RhsT> __attribute__((__always_inline__))
   inline bool constexpr operator==(aabb2<RhsT> const &rhs) const noexcept {
@@ -332,9 +332,9 @@ public:
   }
 
   /**
-   * Tests if @a rhs is not equal to this bounding-box
-   * @param rhs Right-hand side
-   * @return True if @a rhs and this bounding-boxes are not equal, otherwise false
+   * Tests if @a rhs is not equal to this bounding-box.
+   * @param rhs Right-hand side.
+   * @return True if @a rhs and this bounding-boxes are not equal, otherwise false.
    */
   template<typename RhsT> __attribute__((__always_inline__))
   inline bool constexpr operator!=(aabb2<RhsT> const &rhs) const noexcept {
@@ -342,9 +342,63 @@ public:
   }
 
   /**
+   * Addition operator: Moves a copy of this bounding-box by vector @a rhs.
+   * @param rhs A vector to move this bounding-box by.
+   * @return A resulting moved bounding-box.
+   */
+  template<typename RhsT> __attribute__((__always_inline__))
+  inline aabb2<T> constexpr operator+(vector2<RhsT> const &rhs) const noexcept {
+    return aabb2(
+      vector2<T>{min.x + rhs.x, min.y + rhs.y},
+      vector2<T>{max.x + rhs.x, max.y + rhs.y}
+    );
+  }
+
+  /**
+   * Subtraction operator: Moves a copy of this bounding-box by negative vector @a rhs.
+   * @param rhs A vector to move this bounding-box by the inverse of.
+   * @return A resulting moved bounding-box.
+   */
+  template<typename RhsT> __attribute__((__always_inline__))
+  inline aabb2<T> constexpr operator-(vector2<RhsT> const &rhs) const noexcept {
+    return aabb2(
+      vector2<T>{min.x - rhs.x, min.y - rhs.y},
+      vector2<T>{max.x - rhs.x, max.y - rhs.y}
+    );
+  }
+
+  /**
+   * Addition operator: Moves this bounding-box by vector @a rhs.
+   * @param rhs A vector to move this bounding-box by.
+   * @return Reference to this.
+   */
+  template<typename RhsT> __attribute__((__always_inline__))
+  inline aabb2<T> constexpr &operator+=(vector2<RhsT> const &rhs) noexcept {
+    min.x += rhs.x;
+    min.y += rhs.y;
+    max.x += rhs.x;
+    max.y += rhs.y;
+    return *this;
+  }
+
+  /**
+   * Subtraction operator: Moves this bounding-box by negative vector @a rhs.
+   * @param rhs A vector to move this bounding-box by the inverse of.
+   * @return Reference to this.
+   */
+  template<typename RhsT> __attribute__((__always_inline__))
+  inline aabb2<T> constexpr &operator-=(vector2<RhsT> const &rhs) noexcept {
+    min.x -= rhs.x;
+    min.y -= rhs.y;
+    max.x -= rhs.x;
+    max.y -= rhs.y;
+    return *this;
+  }
+
+  /**
    * Extends this bounding-box by point @a rhs.
-   * @param rhs A point to extend this bounding-box by
-   * @return Reference to this
+   * @param rhs A point to extend this bounding-box by.
+   * @return Reference to this.
    */
   template<typename SrcT> __attribute__((__always_inline__))
   inline aabb2<T> constexpr &operator<<(vector2<SrcT> const &rhs) noexcept {
@@ -354,8 +408,8 @@ public:
 
   /**
    * Extends this bounding-box by box @a rhs.
-   * @param rhs A box to extend this bounding-box by
-   * @return Reference to this
+   * @param rhs A box to extend this bounding-box by.
+   * @return Reference to this.
    */
   template<typename SrcT> __attribute__((__always_inline__))
   inline aabb2<T> constexpr &operator<<(aabb2<SrcT> const &rhs) noexcept {
@@ -364,9 +418,9 @@ public:
   }
 
   /**
-   * Union of this and @a rhs bounding-boxes
-   * @param rhs Right-hand side of union
-   * @return A resulting bounding-box representing union
+   * Union of this and @a rhs bounding-boxes.
+   * @param rhs Right-hand side of union.
+   * @return A resulting bounding-box representing union.
    */
   template<typename RhsT> __attribute__((__always_inline__))
   inline aabb2<T> constexpr operator|(aabb2<RhsT> const &rhs) const noexcept {
@@ -374,8 +428,8 @@ public:
   }
 
   /**
-   * Intersection of this and @a rhs bounding-boxed
-   * @param rhs Right-hand side
+   * Intersection of this and @a rhs bounding-boxes.
+   * @param rhs Right-hand side.
    * @return Resulting bounding-box representing the intersection.
    */
   template<typename RhsT> __attribute__((__always_inline__))
@@ -384,8 +438,8 @@ public:
   }
 
   /**
-   * Outputs string representation of bounding-box @a rhs to output stream @a lhs
-   * @param lhs Output stream to write to
+   * Outputs string representation of bounding-box @a rhs to output stream @a lhs.
+   * @param lhs Output stream to write to.
    * @param rhs Bounding-box to write to output stream.
    * @return Reference to output stream @a lhs
    */
