@@ -32,10 +32,10 @@ inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(float number) noexcept {
 
   float x = number * 0.5f;
   float y = number;
-  uint32_t i  = *(uint32_t*)&y;                                                 // evil floating point bit level hacking
+  uint32_t i  = *reinterpret_cast<uint32_t*>(&y);                               // evil floating point bit level hacking
   //i = 0x5f3759df - (i >> 1);                                                    // what the fuck?
   i = 0x5f375a84 - (i >> 1);                                                    // improved magic number from http://jheriko-rtw.blogspot.co.uk/2009/04/understanding-and-improving-fast.html
-  y = *(float*)&i;
+  y = *reinterpret_cast<float*>(&i);
   y = y * (threehalfs - (x * y * y));                                           // 1st iteration
   y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
@@ -47,11 +47,11 @@ inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(double number) noexcept
 
   double x = number * 0.5;
   double y = number;
-  uint64_t i  = *(uint64_t*)&y;                                                 // evil floating point bit level hacking
+  uint64_t i  = *reinterpret_cast<uint64_t*>(&y);                               // evil floating point bit level hacking
   //i = 0x5fe6eb50c7b537a9ll - (i >> 1);                                          // even more magic than "what the fuck" number
   uint64_t constexpr const magic = (uint64_t(0x5fe6eb50) << (8 * 4)) + uint64_t(0xc7b537a9); // hack to produce 0x5fe6eb50c7b537a9ll without triggering -Wlong-long warning
   i = magic - (i >> 1);
-  y = *(double*)&i;
+  y = *reinterpret_cast<double*>(&i);
   y = y * (threehalfs - (x * y * y));                                           // 1st iteration
   y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
@@ -83,10 +83,10 @@ inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept
 
   float x = number * 0.5f;
   float y = number;
-  uint32_t i  = *(uint32_t*)&y;                                                 // evil floating point bit level hacking
+  uint32_t i  = *reinterpret_cast<uint32_t*>(&y);                                // evil floating point bit level hacking
   //i = 0x5f3759df - (i >> 1);                                                    // what the fuck?
   i = 0x5f375a84 - (i >> 1);                                                    // improved magic number from http://jheriko-rtw.blogspot.co.uk/2009/04/understanding-and-improving-fast.html
-  y = *(float*)&i;
+  y = *reinterpret_cast<float*>(&i);
   y = y * (threehalfs - (x * y * y));                                           // 1st iteration
   //y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
@@ -98,11 +98,11 @@ inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(double number) noexce
 
   double x = number * 0.5;
   double y = number;
-  uint64_t i  = *(uint64_t*)&y;                                                 // evil floating point bit level hacking
+  uint64_t i  = *reinterpret_cast<uint64_t*>(&y);                               // evil floating point bit level hacking
   //i = 0x5fe6eb50c7b537a9ll - (i >> 1);                                          // even more magic than "what the fuck" number
   uint64_t constexpr const magic = (uint64_t(0x5fe6eb50) << (8 * 4)) + uint64_t(0xc7b537a9); // hack to produce 0x5fe6eb50c7b537a9ll without triggering -Wlong-long warning
   i = magic - (i >> 1);
-  y = *(double*)&i;
+  y = *reinterpret_cast<double*>(&i);
   y = y * (threehalfs - (x * y * y));                                           // 1st iteration
   //y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
   return y;
