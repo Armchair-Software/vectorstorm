@@ -83,7 +83,7 @@ inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept
 
   float x = number * 0.5f;
   float y = number;
-  uint32_t i  = *reinterpret_cast<uint32_t*>(&y);                                // evil floating point bit level hacking
+  uint32_t i  = *reinterpret_cast<uint32_t*>(&y);                               // evil floating point bit level hacking
   //i = 0x5f3759df - (i >> 1);                                                    // what the fuck?
   i = 0x5f375a84 - (i >> 1);                                                    // improved magic number from http://jheriko-rtw.blogspot.co.uk/2009/04/understanding-and-improving-fast.html
   y = *reinterpret_cast<float*>(&i);
