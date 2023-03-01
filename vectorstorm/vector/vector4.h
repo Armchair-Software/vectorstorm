@@ -273,7 +273,7 @@ public:
    * @param nx initial x-coordinate value
    * @param ny initial y-coordinate value
    * @param nz initial z-coordinate value
-   * @param nz initial w-coordinate value
+   * @param nw initial w-coordinate value
    */
   inline void constexpr assign(T nx = 0, T ny = 0, T nz = 0, T nw = 0) noexcept __attribute__((__always_inline__)) {
     x = nx;
@@ -702,10 +702,13 @@ public:
              std::abs(z - rhs.z) < epsilon<T> &&
              std::abs(w - rhs.w) < epsilon<T>;
     #else
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wfloat-equal"
       return x == rhs.x &&
              y == rhs.y &&
              z == rhs.z &&
              w == rhs.w;
+      #pragma GCC diagnostic pop
     #endif // VECTORSTORM_SOFT_COMPARE
   }
 
@@ -1028,7 +1031,7 @@ public:
    * Linear interpolation of two vectors
    * @param fact Factor of interpolation. For translation from position
    * of this vector to vector r, values of factor goes from 0.0 to 1.0.
-   * @param r Second Vector for interpolation
+   * @param new_r Second Vector for interpolation
    * @note However values of fact parameter are reasonable only in interval
    * [0.0 , 1.0], you can pass also values outside of this interval and you
    * can get result (extrapolation?)
@@ -1120,9 +1123,9 @@ namespace std {
  * @return Vector of minimal coordinates.
  */
 template<typename T>
-inline constexpr vector4<T> min(vector4<T> const &a, const vector4<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
+inline constexpr vector4<T> min(vector4<T> const &a, vector4<T> const &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
 template<typename T>
-inline constexpr vector4<T> min(vector4<T> const &a, const vector4<T> &b) noexcept {
+inline constexpr vector4<T> min(vector4<T> const &a, vector4<T> const &b) noexcept {
   return vector4<T>(::std::min(a.x, b.x), ::std::min(a.y, b.y), ::std::min(a.z, b.z), ::std::min(a.w, b.w));
 }
 
@@ -1131,20 +1134,20 @@ inline constexpr vector4<T> min(vector4<T> const &a, const vector4<T> &b) noexce
  * @return Vector of maximal coordinates.
  */
 template<typename T>
-inline constexpr vector4<T> max(vector4<T> const &a, const vector4<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
+inline constexpr vector4<T> max(vector4<T> const &a, vector4<T> const &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
 template<typename T>
-inline constexpr vector4<T> max(vector4<T> const &a, const vector4<T> &b) noexcept {
+inline constexpr vector4<T> max(vector4<T> const &a, vector4<T> const &b) noexcept {
   return vector4<T>(::std::max(a.x, b.x), ::std::max(a.y, b.y), ::std::max(a.z, b.z), ::std::max(a.w, b.w));
 }
 
-/**
- * Gets a hash value taking account of all dimensions of this vector, for use
- * in standard container maps etc.
- * Note: You need to #include <boost/functional/hash.hpp> before instantiating this if VECTORSTORM_NO_BOOST is not defined.
- * @return Hash value
- */
 template<typename T>
 struct hash<vector4<T>> {
+  /**
+   * Gets a hash value taking account of all dimensions of this vector, for use
+   * in standard container maps etc.
+   * Note: You need to #include <boost/functional/hash.hpp> before instantiating this if VECTORSTORM_NO_BOOST is not defined.
+   * @return Hash value
+   */
   size_t operator()(vector4<T> const &value) const {
     size_t hashvalue = 0;
     HASH_COMBINE(hashvalue, value.x);

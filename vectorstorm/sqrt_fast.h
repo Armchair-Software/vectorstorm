@@ -25,6 +25,7 @@ namespace VECTORSTORM_NAMESPACE {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#pragma GCC diagnostic ignored "-Wundefined-reinterpret-cast"
 inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(float number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
 inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(float number) noexcept {
   /// Adapted from Quake III's fast inverse square root approximation
@@ -76,6 +77,7 @@ inline static int constexpr sqrt_fast(int number) noexcept {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#pragma GCC diagnostic ignored "-Wundefined-reinterpret-cast"
 inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
 inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept {
   /// Adapted from Quake III's fast inverse square root approximation - one iteration version

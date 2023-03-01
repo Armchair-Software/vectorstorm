@@ -469,8 +469,11 @@ public:
       return (std::abs(x - rhs.x) < epsilon<T>) &&
              (std::abs(y - rhs.y) < epsilon<T>);
     #else
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wfloat-equal"
       return x == rhs.x &&
              y == rhs.y;
+      #pragma GCC diagnostic pop
     #endif
   }
 
@@ -488,9 +491,12 @@ public:
              std::abs(y - rhs.y) < epsilon<T> &&
              std::abs(z - rhs.z) < epsilon<T>;
     #else
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wfloat-equal"
       return x == rhs.x &&
              y == rhs.y &&
              z == rhs.z;
+      #pragma GCC diagnostic pop
     #endif // VECTORSTORM_SOFT_COMPARE
   }
 
@@ -501,7 +507,7 @@ public:
    */
   inline bool constexpr operator<(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return (x < rhs.x) &&
-           (y < rhs.y);;
+           (y < rhs.y);
   }
 
   /**
@@ -858,9 +864,9 @@ namespace std {
  * @return Vector of minimal coordinates.
  */
 template<typename T>
-inline constexpr vector2<T> min(vector2<T> const &a, const vector2<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
+inline constexpr vector2<T> min(vector2<T> const &a, vector2<T> const &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
 template<typename T>
-inline constexpr vector2<T> min(vector2<T> const &a, const vector2<T> &b) noexcept {
+inline constexpr vector2<T> min(vector2<T> const &a, vector2<T> const &b) noexcept {
   return vector2<T>(::std::min(a.x, b.x), ::std::min(a.y, b.y));
 }
 
@@ -869,20 +875,20 @@ inline constexpr vector2<T> min(vector2<T> const &a, const vector2<T> &b) noexce
  * @return Vector of maximal coordinates.
  */
 template<typename T>
-inline constexpr vector2<T> max(vector2<T> const &a, const vector2<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
+inline constexpr vector2<T> max(vector2<T> const &a, vector2<T> const &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
 template<typename T>
-inline constexpr vector2<T> max(vector2<T> const &a, const vector2<T> &b) noexcept {
+inline constexpr vector2<T> max(vector2<T> const &a, vector2<T> const &b) noexcept {
   return vector2<T>(::std::max(a.x, b.x), ::std::max(a.y, b.y));
 }
 
-/**
- * Gets a hash value taking account of all dimensions of this vector, for use
- * in standard container maps etc.
- * Note: You need to #include <boost/functional/hash.hpp> before instantiating this if VECTORSTORM_NO_BOOST is not defined.
- * @return Hash value
- */
 template<typename T>
 struct hash<vector2<T>> {
+  /**
+   * Gets a hash value taking account of all dimensions of this vector, for use
+   * in standard container maps etc.
+   * Note: You need to #include <boost/functional/hash.hpp> before instantiating this if VECTORSTORM_NO_BOOST is not defined.
+   * @return Hash value
+   */
   size_t operator()(vector2<T> const &value) const {
     size_t hashvalue = 0;
     HASH_COMBINE(hashvalue, value.x);
