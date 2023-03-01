@@ -48,7 +48,7 @@ public:
 
   /**
    * Constructs axes-aligned bound-box containing one point @a point
-   * @param point
+   * @param point Point to include
    */
   template<typename SrcT> __attribute__((__always_inline__))
   inline constexpr explicit aabb2(vector2<SrcT> const &point) noexcept
@@ -72,8 +72,8 @@ public:
 
   /**
    * Constructs axes-aligned bounding-box from @a min and @b max
-   * @param min X-coordinate of first point
-   * @param max X-coordinate of second point
+   * @param new_min X-coordinate of first point
+   * @param new_max X-coordinate of second point
    */
   template<typename SrcT> __attribute__((__always_inline__))
   inline constexpr aabb2(vector2<SrcT> const &new_min, vector2<SrcT> const &new_max) noexcept

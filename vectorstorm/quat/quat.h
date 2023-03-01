@@ -117,7 +117,6 @@ public:
 
   /**
    * Construct quaternion from rotation matrix.
-   * @return Rotation matrix expressing this quaternion.
    */
   inline constexpr explicit quaternion(matrix3<T> const &matrix) noexcept __attribute__((__always_inline__)) {
     // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
@@ -350,7 +349,10 @@ public:
     #ifdef VECTORSTORM_SOFT_COMPARE
       return (std::abs(w - rhs.w) < epsilon<T>) && v == rhs.v;
     #else
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wfloat-equal"
       return w == rhs.w && v == rhs.v;
+      #pragma GCC diagnostic pop
     #endif // VECTORSTORM_SOFT_COMPARE
   }
 
@@ -483,12 +485,12 @@ public:
   /**
    * @brief Computes the inverse of this quaternion.
    *
+   * The quaternion q such that q * (*this) == (*this) * q
+   * == [ 0 0 0 1 ]<sup>T</sup>.
+   *
    * @note This is a general inverse.  If you know a priori
    * that you're using a unit quaternion (i.e., norm() == 1),
    * it will be significantly faster to use conjugate() instead.
-   *
-   * @return The quaternion q such that q * (*this) == (*this) * q
-   * == [ 0 0 0 1 ]<sup>T</sup>.
    */
   inline void constexpr invert() noexcept __attribute__((__always_inline__)) {
     T l = length();
@@ -547,7 +549,7 @@ public:
   /**
    * Creates quaternion as rotation around axis, rad version.
    * @param axis Unit vector expressing axis of rotation.
-   * @param angleDeg Angle of rotation around axis (in radians).
+   * @param angleRad Angle of rotation around axis (in radians).
    */
   inline static quaternion<T> constexpr from_axis_rot_rad(vector3<T> const &axis, T angleRad) noexcept __attribute__((__always_inline__)) {
     T temp_sin = static_cast<T>(0);
@@ -642,7 +644,7 @@ public:
    * using coefficient of interpolation r (in [0, 1]).
    *
    * @param r The ratio of interpolation form this (r = 0) to q2 (r = 1).
-   * @param q2 Second quaternion for interpolation.
+   * @param rhs Second quaternion for interpolation.
    * @return Result of interpolation.
    */
   inline quaternion<T> constexpr slerp(T r, quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
@@ -709,7 +711,7 @@ public:
   /**
    * Creates quaternion from rotation matrix.
    *
-   * @param m Rotation matrix used to compute quaternion.
+   * @param mat Rotation matrix used to compute quaternion.
    * @return quaternion representing rotation of matrix m.
    */
   inline static quaternion<T> constexpr from_matrix(matrix3<T> const &mat) noexcept __attribute__((__always_inline__)) {
@@ -765,14 +767,14 @@ public:
 #ifndef VECTORSTORM_NO_BOOST
 namespace std {
 
-/**
- * Gets a hash value taking account of all dimensions of this quaternion, for use
- * in standard container maps etc.
- * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
- * @return Hash value
- */
 template<typename T>
 struct hash<quaternion<T>> {
+  /**
+   * Gets a hash value taking account of all dimensions of this quaternion, for use
+   * in standard container maps etc.
+   * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+   * @return Hash value
+   */
   size_t operator()(const quaternion<T> &value) const {
     size_t hashvalue = 0;
     boost::hash_combine(hashvalue, value.v.x);

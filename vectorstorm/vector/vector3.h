@@ -691,9 +691,12 @@ public:
              std::abs(y - rhs.y) < epsilon<T> &&
              std::abs(z - rhs.z) < epsilon<T>;
     #else
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wfloat-equal"
       return x == rhs.x &&
              y == rhs.y &&
              z == rhs.z;
+      #pragma GCC diagnostic pop
     #endif // VECTORSTORM_SOFT_COMPARE
   }
 
@@ -993,7 +996,7 @@ public:
   }
   /**
    * Rotate vector by a quaternion.
-   * @param ax quaternion to rotate by.
+   * @param rhs quaternion to rotate by.
    */
   inline void constexpr rotate(quaternion<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     *this *= rhs;
@@ -1003,7 +1006,7 @@ public:
    * Linear interpolation of two vectors
    * @param fact Factor of interpolation. For translation from positon
    * of this vector to vector r, values of factor goes from 0.0 to 1.0.
-   * @param r Second Vector for interpolation
+   * @param new_r Second Vector for interpolation
    * @note However values of fact parameter are reasonable only in interval
    * [0.0 , 1.0], you can pass also values outside of this interval and you
    * can get result (extrapolation?)
@@ -1115,14 +1118,14 @@ inline constexpr vector3<T> max(vector3<T> const &a, vector3<T> const &b) noexce
   return vector3<T>(::std::max(a.x, b.x), ::std::max(a.y, b.y), ::std::max(a.z, b.z));
 }
 
-/**
- * Gets a hash value taking account of all dimensions of this vector, for use
- * in standard container maps etc.
- * Note: You need to #include <boost/functional/hash.hpp> before instantiating this if VECTORSTORM_NO_BOOST is not defined.
- * @return Hash value
- */
 template<typename T>
 struct hash<vector3<T>> {
+  /**
+   * Gets a hash value taking account of all dimensions of this vector, for use
+   * in standard container maps etc.
+   * Note: You need to #include <boost/functional/hash.hpp> before instantiating this if VECTORSTORM_NO_BOOST is not defined.
+   * @return Hash value
+   */
   size_t operator()(vector3<T> const &value) const {
     size_t hashvalue = 0;
     HASH_COMBINE(hashvalue, value.x);

@@ -5,7 +5,6 @@
 /// Include this in other headers instead of vectorstorm.h wherever possible
 
 #include "vectorstorm/deprecated_macros.h"
-#define _USE_MATH_DEFINES
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {

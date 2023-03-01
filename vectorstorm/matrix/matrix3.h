@@ -324,7 +324,7 @@ public:
     return from_column_major_array(arr);
   }
 
-  //---------------------[ equiality operators ]------------------------------
+  //---------------------[ equality operators ]------------------------------
   /**
    * Equality test operator
    * @param rhs Right hand side argument of binary operator.
@@ -345,6 +345,8 @@ public:
              std::abs(data[7] - rhs.data[7]) < epsilon<T> &&
              std::abs(data[8] - rhs.data[8]) < epsilon<T>;
     #else
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wfloat-equal"
       return data[0] == rhs.data[0] &&
              data[1] == rhs.data[1] &&
              data[2] == rhs.data[2] &&
@@ -354,6 +356,7 @@ public:
              data[6] == rhs.data[6] &&
              data[7] == rhs.data[7] &&
              data[8] == rhs.data[8];
+      #pragma GCC diagnostic pop
     #endif // VECTORSTORM_SOFT_COMPARE
   }
 
@@ -862,14 +865,14 @@ inline constexpr matrix3<T> max(matrix3<T> const &a, const matrix3<T> &b) noexce
 }
 
 #ifndef VECTORSTORM_NO_BOOST
-/**
- * Gets a hash value taking account of all dimensions of this matrix, for use
- * in standard container maps etc.
- * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
- * @return Hash value
- */
 template<typename T>
 struct hash<matrix3<T>> {
+  /**
+   * Gets a hash value taking account of all dimensions of this matrix, for use
+   * in standard container maps etc.
+   * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+   * @return Hash value
+   */
   size_t operator()(const matrix3<T> &value) const {
     size_t hashvalue = 0;
     boost::hash_combine(hashvalue, value.data[0]);

@@ -342,8 +342,8 @@ public:
    * @param right Specify the coordinate for the right vertical clipping plane.
    * @param bottom Specify the coordinate for the bottom horizontal clipping plane,
    * @param top Specify the coordinate for the top horizontal clipping plane.
-   * @param near Specify the distance to the near clipping plane.  Distance must be positive.
-   * @param far Specify the distance to the far depth clipping plane.  Distance must be positive.
+   * @param near_plane Specify the distance to the near clipping plane.  Distance must be positive.
+   * @param far_plane Specify the distance to the far depth clipping plane.  Distance must be positive.
    * @return Projection matrix for specified frustum.
    */
   inline static matrix4<T> constexpr create_frustum(T left, T right, T bottom, T top, T near_plane, T far_plane) noexcept __attribute__((__always_inline__)) {
@@ -395,8 +395,8 @@ public:
    * @param right Specify the coordinate for the right vertical clipping plane.
    * @param bottom Specify the coordinate for the bottom horizontal clipping plane.
    * @param top Specify the coordinate for the top horizontal clipping plane.
-   * @param near Specify the distance to the nearer depth clipping plane. This value is negative if the plane is to be behind the viewer.
-   * @param far Specify the distance to the farther depth clipping plane. This value is negative if the plane is to be behind the viewer.
+   * @param near_plane Specify the distance to the nearer depth clipping plane. This value is negative if the plane is to be behind the viewer.
+   * @param far_plane Specify the distance to the farther depth clipping plane. This value is negative if the plane is to be behind the viewer.
    * @return Othrographic projection matrix.
    */
   inline static matrix4<T> constexpr create_ortho(T left, T right, T bottom, T top, T near_plane, T far_plane) noexcept __attribute__((__always_inline__)) {
@@ -518,6 +518,8 @@ public:
              std::abs(data[14] - rhs.data[14]) < epsilon<T> &&
              std::abs(data[15] - rhs.data[15]) < epsilon<T>;
     #else
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wfloat-equal"
       return data[ 0] == rhs.data[ 0] &&
              data[ 1] == rhs.data[ 1] &&
              data[ 2] == rhs.data[ 2] &&
@@ -534,6 +536,7 @@ public:
              data[13] == rhs.data[13] &&
              data[14] == rhs.data[14] &&
              data[15] == rhs.data[15];
+      #pragma GCC diagnostic pop
     #endif // VECTORSTORM_SOFT_COMPARE
   }
 
@@ -1101,14 +1104,14 @@ inline constexpr matrix4<T> max(matrix4<T> const &a, const matrix4<T> &b) noexce
 }
 
 #ifndef VECTORSTORM_NO_BOOST
-/**
- * Gets a hash value taking account of all dimensions of this matrix, for use
- * in standard container maps etc.
- * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
- * @return Hash value
- */
 template<typename T>
 struct hash<matrix4<T>> {
+  /**
+   * Gets a hash value taking account of all dimensions of this matrix, for use
+   * in standard container maps etc.
+   * Note: You need to #include <boost/functional/hash.hpp> before instantiating this.
+   * @return Hash value
+   */
   size_t operator()(const matrix4<T> &value) const {
     size_t hashvalue = 0;
     boost::hash_combine(hashvalue, value.data[0]);
