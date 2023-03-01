@@ -1120,9 +1120,9 @@ namespace std {
  * @return Vector of minimal coordinates.
  */
 template<typename T>
-inline constexpr vector4<T> min(vector4<T> const &a, const vector4<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
+inline constexpr vector4<T> min(vector4<T> const &a, vector4<T> const &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
 template<typename T>
-inline constexpr vector4<T> min(vector4<T> const &a, const vector4<T> &b) noexcept {
+inline constexpr vector4<T> min(vector4<T> const &a, vector4<T> const &b) noexcept {
   return vector4<T>(::std::min(a.x, b.x), ::std::min(a.y, b.y), ::std::min(a.z, b.z), ::std::min(a.w, b.w));
 }
 
@@ -1131,9 +1131,9 @@ inline constexpr vector4<T> min(vector4<T> const &a, const vector4<T> &b) noexce
  * @return Vector of maximal coordinates.
  */
 template<typename T>
-inline constexpr vector4<T> max(vector4<T> const &a, const vector4<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
+inline constexpr vector4<T> max(vector4<T> const &a, vector4<T> const &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
 template<typename T>
-inline constexpr vector4<T> max(vector4<T> const &a, const vector4<T> &b) noexcept {
+inline constexpr vector4<T> max(vector4<T> const &a, vector4<T> const &b) noexcept {
   return vector4<T>(::std::max(a.x, b.x), ::std::max(a.y, b.y), ::std::max(a.z, b.z), ::std::max(a.w, b.w));
 }
 
