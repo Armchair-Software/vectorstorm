@@ -10,6 +10,16 @@ The VectorStorm library is intended to easily interface with OpenGL and similar 
 
 The VectorStorm library is used by most [VoxelStorm](https://github.com/VoxelStorm-Ltd) and [Armchair Software](https://github.com/Armchair-Software) libraries.
 
+The library provides the following primitives:
+- [Vector](#vector): 2D, 3D and 4D
+- [Quaternion](#quaternion)
+- [Matrix](#matrix): 3x3 and 4x4
+- [Axis-aligned Bounding Box (AABB)](axis-aligned-bounding-box-aabb): 2D and 3D
+
+Additionally, it provides [stand-alone functionality](#stand-alone-functionality) for interpolation, conversion, and fast floor and square root algorithms, which can be used with VectorStorm types or primitive or external types.
+
+Each primitive provides a set of operators to perform arithmetic operations on VectorStorm primitives as if you were performing them on basic numerical types.
+
 ## Requirements
 
 - Optional: Boost headers, for math constants and hash_combine.  This requirement can be overruled with the `VECTORSTORM_NO_BOOST` define, but will fall back to functionality that may introduce a performance penalty.  Alternatively, if you don't use the related functionality, Boost is not required.  For this reason, you may need to include the Boost headers yourself, only when instantiating the relevant templates.
@@ -29,6 +39,11 @@ Two-dimensional vectors:
 - [vector/vector2.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector2.h)
 - [vector/vector2_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector2_forward.h) - forward declarations
 - [vector/vector2_types.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector2_types.h) - shortcut type definitions
+  - `using vector2f  = vector2<float>;` Two dimensional vector of floats
+  - `using vector2d  = vector2<double>;` Two dimensional vector of doubles
+  - `using vector2ld = vector2<long double>;` Two dimensional vector of long doubles
+  - `using vector2i  = vector2<int>;` Two dimensional vector of integers
+  - `using vector2ui = vector2<unsigned int>;` Two dimensional vector of unsigned integers
   - `using vec2   = vector2<T>;`
   - `using vec2f  = vector2f;`
   - `using vec2d  = vector2d;`
@@ -40,6 +55,11 @@ Three-dimensional vectors:
 - [vector/vector3.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector3.h)
 - [vector/vector3_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector3_forward.h) - forward declarations
 - [vector/vector3_types.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector3_types.h) - shortcut type definitions
+  - `using vector3f  = vector3<float>;` Three dimensional vector of floats
+  - `using vector3d  = vector3<double>;` Three dimensional vector of doubles
+  - `using vector3ld = vector3<long double>;` Three dimensional vector of long doubles
+  - `using vector3i  = vector3<int>;` Three dimensional vector of integers
+  - `using vector3ui = vector3<unsigned int>;` Three dimensional vector of unsigned integers  
   - `using vec3   = vector3<T>;`
   - `using vec3f  = vector3f;`
   - `using vec3d  = vector3d;`
@@ -51,6 +71,11 @@ Four-dimensional vectors:
 - [vector/vector4.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector4.h)
 - [vector/vector4_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector4_forward.h) - forward declarations
 - [vector/vector4_types.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector4_types.h) - shortcut type definitions
+  - `using vector4f  = vector4<float>;` Four dimensional vector of floats
+  - `using vector4d  = vector4<double>;` Four dimensional vector of doubles
+  - `using vector4ld = vector4<long double>;` Four dimensional vector of long doubles
+  - `using vector4i  = vector4<int>;` Four dimensional vector of integers
+  - `using vector4ui = vector4<unsigned int>;` Four dimensional vector of unsigned integers
   - `using vec4   = vector4<T>;`
   - `using vec4f  = vector4f;`
   - `using vec4d  = vector4d;`
@@ -59,34 +84,74 @@ Four-dimensional vectors:
   - `using vec4ui = vector4ui;`
 
 Utility functionality for vectors:
-- [vector/hash_combine.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/hash_combine.h)
+- [vector/hash_combine.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/hash_combine.h) - defines HASH_COMBINE which uses Boost's hash_combine if available, or falls back to the internal hasher - used in vector hash functions called by standard containers:
+  - `void hash_combine(std::size_t &seed, T const &v)`
 
 #### Quaternion
 - [quat/quat.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/quat/quat.h)
 - [quat/quat_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/quat/quat_forward.h) - forward declarations
 - [quat/quat_types.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/quat/quat_types.h) - shortcut type definitions
+  - `using quaternionf  = quaternion<float>;` Quaternion of floats
+  - `using quaterniond  = quaternion<double>;` Quaternion of doubles
+  - `using quaternionld = quaternion<long double>;` Quaternion of long doubles
+  - `using quat   = quaternion<T>;`
+  - `using quatf  = quaternionf;`
+  - `using quatd  = quaterniond;`
+  - `using quatld = quaternionld;`
 
 #### Matrix
 Three-dimensional matrix types (3x3 matrices)
 - [matrix/matrix3.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/matrix/matrix3.h)
 - [matrix/matrix3_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/matrix/matrix3_forward.h) - forward declarations
 - [matrix/matrix3_types.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/matrix/matrix3_types.h) - shortcut type definitions
+  - `using matrix3f  = matrix3<float>;` matrix 3x3 of floats
+  - `using matrix3d  = matrix3<double>;` matrix 3x3 of doubles
+  - `using matrix3ld = matrix3<long double>;` matrix 3x3 of long doubles
+  - `using matrix3i  = matrix3<int>;` matrix 3x3 of integers
+  - `using matrix3ui = matrix3<unsigned int>;` matrix 3x3 of unsigned integers
+  - `using mat3   = matrix3<T>;`
+  - `using mat3f  = matrix3f;`
+  - `using mat3d  = matrix3d;`
+  - `using mat3ld = matrix3ld;`
+  - `using mat3i  = matrix3i;`
+  - `using mat3ui = matrix3ui;`
 
 Four-dimensional matrix types (4x4 matrices)
 - [matrix/matrix4.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/matrix/matrix4.h)
 - [matrix/matrix4_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/matrix/matrix4_forward.h) - forward declarations
 - [matrix/matrix4_types.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/matrix/matrix4_types.h) - shortcut type definitions
+  - `using matrix4f  = matrix4<float>;` matrix 4x4 of floats
+  - `using matrix4d  = matrix4<double>;` matrix 4x4 of doubles
+  - `using matrix4ld = matrix4<long double>;` matrix 4x4 of long doubles
+  - `using matrix4i  = matrix4<int>;` matrix 4x4 of integers
+  - `using matrix4ui = matrix4<unsigned int>;` matrix 4x4 of unsigned integers
+  - `using mat4   = matrix4<T>;`
+  - `using mat4f  = matrix4f;`
+  - `using mat4d  = matrix4d;`
+  - `using mat4ld = matrix4ld;`
+  - `using mat4i  = matrix4i;`
+  - `using mat4ui = matrix4ui;`
 
 #### Axis-aligned Bounding Box (AABB)
 Two-dimensional bounding box types
 - [aabb/aabb2.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/aabb/aabb2.h)
 - [aabb/aabb2_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/aabb/aabb2_forward.h) - forward declarations
 - [aabb/aabb2_types.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/aabb/aabb2_types.h) - shortcut type definitions
+  - `using aabb2f  = aabb2<float>;` 2D axis-aligned bounding box of floats
+  - `using aabb2d  = aabb2<double>;` 2D axis-aligned bounding box of doubles
+  - `using aabb2ld = aabb2<long double>;` 2D axis-aligned bounding box of long doubles
+  - `using aabb2i  = aabb2<int>; `2D axis-aligned bounding box of integers
+  - `using aabb2ui = aabb2<unsigned int>; `2D axis-aligned bounding box of unsigned integers
 
 Three-dimensional bounding box types
 - [aabb/aabb3.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/aabb/aabb3.h)
 - [aabb/aabb3_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/aabb/aabb3_forward.h) - forward declarations
 - [aabb/aabb3_types.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/aabb/aabb3_types.h) - shortcut type definitions
+  - `using aabb3f  = aabb3<float>;` 3D axis-aligned bounding box of floats
+  - `using aabb3d  = aabb3<double>;` 3D axis-aligned bounding box of doubles
+  - `using aabb3ld = aabb3<long double>;` 3D axis-aligned bounding box of long doubles
+  - `using aabb3i  = aabb3<int>;` 2D axis-aligned bounding box of integers
+  - `using aabb3ui = aabb3<unsigned int>;` 2D axis-aligned bounding box of unsigned integers
 
 ### Stand-alone functionality
 - [deg2rad.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/deg2rad.h)
