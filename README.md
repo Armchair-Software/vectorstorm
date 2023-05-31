@@ -1,6 +1,6 @@
 # VectorStorm
 
-Vector mathematics for computer graphics - VoxelStorm version.
+Vector mathematics for computer graphics - [Armchair Software](https://github.com/Armchair-Software) version, formerly developed by [VoxelStorm](https://github.com/VoxelStorm-Ltd).
 
 This library loosely follows the structure of the popular `vmath.h` library by Jan Bartipan for familiarity and ease of back-porting, but provides optimised algorithms, modern C++, extensive constexpr compatibility, explicit control over copy operations, SSE and platform-specific optimisations, and a GLSL-style altenative short syntax.
 
