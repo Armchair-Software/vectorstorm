@@ -27,11 +27,35 @@ Each primitive provides a set of operators to perform arithmetic operations on V
   - boost/math/constants/constants.hpp
   - boost/math/special_functions/erf.hpp
 
+## Core features
+The following feature concepts apply to all of the primitive VectorStorm types:
+
+### Use with any underlying types
+The VectorStorm primitives are templated and intended to be maximally flexible.  They can store any numerical or custom type, as long as the mathematical operators you intend to use are defined for that type.  Non-numerical types can also be used as long as you don't attempt to call any undefined mathematical operators, and no restrictions are placed on types you use.  All VectorStorm types can hold all other VectorStorm types, including themselves.  You can have a four-dimensional vector of floats to represent a colour, and then have a 4x4 matrix of colours, encapsulate those in your own object, and then create a three-dimensional vector of your own object if you like.
+
+### Multiple methods of access
+Members can be accessed by name (`my_vector.x`, `my_vector.y`), by index (`my_vector[0]`, `my_vector[1]`), by cast to array, or by direct access to the underlying data (`*my_vector`).  This means VectorStorm types work with most third party libraries with no adaptation required.  The second element in a 2D vector can be accessed either by "y" or "z" identifier, for easier expression of intent when working with mixed 2D and 3D types.
+
+### Easy debugging & printing
+All types have string conversion and stream operators, and can simply be streamed to stdout as long as the type they hold is also streamable.  This makes debugging and pretty-printing extremely simple.
+
+### Mathematical operators on all types
+All sensible mathematical operations are supported on all types.  You can add and subtract vectors and matrices.  You can multiply vectors, matrices and quaternions.  You can move bounding boxes by adding numeric values to them.  You can compare VectorStorm types using exact comparison or soft floating point (epsilon) comparison.  
+
+### Convertability
+Higher dimension vectors and matrices can easily be converted to specific lower dimensions with a single call, for example `my_vector3.to_2d_xz()` to quickly flatten the X and Z dimensions of a 3D XYZ vector into the X and Y dimensions of a 2D vector.
+
+### Seamless use with standard library containers
+All VectorStorm types, containing any types of your own, can be stored in std containers and boost containers without modification.  Hash functions are provided for VectorStorm types to operate inside hash-based containers such as `std::unordered_set` and `std::unordered_map`.
+
+### Interoperability with common third party libraries
+No conversions are required to use VectorStorm types directly with OpenGL, or any other library that accepts vector or matrix data as a plain array or a pointer to a range of values.  Simple conversion operators can be provided for interoperation with other libraries' vector types, and examples are provided [below](#interoperability).
+
 ## Structure
 ### Top level includes
 - [vectorstorm.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vectorstorm.h) - Include this to pull in all other headers.  For finer grained control, only include the required headers below.
 - [vectorstorm_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vectorstorm_forward.h) - Forward declaration for all types.
-- [vectorstorm.cpp](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vectorstorm.cpp) - Optionally build this in your project, with `VECTORSTORM_PREINSTANTIATE` enabled, if you wish to instantiate all templates with common numerical types.  Not normally required.
+- [vectorstorm.cpp](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vectorstorm.cpp) - Optionally build this file in your project, with `VECTORSTORM_PREINSTANTIATE` enabled, if you wish to instantiate all templates with common numerical types.  Not normally required.  Without this, the library is header-only.
  
 ### Primary types
 #### Vector
@@ -197,6 +221,7 @@ VectorStorm types use explicit constructors in a bid to aid the user in avoiding
 ## Interoperability
 
 ### Use with OpenGL
+Float, double, signed and unsigned integer vector, quaternion and matrix types can all be passed to OpenGL directly without any casting, for any function that accepts array representations of the equivalent types.
 
 ### Use with GLFW
 
