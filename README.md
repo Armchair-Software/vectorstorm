@@ -34,7 +34,7 @@ The following feature concepts apply to all of the primitive VectorStorm types:
 The VectorStorm primitives are templated and intended to be maximally flexible.  They can store any numerical or custom type, as long as the mathematical operators you intend to use are defined for that type.  Non-numerical types can also be used as long as you don't attempt to call any undefined mathematical operators, and no restrictions are placed on types you use.  All VectorStorm types can hold all other VectorStorm types, including themselves.  You can have a four-dimensional vector of floats to represent a colour, and then have a 4x4 matrix of colours, encapsulate those in your own object, and then create a three-dimensional vector of your own object if you like.
 
 ### Multiple methods of access
-Members can be accessed by name (`my_vector.x`, `my_vector.y`), by index (`my_vector[0]`, `my_vector[1]`), by cast to array, or by direct access to the underlying data (`*my_vector`).  This means VectorStorm types work with most third party libraries with no adaptation required.  The second element in a 2D vector can be accessed either by "y" or "z" identifier, for easier expression of intent when working with mixed 2D and 3D types.
+Members can be accessed by name (`my_vector.x`, `my_vector.y` or `my_vector.s`, `my_vector.t`), by index (`my_vector[0]`, `my_vector[1]`), by cast to array, or by direct access to the underlying data (`*my_vector`).  This means VectorStorm types work with most third party libraries with no adaptation required.  The second element in a 2D vector can be accessed either by "y" or "z" identifier, for easier expression of intent when working with mixed 2D and 3D types.
 
 ### Easy debugging & printing
 All types have string conversion and stream operators, and can simply be streamed to stdout as long as the type they hold is also streamable.  This makes debugging and pretty-printing extremely simple.
@@ -59,6 +59,40 @@ No conversions are required to use VectorStorm types directly with OpenGL, or an
  
 ### Primary types
 #### Vector
+All dimensions of vectors have the following operations in common:
+  - Default constructor `vector2()` Creates and sets to (0,0) .
+  - Piecewise contructor `vector2(T x, T y)` Creates and sets to (x, y).
+	- Copy and move constructors, including copy and move constructors from vector3 and vector4, and copy casting constructors from other underlying types.
+	- `assign(T nx = 0, T ny = 0)` Assigns all component values in a single operation (or resets to identity if no values specified).
+	- `operator[]` Array access operator.
+	- Mathematical operators: Addition, subtraction, multiplication, division, modulo, for scalar and vector values.
+	- `dot(vector2<T> const &rhs)` Dot product with other vector.
+	- `cross(vector2<T> const &rhs)` Cross product with other vector.
+	- Comparison operators: Equality, inequality, less than, greater than, less than or equal, greater than or equal.
+	- Unary operations: Unary negate.
+	- `T length()` length of the vector.
+	- `T length_fast()` length of the vector, using fast square root approximation (see below).
+	- `T length_faster()` length of the vector, using faster square root with a single iteration (see below).
+	- `T length_sq()` returns the square of the length of the vector, useful to avoid square root - use when comparing two distances, for example.
+	- `bool length_zero()` test whether a vector is zero length - much faster than calculating the length and testing for approximate equality to zero.
+	- `void normalise()` normalise the vector, setting its unit length to 1.  Not safe to call on zero length vectors.
+	- `void normalise_fast()` normalise the vector, using fast square root approximation (see below)
+	- `void normalise_faster()` normalise the vector, using faster square root approximation with a single iteration (see below).
+  - `vector2<T> normalise_copy()` returns a normalised copy of the vector, setting its unit length to 1.  Not safe to call on zero length vectors.
+	- `vector2<T> normalise_copy_fast()` returns a normalised copy of the vector, using fast square root approximation (see below)
+	- `vector2<T> normalise_copy_faster()` returns a normalised copy of the vector, using faster square root approximation with a single iteration (see below).
+	- `void normalise_safe()` as per `normalise`, but with an added zero safety check to avoid division by zero.
+	- `vector2<T> normalise_safe()` as per `normalise_copy`, but with an added zero safety check to avoid division by zero.
+	- `void abs()` make the vector absolute - set all values to positive using `std::abs` on each component.
+	- `vector2<T> abs_copy()` return an absolute copy of the vector
+	- `void rotate(T angle)` rotate the vector clockwise by the given angle in degrees
+	- `void rotate_rad(T angle)` rotate the vector clockwise by the given angle in radians
+	- `vector2<T> lerp(T factor, vector2<T> const &other)` return an interpolated vector, between this vector and another.  Factor is 0 for this vector and 1 for `other`.  The range is not limited to 0-1, values outside of the range can be used to extrapolate.
+	- Output to stream operator and `std::string to string()` for stream or string output.
+	- `bool get_line_intersection(vector2<FromT> const &line1start, vector2<FromT> const &line1end, vector2<FromT> const &line2start, vector2<FromT> const &line2end)` - get the intersection of two lines (defined by two pairs of vectors) and store the result in this vector, returning true, or leaving the vector unchanged and returning false if there is no intersection.
+	- `static bool do_lines_intersect(vector2<FromT> const &line1start, vector2<FromT> const &line1end, vector2<FromT> const &line2start, vector2<FromT> const &line2end)` - determine whether two lines intersect (as defined by two pairs of vectors), just returning true or false.  Prefer this version when you only care about whether there is an intersection or not, but prefer the version above to avoid duplicating calculations if you care about the resulting intersection point as well.
+	- `to_2d_xy()`, `to_3d_xy()`, `to_2d_xz()`, `to_2d_yz()` etc - convert between dimensions of vectors, dropping dimensions or adding them as per the specified function.
+
 Two-dimensional vectors:
 - [vector/vector2.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector2.h)
 - [vector/vector2_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector2_forward.h) - forward declarations
@@ -180,7 +214,7 @@ Three-dimensional bounding box types
 ### Stand-alone functionality
 Interpolation
 - [lerp.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/lerp.h)
-  - `T lerp(T const a, T const b, F factor)` linear interpolation between `a` and `b` by factor `f` - result is equal to `a` when `f == 0` and to `b` when `f == 1`.  Usable with VectorStorm types as well as primitive types.  
+  - `T lerp(T const a, T const b, F factor)` linear interpolation between `a` and `b` by factor `f` - result is equal to `a` when `f == 0` and to `b` when `f == 1`.  Usable with VectorStorm types as well as primitive types.  The range is not limited to 0-1, values outside of the range can be used to extrapolate.
 - [sigmoid.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/sigmoid.h)
 
 Conversion
