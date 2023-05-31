@@ -154,18 +154,32 @@ Three-dimensional bounding box types
   - `using aabb3ui = aabb3<unsigned int>;` 2D axis-aligned bounding box of unsigned integers
 
 ### Stand-alone functionality
-- [deg2rad.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/deg2rad.h)
-- [rad2deg.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/rad2deg.h)
-- [epsilon.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/epsilon.h)
-- [floor_fast.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/floor_fast.h)
+Interpolation
 - [lerp.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/lerp.h)
+  - `T lerp(T const a, T const b, F factor)` linear interpolation between `a` and `b` by factor `f` - result is equal to `a` when `f == 0` and to `b` when `f == 1`.  Usable with VectorStorm types as well as primitive types.  
 - [sigmoid.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/sigmoid.h)
-- [sincos.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/sincos.h)
+
+Conversion
+- [deg2rad.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/deg2rad.h)
+  - `T deg2rad(T const angle_deg)` convert angles in degrees to radians.
+- [rad2deg.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/rad2deg.h)
+  - `T rad2deg(T const angle_rad)` convert angles in radians to degrees.
+
+Optimised algorithms
+- [floor_fast.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/floor_fast.h) - Fast floor algorithms for floating types, returning an integer rather than the same floating type.  These should be faster than `std::floor` on most implementations.
+  - `int floor_fast(float value)` Fast floor of a float to an integer
+  - `int floor_fast(double value)` Fast floor of a double to an integer
 - [sqrt_fast.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/sqrt_fast.h)
+- [sincos.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/sincos.h) - Provides a platform-independent single `sincos` implementation, to return a sine and a cosine of a value in a single call.  Will use platform-optimised builtins when available, and fall back to separate sin and cos computation otherwise, so you don't have to worry about calling builtins directly when you need to use both sin and cos results at the same time.
+- `void sincos_any(T const angle_rad, T &out_sin, T &out_cos)`
+- `void sincos_any(int const angle_rad, int &out_sin, int &out_cos)`
+- `void sincos_any(float const angle_rad, float &out_sin, float &out_cos)`
+- `sincos_any(long double const angle_rad, long double &out_sin, long double &out_cos)`
 
 ### Miscellaneous
-- [pi.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/pi.h)
-- [deprecated_macros.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/deprecated_macros.h)
+- [pi.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/pi.h) - provides a definition of PI based on Boost if available, or an internal fallback if not
+- [epsilon.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/epsilon.h) - provides a definition of epsilon value for use in soft float comparison when `VECTORSTORM_SOFT_COMPARE` is defined
+- [deprecated_macros.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/deprecated_macros.h) - "deprecated" macros for porting compatibility with the vmath library
 
  
 ## Interoperability
