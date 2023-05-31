@@ -63,39 +63,41 @@ Vectors may be two, three or four dimensional, with the same type stored in each
 
 The members can be accessed as spacial coordinates `.x`, `.y`, `.z`, `.w`, or texture coordinates `.s`, `.t`, `.u`, or colours `.r`, `.g`, `.b`, `.a`, to clearly express the intention in a given use case.
 
-All dimensions of vectors have the following operations in common:
-  - Default constructor `vector2()` Creates and sets to (0,0) .
-  - Piecewise contructor `vector2(T x, T y)` Creates and sets to (x, y).
-  - Copy and move constructors, including copy and move constructors from vector3 and vector4, and copy casting constructors from other underlying types.
-  - `assign(T nx = 0, T ny = 0)` Assigns all component values in a single operation (or resets to identity if no values specified).
-  - `operator[]` Array access operator.
-  - Mathematical operators: Addition, subtraction, multiplication, division, modulo, for scalar and vector values.
-  - `dot(vector2<T> const &rhs)` Dot product with other vector.
-  - `cross(vector2<T> const &rhs)` Cross product with other vector.
-  - Comparison operators: Equality, inequality, less than, greater than, less than or equal, greater than or equal.
-  - Unary operations: Unary negate.
-  - `T length()` length of the vector.
-  - `T length_fast()` length of the vector, using fast square root approximation (see below).
-  - `T length_faster()` length of the vector, using faster square root with a single iteration (see below).
-  - `T length_sq()` returns the square of the length of the vector, useful to avoid square root - use when comparing two distances, for example.
-  - `bool length_zero()` test whether a vector is zero length - much faster than calculating the length and testing for approximate equality to zero.
-  - `void normalise()` normalise the vector, setting its unit length to 1.  Not safe to call on zero length vectors.
-  - `void normalise_fast()` normalise the vector, using fast square root approximation (see below)
-  - `void normalise_faster()` normalise the vector, using faster square root approximation with a single iteration (see below).
-  - `vector2<T> normalise_copy()` returns a normalised copy of the vector, setting its unit length to 1.  Not safe to call on zero length vectors.
-  - `vector2<T> normalise_copy_fast()` returns a normalised copy of the vector, using fast square root approximation (see below)
-  - `vector2<T> normalise_copy_faster()` returns a normalised copy of the vector, using faster square root approximation with a single iteration (see below).
-  - `void normalise_safe()` as per `normalise`, but with an added zero safety check to avoid division by zero.
-  - `vector2<T> normalise_safe()` as per `normalise_copy`, but with an added zero safety check to avoid division by zero.
-  - `void abs()` make the vector absolute - set all values to positive using `std::abs` on each component.
-  - `vector2<T> abs_copy()` return an absolute copy of the vector
-  - `void rotate(T angle)` rotate the vector clockwise by the given angle in degrees
-  - `void rotate_rad(T angle)` rotate the vector clockwise by the given angle in radians
-  - `vector2<T> lerp(T factor, vector2<T> const &other)` return an interpolated vector, between this vector and another.  Factor is 0 for this vector and 1 for `other`.  The range is not limited to 0-1, values outside of the range can be used to extrapolate.
-  - Output to stream operator and `std::string to_string()` for stream or string output.
-  - `bool get_line_intersection(vector2<FromT> const &line1start, vector2<FromT> const &line1end, vector2<FromT> const &line2start, vector2<FromT> const &line2end)` - get the intersection of two lines (defined by two pairs of vectors) and store the result in this vector, returning true, or leaving the vector unchanged and returning false if there is no intersection.
-  - `static bool do_lines_intersect(vector2<FromT> const &line1start, vector2<FromT> const &line1end, vector2<FromT> const &line2start, vector2<FromT> const &line2end)` - determine whether two lines intersect (as defined by two pairs of vectors), just returning true or false.  Prefer this version when you only care about whether there is an intersection or not, but prefer the version above to avoid duplicating calculations if you care about the resulting intersection point as well.
-  - `to_2d_xy()`, `to_3d_xy()`, `to_2d_xz()`, `to_2d_yz()` etc - convert between dimensions of vectors, dropping dimensions or adding them as per the specified function.
+All dimensions of vectors have the following operations in common, the below examples use `vector2` for consistency:
+
+- Default constructor `vector2()` Creates and sets to (0,0) .
+- Piecewise contructor `vector2(T x, T y)` Creates and sets to (x, y).
+- Copy and move constructors, including copy and move constructors from vector3 and vector4, and copy casting constructors from other underlying types.
+- `assign(T nx = 0, T ny = 0)` Assigns all component values in a single operation (or resets to identity if no values specified).
+- `operator[]` Array access operator.
+- Mathematical operators: Addition, subtraction, multiplication, division, modulo, for scalar and vector values.
+- `dot(vector2<T> const &rhs)` Dot product with other vector.
+- `cross(vector2<T> const &rhs)` Cross product with other vector.
+- Comparison operators: Equality, inequality, less than, greater than, less than or equal, greater than or equal.
+- Unary operations: Unary negate.
+- `T length()` length of the vector.
+- `T length_fast()` length of the vector, using fast square root approximation (see below).
+- `T length_faster()` length of the vector, using faster square root with a single iteration (see below).
+- `T length_sq()` returns the square of the length of the vector, useful to avoid square root - use when comparing two distances, for example.
+- `bool length_zero()` test whether a vector is zero length - much faster than calculating the length and testing for approximate equality to zero.
+- `void normalise()` normalise the vector, setting its unit length to 1.  Not safe to call on zero length vectors.
+- `void normalise_fast()` normalise the vector, using fast square root approximation (see below)
+- `void normalise_faster()` normalise the vector, using faster square root approximation with a single iteration (see below).
+- `vector2<T> normalise_copy()` returns a normalised copy of the vector, setting its unit length to 1.  Not safe to call on zero length vectors.
+- `vector2<T> normalise_copy_fast()` returns a normalised copy of the vector, using fast square root approximation (see below)
+- `vector2<T> normalise_copy_faster()` returns a normalised copy of the vector, using faster square root approximation with a single iteration (see below).
+- `void normalise_safe()` as per `normalise`, but with an added zero safety check to avoid division by zero.
+- `vector2<T> normalise_safe()` as per `normalise_copy`, but with an added zero safety check to avoid division by zero.
+- `void abs()` make the vector absolute - set all values to positive using `std::abs` on each component.
+- `vector2<T> abs_copy()` return an absolute copy of the vector
+- `void rotate(T angle)` rotate the vector clockwise by the given angle in degrees
+- `void rotate_rad(T angle)` rotate the vector clockwise by the given angle in radians
+- `vector2<T> lerp(T factor, vector2<T> const &other)` return an interpolated vector, between this vector and another.  Factor is 0 for this vector and 1 for `other`.  The range is not limited to 0-1, values outside of the range can be used to extrapolate.
+- Output to stream operator and `std::string to_string()` for stream or string output.
+- `bool get_line_intersection(vector2<FromT> const &line1start, vector2<FromT> const &line1end, vector2<FromT> const &line2start, vector2<FromT> const &line2end)` - get the intersection of two lines (defined by two pairs of vectors) and store the result in this vector, returning true, or leaving the vector unchanged and returning false if there is no intersection.
+- `static bool do_lines_intersect(vector2<FromT> const &line1start, vector2<FromT> const &line1end, vector2<FromT> const &line2start, vector2<FromT> const &line2end)` - determine whether two lines intersect (as defined by two pairs of vectors), just returning true or false.  Prefer this version when you only care about whether there is an intersection or not, but prefer the version above to avoid duplicating calculations if you care about the resulting intersection point as well.
+- `to_2d_xy()`, `to_3d_xy()`, `to_2d_xz()`, `to_2d_yz()` etc - convert between dimensions of vectors, dropping dimensions or adding them as per the specified function.
+- `std::min()` and `std::max()` overrides.
 
 Two-dimensional vectors:
 - [vector/vector2.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/vector/vector2.h)
@@ -155,30 +157,30 @@ A `quaternion<T>` consists of a `T` real component and a `vector3<T>` imaginary 
 The pair of members can be accessed as `.w`, `.v`, or `.real`, `.imaginary`, or `.scalar`, `.vector`.
 
 Quaternions have the following operations:
-  - `quaternion()` constructs quaternion (0 + 0i + 0j + 0k).
-  - `quaternion(T w, vector3<T> const &v)` constructs quaternion from real part `w` and complex part `v`.
-  - `quaternion(T w, T i, T j, T k)` constructs quaternion from real part `w` and complex coefficients `i`, `j` and `k`.
-  - `quaternion(matrix3<T> const &matrix)` and `quaternion(matrix4<T> const &matrix)` Constructs a quaternion from a 3x3 or 4x4 matrix. 
-  - Copy and move constructors, including copy and move constructors from vector3 and vector4, and copy casting constructors from other underlying types.
-  - `assign(T w = 0, T i = 0, T j = 0, T k = 0)` Assigns all component values in a single operation (or resets to identity if no values specified).
-  - Mathematical operators: Addition, subtraction, multiplication, division, modulo, for scalar and vector values.
-  - `dot(quaternion<T> const &rhs)` Dot product with other quaternion.
-  - Comparison operators: Equality, inequality, less than, greater than, less than or equal, greater than or equal.
-  - Unary operations: Unary negate, unary conjugate.
-  - `length` and `normalise` functions as per vectors - see above.
-  - `void conjugate()` and `quaternion<T> conjugate_copy()` to conjugate (unary negate) this quaternion, or to return a conjugated copy.  Only valid for unit (normalised) quaternions, otherwise use `inverse()`.
-  - `void invert()` and `quaternion<T> invert_copy()` - compute the inverse of this quaternion.  This is a general inverse - if you know that your quaternion is a unit quaternion, that is already normalised to 1.0, then it will be much faster to use `conjugate()` above.
-  - `quaternion<T> from_euler_angles(T x, T y, T z)` Construct a quaternion from three Euler angles: rotation around the x, y and z axis in degrees.
-  - `quaternion<T> from_euler_angles_rad(T x, T y, T z)` Construct a quaternion from three Euler angles: rotation around the x, y and z axis in radians.
-  - `quaternion<T> from_axis_rot(vector3<T> const &axis, T angleDeg)` Construct a quaternion as a rotation around an axis, in degrees.
-  - `quaternion<T> from_axis_rot_rad(vector3<T> const &axis, T angleDeg)` Construct a quaternion as a rotation around an axis, in radians.
-  - `void to_angle_axis(T &angle, vector3<T> &axis)` Convert this quaternion to an axis and angle combination.
-  - `matrix3<T> rotmatrix()` Converts this quaternion into a rotation matrix.
-  - `matrix4<T> transform()` Converts this quaternion into a transformation matrix.  This is identical to `rotmatrix()` above but produces a 4x4 matrix.
-  - `quaternion<T> lerp(T factor, quaternion<T> const &other)` return a linearly interpolated quaternion, between this quaternion and another.  Factor is 0 for this quaternion and 1 for `other`.  The range is not limited to 0-1, values outside of the range can be used to extrapolate.
-  - `quaternion<T> slerp(T factor, quaternion<T> const &other)` return a spherically interpolated quaternion, between this quaternion and another.  Factor is 0 for this quaternion and 1 for `other`.  The range must be 0-1.
-  - Output to stream operator and `std::string to_string()` for stream or string output.
-  - `quaternion<T> from_matrix(matrix3<T> const &mat)` Construct a quaternion from a rotation matrix.
+- `quaternion()` constructs quaternion (0 + 0i + 0j + 0k).
+- `quaternion(T w, vector3<T> const &v)` constructs quaternion from real part `w` and complex part `v`.
+- `quaternion(T w, T i, T j, T k)` constructs quaternion from real part `w` and complex coefficients `i`, `j` and `k`.
+- `quaternion(matrix3<T> const &matrix)` and `quaternion(matrix4<T> const &matrix)` Constructs a quaternion from a 3x3 or 4x4 matrix. 
+- Copy and move constructors, including copy and move constructors from vector3 and vector4, and copy casting constructors from other underlying types.
+- `assign(T w = 0, T i = 0, T j = 0, T k = 0)` Assigns all component values in a single operation (or resets to identity if no values specified).
+- Mathematical operators: Addition, subtraction, multiplication, division, modulo, for scalar and vector values.
+- `dot(quaternion<T> const &rhs)` Dot product with other quaternion.
+- Comparison operators: Equality, inequality, less than, greater than, less than or equal, greater than or equal.
+- Unary operations: Unary negate, unary conjugate.
+- `length` and `normalise` functions as per vectors - see above.
+- `void conjugate()` and `quaternion<T> conjugate_copy()` to conjugate (unary negate) this quaternion, or to return a conjugated copy.  Only valid for unit (normalised) quaternions, otherwise use `inverse()`.
+- `void invert()` and `quaternion<T> invert_copy()` - compute the inverse of this quaternion.  This is a general inverse - if you know that your quaternion is a unit quaternion, that is already normalised to 1.0, then it will be much faster to use `conjugate()` above.
+- `quaternion<T> from_euler_angles(T x, T y, T z)` Construct a quaternion from three Euler angles: rotation around the x, y and z axis in degrees.
+- `quaternion<T> from_euler_angles_rad(T x, T y, T z)` Construct a quaternion from three Euler angles: rotation around the x, y and z axis in radians.
+- `quaternion<T> from_axis_rot(vector3<T> const &axis, T angleDeg)` Construct a quaternion as a rotation around an axis, in degrees.
+- `quaternion<T> from_axis_rot_rad(vector3<T> const &axis, T angleDeg)` Construct a quaternion as a rotation around an axis, in radians.
+- `void to_angle_axis(T &angle, vector3<T> &axis)` Convert this quaternion to an axis and angle combination.
+- `matrix3<T> rotmatrix()` Converts this quaternion into a rotation matrix.
+- `matrix4<T> transform()` Converts this quaternion into a transformation matrix.  This is identical to `rotmatrix()` above but produces a 4x4 matrix.
+- `quaternion<T> lerp(T factor, quaternion<T> const &other)` return a linearly interpolated quaternion, between this quaternion and another.  Factor is 0 for this quaternion and 1 for `other`.  The range is not limited to 0-1, values outside of the range can be used to extrapolate.
+- `quaternion<T> slerp(T factor, quaternion<T> const &other)` return a spherically interpolated quaternion, between this quaternion and another.  Factor is 0 for this quaternion and 1 for `other`.  The range must be 0-1.
+- Output to stream operator and `std::string to_string()` for stream or string output.
+- `quaternion<T> from_matrix(matrix3<T> const &mat)` Construct a quaternion from a rotation matrix.
 
 - [quat/quat.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/quat/quat.h)
 - [quat/quat_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/quat/quat_forward.h) - forward declarations
@@ -192,6 +194,51 @@ Quaternions have the following operations:
   - `using quatld = quaternionld;`
 
 #### Matrix
+Matrices are three-dimensional (3x3 - rotation matrix) or four-dimensional (4x4 - translation matrix).
+
+Access to members is via conversion to pointer operator, or with `T at(int x, int y)`, or the function call operator `(int x, int y)`.
+
+The following functions are common to both matrix types, the following examples use `matrix3` for consistency:
+- `matrix3()` Construct an identity matrix (values of 1 on a diagonal).
+- `matrix3(T *dt)` Construct a matrix from values in an array - these must be in column major order.
+- Copy and move constructors.
+- `matrix3(T... dt)` Variadic constructor, accepting an initialiser list containing raw data for each element to construct in order.
+- `void identity()` Reset the matrix to identity (values of 1 on a diagonal).
+- `matrix3<T> create_rotation_from_euler_angles(T xDeg, T yDeg, T zDeg)` Create a rotation matrix from rotation around the x, y and z axes, in degrees.
+- `matrix3<T> create_rotation_from_euler_angles_rad(T xRads, T yRads, T zRads)` Create a rotation matrix from clockwise rotation around the x, y and z axes, in radians.
+- `matrix3<T> create_rotation_around_axis(vector3<T> const &axis, T angle)` Create a rotation matrix by clockwise rotation around an axis, in degrees.
+- `matrix3<T> create_rotation_around_axis(vector3<T> const &axis, T angle)` Create a rotation matrix by clockwise rotation around an axis, in radians.
+- `matrix3<T> create_rotation_between_vectors(vector3<T> const &from, vector3<T> const &to)` Create rotation matrix representing the rotation required to align one vector to another.  Much more efficient than computing angles and creating a matrix from those.
+- `matrix3<T> create_rotation_aligned_to_vector(vector3<T> const &target, vector3<T> const &up_dir)` Creates a rotation matrix to align with a target vector direction.  Accepts a vector that the rotation should point to, the direction of the up vector, and returns a matrix that is oriented to the target vector.
+- `matrix3<T> from_row_major_array(FromT const *arr)` Create a matrix from an array representing an equivalent dimension matrix in row major order.
+- `matrix3<T> from_column_major_array(FromT const *arr)` Create a matrix from an array representing an equivalent dimension matrix in column major order.
+- Mathematical operators: Addition, subtraction, multiplication, division, modulo, for scalar, vector and matrix values.
+- Comparison operators: Equality, inequality.
+- `T det()` Compute the determinant of the matrix.
+- `matrix3<T> inverse()` Compute the inverse of the matrix.
+- `matrix3<T> transpose()` Transpose the matrix.
+- `matrix3<T> lerp(T fact, matrix3<T> const &rhs)` Linear interpolation of two matrices.  Factor runs from 0 (this matrix) to 1 (other matrix), but is not limited to this range, allowing extrapolation.
+- `void orthonormalise()` Orthonormalises the matrix: normalises the normal, normalises the tangent and makes sure it's orthogonal to the normal, then normalises binormal and makes sure it is orthogonal to both the normal and the tangent.
+- Output to stream operator and `std::string to_string()` for stream or string output.
+- `std::min()` and `std::max()` overrides.
+
+The following functions are specific to 3x3 matrices only:
+- `matrix3<T> from_ode(It const *mat)` Create rotation matrix from ODE matrix.
+- `matrix4<T> get_transform()` Return a transform matrix with this matrix as the rotation component.
+
+The following functions are specific to 4x4 matrices only:
+- `matrix4<T> createTranslation(T x, T y, T z, T w = 1)` Creates a translation matrix from x, y, and z direction translation values, and an optional w translation.
+- `matrix4<T> create_scale(T sx, T sy, T sz)` Create scale matrix with sx, sy, and sz being scale values for each axis.
+- `matrix4<T> create_look_at(vector3<T> const &eye_pos, vector3<T> const &target_pos, vector3<T> const &up_dir)` Create a view matrix to look from the eye position to the target position, with a specified up vector.
+- `matrix4<T> create_frustum(T left, T right, T bottom, T top, T near_plane, T far_plane)` Create an OpenGL compatible perspective projection according to the specified frustum clipping planes.
+- `matrix4<T> create_ortho(T left, T right, T bottom, T top, T near_plane, T far_plane)` Create an OpenGL compatible orthographic projection matrix according to the specified clipping planes.
+- `void set_translation(vector3<T> const &v)` Set the translation part of this matrix to the specified translation.
+- `vector3<T> get_translation()` Return the translation part of this matrix.
+- `void set_rotation(matrix3<T> const &m)` Set the rotation part of this matrix.
+- `matrix3<T> get_rotation()` Return the rotation part of this matrix.
+- `void set_scale(vector3<T> const &v)` Sets the scale part of this matrix.
+- `vector3<T> get_scale()` Returns the scale part of this matrix.
+
 Three-dimensional matrix types (3x3 matrices)
 - [matrix/matrix3.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/matrix/matrix3.h)
 - [matrix/matrix3_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/matrix/matrix3_forward.h) - forward declarations
