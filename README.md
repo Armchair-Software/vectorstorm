@@ -272,6 +272,37 @@ Four-dimensional matrix types (4x4 matrices)
   - `using mat4ui = matrix4ui;`
 
 #### Axis-aligned Bounding Box (AABB)
+Two and three dimensional axis aligned bounding boxes, which can be constructed to include any number of points they must surround, can test whether another point or other AABB intersects with it, and can be transformed with matrixes, and intuitively queried and modified with boolean operators.
+
+Access is via `vector2<T> min` and `vector2<T> max` members, which represent the minimum and maximum corner of the bounding box.
+
+The following functionality is common to all dimensions of bounding box types, and these examples use `aabb2` for consistency:
+- `aabb2()` Construct a default AABB, which is considered to be in an "invalid" state (negative size) until at least one point is added to it.
+- `aabb2(vector2<SrcT> const &point)` Construct an AABB containing one point.
+- `aabb2(SrcT x0, SrcT y0, SrcT x1, SrcT y1)` Construct an AABB from piecewise definitions of the x, y, (z) elements of min and max coordinates.
+- `aabb2(vector2<SrcT> const &min, vector2<SrcT> const &max)` Construct an AABB from vector min and max coordinates.
+- Copy and move constructors and assignment operators.
+- `bool valid()` Checks if a bounding box is valid.  A valid bounding box has a non-negative size.  Default-constructed bounding boxes are invalid until made valid by an extend operation.
+- `void invalidate()` Renders this bounding box invalid (gives it a negative size).  Future calls to `valid()` will return false until an extend operation makes it valid again.
+- `void extend(vector2<SrcT> const &point)` Extend the bounding box to include the specified point.
+- `void extend(aabb2<SrcT> const &box)` Extend this bounding box to include another AABB.
+- `aabb2<T> extended(vector2<SrcT> const &point)` Gets a copy of this bounding box, extended to include the specified point.
+- `aabb2<T> extended(aabb2<SrcT> const &box)` Gets a copy of this bounding box extended to include another AABB.
+- `bool intersects(vector2<SrcT> const &point)` Test if the point is within this bounding box.
+- `bool intersects(aabb2<SrcT> const &box)` Test if the other bounding box intersects (even partially) with this AABB.
+- `aabb2<T> intersection(aabb2<SrcT> const &other)` Return the intersection of this bounding box with another AABB, or return a default-constructed (invalid) AABB if there is no intersection.  There is no need to separately check `intersects()` before calling this - instead, just check whether the result is `valid()`.
+- `bool ray_intersects(vector2<SrcT> const &ray, vector2<SrcT> const &origin = vector2<SrcT>())` Tests if a ray intersects this bounding box.  The ray does not need to be normalised.  If the origin is specified, the ray runs from the origin, otherwise it runs from the default constructed vector of the given type - with numeric types, the origin (0, 0).
+- `vector2<T> centre()` Calculates the centre coordinates of the bounding box.
+- `vector2<T> extent()` Calculates the extent of the bounding box from the centre (i.e. half of the diagonal size).
+- `vector2<T> size()` Calculates the diagonal size of the bounding box.
+- `vector2<T> point(unsigned int i)` Gets a corner of the bounding box by index, with 0 representing (max.x, max.y) and incrementing clockwise.
+- Mathematical operators: Addition and subtraction, for scalar and vector values.  Addition and subtraction by vectors moves a bounding box in space.
+- Comparison operators: Equality, inequality.
+- `<<` operator to extend a bounding box by a point or another AABB, as per the `extend` functions.
+- `|` operator to return an extended bounding box, as per the `extended` functions.
+- `&` operator to return an intersection between this and another bounding box, as per the `intersection` function.
+- Output to stream operator and `std::string to_string()` for stream or string output.
+
 Two-dimensional bounding box types
 - [aabb/aabb2.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/aabb/aabb2.h)
 - [aabb/aabb2_forward.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/aabb/aabb2_forward.h) - forward declarations
