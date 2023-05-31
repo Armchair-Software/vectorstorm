@@ -191,7 +191,9 @@ Optimised algorithms
 - [epsilon.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/epsilon.h) - provides a definition of epsilon value for use in soft float comparison when `VECTORSTORM_SOFT_COMPARE` is defined
 - [deprecated_macros.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/deprecated_macros.h) - "deprecated" macros for porting compatibility with the vmath library
 
- 
+## Optimisation-safety
+VectorStorm types use explicit constructors in a bid to aid the user in avoiding unexpected or unintended copies.  For instance, when constructing a new VectorStorm vector as a copy of an existing vector, you will need to explicitly copy the object so it is clear in the code when such copies take place.  You are then able to assume other operations with vectors will be copy-free.  Use of `std::move` is encouraged wherever possible.
+
 ## Interoperability
 
 ### Use with OpenGL
@@ -199,6 +201,27 @@ Optimised algorithms
 ### Use with GLFW
 
 ### Use with ImGUI
+VectorStorm vector types can easily be used natively with [Dear ImGui](https://github.com/ocornut/imgui), and offer a lot of power relative to ImGui's simple Vec2 and Vec4 types.
+
+To use VectorStorm with ImGui, edit your `imconfig.h` file as follows:
+```cpp
+//---- Define constructor and implicit cast operators to convert back<>forth between your math types and ImVec2/ImVec4.
+// This will be inlined as part of ImVec2 and ImVec4 class declarations.
+#include <vectorstorm/vector/vector2.h>
+#include <vectorstorm/vector/vector4.h>
+
+#define IM_VEC2_CLASS_EXTRA                                                    \
+        constexpr ImVec2(const vector2<float> &f) : x(f.x), y(f.y) {}          \
+        constexpr ImVec2(const vector2<int> &f) : x(static_cast<float>(f.x)), y(static_cast<float>(f.y)) {} \
+        constexpr ImVec2(const vector2<unsigned int> &f) : x(static_cast<float>(f.x)), y(static_cast<float>(f.y)) {} \
+        operator vector2<float>() const {return vector2<float>{x, y};}
+
+#define IM_VEC4_CLASS_EXTRA                                                    \
+        constexpr ImVec4(const vector4<float> &f) : x(f.x), y(f.y), z(f.z), w(f.w) {} \
+        constexpr ImVec4(const vector4<int> &f) : x(static_cast<float>(f.x)), y(static_cast<float>(f.y)), z(static_cast<float>(f.z)), w(static_cast<float>(f.w)) {} \
+        constexpr ImVec4(const vector4<unsigned int> &f) : x(static_cast<float>(f.x)), y(static_cast<float>(f.y)), z(static_cast<float>(f.z)), w(static_cast<float>(f.w)) {} \
+        operator vector4<float>() const {return vector4<float>{x, y, z, w};}
+```
 
 ## Defines
 
