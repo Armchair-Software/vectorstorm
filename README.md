@@ -169,7 +169,17 @@ Optimised algorithms
 - [floor_fast.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/floor_fast.h) - Fast floor algorithms for floating types, returning an integer rather than the same floating type.  These should be faster than `std::floor` on most implementations.
   - `int floor_fast(float value)` Fast floor of a float to an integer
   - `int floor_fast(double value)` Fast floor of a double to an integer
-- [sqrt_fast.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/sqrt_fast.h)
+- [sqrt_fast.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/sqrt_fast.h) - Various optimised approximations for fast square root and inverse square root calculations.  Performance of each may differ by platform - benchmarking is advised to select the appropriate algorithm for a specific situation.
+  - `float sqrt_inv_fast(float number)` Adapted from Quake III's fast inverse square root approximation
+  - `sqrt_inv_fast(double number)` Similar to the Quake III fast inverse square root but for doubles
+  - `long double sqrt_fast(long double number)` This is sped up by simply casting the long double to a double for the fast sqrt operation.
+  - `int sqrt_fast(int number)` Fast integer square root, through the float path
+  - `float sqrt_inv_faster(float number)` Adapted from Quake III's fast inverse square root approximation - one iteration version
+  - `double sqrt_inv_faster(double number)` Similar to the Quake III fast inverse square root but for doubles - one iteration version
+  - `long double sqrt_faster(long double number)` This is sped up by simply casting the long double to a double for the faster sqrt operation.
+  - `int sqrt_faster(int number)` Faster integer square root, through the float path with one iteration
+  - `float sqrt_inv_sse(float number)` Scalar SSE inverse square root approximation
+  - `float sqrt_sse(float number)` Scalar SSE square root approximation
 - [sincos.h](https://github.com/VoxelStorm-Ltd/vectorstorm/blob/master/vectorstorm/sincos.h) - Provides a platform-independent single `sincos` implementation, to return a sine and a cosine of a value in a single call.  Will use platform-optimised builtins when available, and fall back to separate sin and cos computation otherwise, so you don't have to worry about calling builtins directly when you need to use both sin and cos results at the same time.
 - `void sincos_any(T const angle_rad, T &out_sin, T &out_cos)`
 - `void sincos_any(int const angle_rad, int &out_sin, int &out_cos)`
