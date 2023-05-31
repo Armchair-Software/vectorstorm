@@ -289,9 +289,25 @@ VectorStorm types use explicit constructors in a bid to aid the user in avoiding
 ## Interoperability
 
 ### Use with OpenGL
-Float, double, signed and unsigned integer vector, quaternion and matrix types can all be passed to OpenGL directly without any casting, for any function that accepts array representations of the equivalent types.
+Float, double, signed and unsigned integer vector, quaternion and matrix types can all be passed to OpenGL directly without any casting, for any function that accepts array representations of the equivalent types.  Individual components can also be passed to functions that accept separate components.  For example:
+```cpp
+vec4f my_colour{1.0f, 0.5f, 0.0f, 1.0f};
+// set as vector:
+glColor4fv(my_colour);
+// which is functionally equivalent to:
+glColor4f(my_colour.r, my_colour.g, my_colour.b, my_colour.a);
+// and shares identical behaviour with any of:
+glColor4fv(my_colour[0]);
+glColor4fv(my_colour.x);
+glColor4fv(*my_colour);
+```
 
 ### Use with GLFW
+Most GLFW functions take separate arguments for width and height, so simply pass the relevant components to each - for example:
+```cpp
+vec2i my_viewport_size{1024, 768};
+glfwSetWindowSize(my_window, my_viewport_size.x, my_viewport_size.y);
+```
 
 ### Use with ImGUI
 VectorStorm vector types can easily be used natively with [Dear ImGui](https://github.com/ocornut/imgui), and offer a lot of power relative to ImGui's simple Vec2 and Vec4 types.
