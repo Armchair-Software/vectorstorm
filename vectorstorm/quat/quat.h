@@ -641,14 +641,14 @@ public:
 
   /**
    * Computes spherical interpolation between quaternions (this, q2)
-   * using coefficient of interpolation r (in [0, 1]).
+   * using coefficient of interpolation fact (in [0, 1]).
    *
-   * @param r The ratio of interpolation form this (r = 0) to q2 (r = 1).
+   * @param fact The ratio of interpolation form this (fact = 0) to q2 (fact = 1).
    * @param rhs Second quaternion for interpolation.
    * @return Result of interpolation.
    */
-  inline quaternion<T> constexpr slerp(T r, quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    T cos_theta = std::max(std::min(dot(rhs), static_cast<T>(1)), static_cast<T>(-1)); // clamp the dot product, as it can sometimes exceed 1.0 and cause acos to return NaN
+  inline quaternion<T> constexpr slerp(T fact, quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+    T cos_theta = std::clamp(dot(rhs), static_cast<T>(-1), static_cast<T>(1));  // clamp the dot product, as it can sometimes exceed 1.0 and cause acos to return NaN
     quaternion<T> rhs_temp(rhs);
     if(cos_theta < static_cast<T>(0)) {                                         // dot(lhs, rhs) must be positive for smooth interpolation around poles; if not, flip rhs
       cos_theta = -cos_theta;
@@ -664,8 +664,8 @@ public:
         // this point may only be reached extremely rarely?
         return quaternion<T>{static_cast<T>(0.5) * w + static_cast<T>(0.5) * rhs_temp.w, v.lerp(static_cast<T>(0.5), rhs_temp.v)};
       } else {
-        T const temp_a = static_cast<T>(std::sin((static_cast<T>(1) - r) * theta)) / sin_theta;
-        T const temp_b = static_cast<T>(std::sin(r * theta)) / sin_theta;
+        T const temp_a = static_cast<T>(std::sin((static_cast<T>(1) - fact) * theta)) / sin_theta;
+        T const temp_b = static_cast<T>(std::sin(fact * theta)) / sin_theta;
         return quaternion<T>{(w * temp_a) + (rhs_temp.w * temp_b),
                              (v * temp_a) + (rhs_temp.v * temp_b)};
       }

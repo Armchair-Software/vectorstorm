@@ -681,10 +681,10 @@ public:
   }
 
   /**
-   * Orthonormalizes the matrix.
-   * 1. normalizes the normal.
-   * 2. normalizes the tangent and makes sure it is orthogonal to normal.
-   * 3. normalizes binormal and makes sure it is orthogonal to both normal and tangent.
+   * Orthonormalises the matrix.
+   * 1. normalises the normal.
+   * 2. normalises the tangent and makes sure it is orthogonal to normal.
+   * 3. normalises binormal and makes sure it is orthogonal to both normal and tangent.
    */
   inline void constexpr orthonormalise() noexcept __attribute__((__always_inline__)) {
     // normalize x:
@@ -707,7 +707,7 @@ public:
     data[4] = data[8] * data[0] - data[2] * data[6];
     data[5] = data[6] * data[1] - data[0] * data[7];
   }
-  /// Proper English
+  [[deprecated("Proper English, please!")]]
   inline void constexpr orthonormalize() noexcept __attribute__((__always_inline__)) {
     orthonormalise();
   }
