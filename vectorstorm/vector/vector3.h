@@ -172,7 +172,7 @@ public:
   inline constexpr explicit vector3(vector4<T> const &src) noexcept __attribute__((__always_inline__))
     : x(src.x),
       y(src.y),
-      z(src.y) {
+      z(src.z) {
   }
 
   /**
@@ -183,7 +183,7 @@ public:
   inline constexpr explicit vector3(vector4<FromT> const &src) noexcept
     : x(static_cast<T>(src.x)),
       y(static_cast<T>(src.y)),
-      z(static_cast<T>(src.y)) {
+      z(static_cast<T>(src.z)) {
   }
 
   /**
