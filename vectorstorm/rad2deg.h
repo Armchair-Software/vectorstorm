@@ -11,9 +11,9 @@ namespace VECTORSTORM_NAMESPACE {
 #endif
 
 template<typename T>
-inline static T constexpr const rad2deg(T const angle_rad) noexcept __attribute__((__always_inline__));
+inline static T constexpr rad2deg(T const angle_rad) noexcept __attribute__((__always_inline__));
 template<typename T>
-inline static T constexpr const rad2deg(T const angle_rad) noexcept {
+inline static T constexpr rad2deg(T const angle_rad) noexcept {
   #ifndef VECTORSTORM_NO_BOOST
     return angle_rad * boost::math::constants::radian<T>();
   #else  // VECTORSTORM_NO_BOOST

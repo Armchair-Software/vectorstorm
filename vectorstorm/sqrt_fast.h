@@ -31,7 +31,7 @@ namespace VECTORSTORM_NAMESPACE {
 inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(float number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
 inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(float number) noexcept {
   /// Adapted from Quake III's fast inverse square root approximation
-  float constexpr const threehalfs = 1.5f;
+  float constexpr threehalfs = 1.5f;
 
   float x = number * 0.5f;
   float y = number;
@@ -46,7 +46,7 @@ inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(float number) noexcept {
 inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(double number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
 inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(double number) noexcept {
   /// Similar to the Quake III fast inverse square root but for doubles
-  double constexpr const threehalfs = 1.5;
+  double constexpr threehalfs = 1.5;
 
   double x = number * 0.5;
   double y = number;
@@ -85,7 +85,7 @@ inline static int constexpr sqrt_fast(int number) noexcept {
 inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
 inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept {
   /// Adapted from Quake III's fast inverse square root approximation - one iteration version
-  float constexpr const threehalfs = 1.5f;
+  float constexpr threehalfs = 1.5f;
 
   float x = number * 0.5f;
   float y = number;
@@ -100,13 +100,13 @@ inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept
 inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(double number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
 inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(double number) noexcept {
   /// Similar to the Quake III fast inverse square root but for doubles
-  double constexpr const threehalfs = 1.5;
+  double constexpr threehalfs = 1.5;
 
   double x = number * 0.5;
   double y = number;
   uint64_t i  = *reinterpret_cast<uint64_t*>(&y);                               // evil floating point bit level hacking
   //i = 0x5fe6eb50c7b537a9ll - (i >> 1);                                          // even more magic than "what the fuck" number
-  uint64_t constexpr const magic = (uint64_t(0x5fe6eb50) << (8 * 4)) + uint64_t(0xc7b537a9); // hack to produce 0x5fe6eb50c7b537a9ll without triggering -Wlong-long warning
+  uint64_t constexpr magic = (uint64_t(0x5fe6eb50) << (8 * 4)) + uint64_t(0xc7b537a9); // hack to produce 0x5fe6eb50c7b537a9ll without triggering -Wlong-long warning
   i = magic - (i >> 1);
   y = *reinterpret_cast<double*>(&i);
   y = y * (threehalfs - (x * y * y));                                           // 1st iteration
