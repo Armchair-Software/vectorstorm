@@ -723,7 +723,7 @@ public:
     // Diagonal matrix D = Q * A * Transpose(Q);  and  A = QT*D*Q
     // The rows of q are the eigenvectors D's diagonal is the eigenvalues
     // As per 'row' convention if float3x3 Q = q.getmatrix(); then v*Q = q*v*conj(q)
-    unsigned int constexpr const maxsteps = 24;                                 // certainly wont need that many.
+    unsigned int constexpr maxsteps = 24;                                       // certainly wont need that many.
     quaternion<T> q(1, 0, 0, 0);
     for(unsigned int i = 0; i != maxsteps; ++i) {
       matrix3<T> const Q{q.rotmatrix()};                                        // v*Q == q*v*conj(q)
