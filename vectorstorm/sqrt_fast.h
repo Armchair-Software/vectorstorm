@@ -52,7 +52,7 @@ inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(double number) noexcept
   double y = number;
   uint64_t i  = *reinterpret_cast<uint64_t*>(&y);                               // evil floating point bit level hacking
   //i = 0x5fe6eb50c7b537a9ll - (i >> 1);                                          // even more magic than "what the fuck" number
-  uint64_t constexpr const magic = (uint64_t(0x5fe6eb50) << (8 * 4)) + uint64_t(0xc7b537a9); // hack to produce 0x5fe6eb50c7b537a9ll without triggering -Wlong-long warning
+  uint64_t constexpr magic = (uint64_t(0x5fe6eb50) << (8 * 4)) + uint64_t(0xc7b537a9); // hack to produce 0x5fe6eb50c7b537a9ll without triggering -Wlong-long warning
   i = magic - (i >> 1);
   y = *reinterpret_cast<double*>(&i);
   y = y * (threehalfs - (x * y * y));                                           // 1st iteration
