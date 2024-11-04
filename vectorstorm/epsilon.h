@@ -9,7 +9,7 @@
 // can be very expensive in some cases.
 // old version: double constexpr epsilon = 4.37114e-05;
 template<class T>
-constexpr T epsilon = std::numeric_limits<T>::epsilon();
+constexpr T epsilon{std::numeric_limits<T>::epsilon()};
 #define EPSILON epsilon
 
 #endif // VECTORSTORM_EPSILON_H_INCLUDED
