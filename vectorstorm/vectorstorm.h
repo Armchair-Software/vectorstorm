@@ -1,5 +1,4 @@
-#ifndef VECTORSTORM_H_INCLUDED
-#define VECTORSTORM_H_INCLUDED
+#pragma once
 
 /**
  * @mainpage Intro
@@ -114,5 +113,3 @@
 
 #include "aabb/aabb2.h"
 #include "aabb/aabb3.h"
-
-#endif // VECTORSTORM_H_INCLUDED

@@ -1,7 +1,4 @@
-#ifndef VECTORSTORM_MATRIX3_FORWARD_H_INCLUDED
-#define VECTORSTORM_MATRIX3_FORWARD_H_INCLUDED
-
-#include "vectorstorm/deprecated_macros.h"
+#pragma once
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {
@@ -14,5 +11,3 @@ template<typename T> class matrix3;
 #endif //VECTORSTORM_NAMESPACE
 
 #include "matrix3_types.h"
-
-#endif // VECTORSTORM_MATRIX3_FORWARD_H_INCLUDED

@@ -1,10 +1,8 @@
-#ifndef VECTORSTORM_FORWARD_H_INCLUDED
-#define VECTORSTORM_FORWARD_H_INCLUDED
+#pragma once
 
 /// Cut-down header alternative for vectorstorm.h including only forward declarations
 /// Include this in other headers instead of vectorstorm.h wherever possible
-
-#include "vectorstorm/deprecated_macros.h"
+/// Or preferably, include only the specific forward-declaration headers you really need
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {
@@ -23,5 +21,3 @@ namespace VECTORSTORM_NAMESPACE {
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif
-
-#endif // VECTORSTORM_FORWARD_H_INCLUDED

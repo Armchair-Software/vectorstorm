@@ -1,7 +1,5 @@
-#ifndef VECTORSTORM_DEG2RAD_H_INCLUDED
-#define VECTORSTORM_DEG2RAD_H_INCLUDED
+#pragma once
 
-#include "vectorstorm/deprecated_macros.h"
 #include "pi.h"
 
 #define DEG2RAD deg2rad
@@ -25,5 +23,3 @@ inline static constexpr T deg2rad(T const angle_deg) noexcept {
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif
-
-#endif // VECTORSTORM_DEG2RAD_H_INCLUDED

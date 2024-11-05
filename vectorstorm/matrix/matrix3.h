@@ -1,7 +1,5 @@
-#ifndef VECTORSTORM_MATRIX3_H_INCLUDED
-#define VECTORSTORM_MATRIX3_H_INCLUDED
+#pragma once
 
-#include "vectorstorm/deprecated_macros.h"
 #include "vectorstorm/epsilon.h"
 #include "matrix4_forward.h"
 #ifdef VECTORSTORM_NO_BOOST
@@ -917,5 +915,3 @@ size_t hash_value(matrix3<T> const &value) {
   return hashvalue;
 }
 #endif // VECTORSTORM_NO_BOOST
-
-#endif // VECTORSTORM_MATRIX3_H_INCLUDED

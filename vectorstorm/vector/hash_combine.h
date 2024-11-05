@@ -1,7 +1,4 @@
-#ifndef VECTORSTORM_VECTOR_HASH_COMBINE_H_INCLUDED
-#define VECTORSTORM_VECTOR_HASH_COMBINE_H_INCLUDED
-
-#include "vectorstorm/deprecated_macros.h"
+#pragma once
 
 #ifdef VECTORSTORM_NO_BOOST
 #ifdef VECTORSTORM_NAMESPACE
@@ -27,5 +24,3 @@ inline constexpr void hash_combine(std::size_t &seed, T const &v) {
 #else
   #define HASH_COMBINE boost::hash_combine
 #endif // VECTORSTORM_NO_BOOST
-
-#endif // VECTORSTORM_VECTOR_HASH_COMBINE_H_INCLUDED

@@ -1,7 +1,5 @@
-#ifndef VECTORSTORM_QUAT_H_INCLUDED
-#define VECTORSTORM_QUAT_H_INCLUDED
+#pragma once
 
-#include "vectorstorm/deprecated_macros.h"
 #include "vectorstorm/epsilon.h"
 #include "vectorstorm/sincos.h"
 #include "vectorstorm/deg2rad.h"
@@ -803,5 +801,3 @@ size_t hash_value(quaternion<T> const &value) {
   return hashvalue;
 }
 #endif // VECTORSTORM_NO_BOOST
-
-#endif // VECTORSTORM_QUAT_H_INCLUDED

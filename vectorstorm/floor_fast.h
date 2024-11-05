@@ -1,7 +1,4 @@
-#ifndef VECTORSTORM_FLOOR_FAST_H_INCLUDED
-#define VECTORSTORM_FLOOR_FAST_H_INCLUDED
-
-#include "vectorstorm/deprecated_macros.h"
+#pragma once
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {
@@ -26,5 +23,3 @@ inline int constexpr floor_fast(double value) noexcept {
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif
-
-#endif // VECTORSTORM_FLOOR_FAST_H_INCLUDED

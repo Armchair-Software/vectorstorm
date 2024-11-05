@@ -1,7 +1,5 @@
-#ifndef VECTORSTORM_VECTOR2_H_INCLUDED
-#define VECTORSTORM_VECTOR2_H_INCLUDED
+#pragma once
 
-#include "vectorstorm/deprecated_macros.h"
 #include <cmath>
 #include <sstream>
 #include "vectorstorm/epsilon.h"
@@ -912,5 +910,3 @@ size_t hash_value(vector2<T> const &value) {
   HASH_COMBINE(hashvalue, value.y);
   return hashvalue;
 }
-
-#endif // VECTORSTORM_VECTOR2_H_INCLUDED

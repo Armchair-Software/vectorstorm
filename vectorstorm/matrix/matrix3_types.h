@@ -1,7 +1,4 @@
-#ifndef VECTORSTORM_MATRIX3_TYPES_H_INCLUDED
-#define VECTORSTORM_MATRIX3_TYPES_H_INCLUDED
-
-#include "vectorstorm/deprecated_macros.h"
+#pragma once
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {
@@ -41,5 +38,3 @@ using Matrix3i  __attribute__((deprecated("Use matrix3 or mat3 instead."))) = ma
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif //VECTORSTORM_NAMESPACE
-
-#endif // VECTORSTORM_MATRIX3_TYPES_H_INCLUDED

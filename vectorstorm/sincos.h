@@ -1,7 +1,5 @@
-#ifndef VECTORSTORM_SINCOS_H_INCLUDED
-#define VECTORSTORM_SINCOS_H_INCLUDED
+#pragma once
 
-#include "vectorstorm/deprecated_macros.h"
 #include "pi.h"
 
 #ifdef VECTORSTORM_NAMESPACE
@@ -64,5 +62,3 @@ inline static void constexpr sincos_any(long double const angle_rad, long double
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif
-
-#endif // VECTORSTORM_SINCOS_H_INCLUDED

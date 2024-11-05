@@ -1,7 +1,5 @@
-#ifndef VECTORSTORM_VECTOR4_H_INCLUDED
-#define VECTORSTORM_VECTOR4_H_INCLUDED
+#pragma once
 
-#include "vectorstorm/deprecated_macros.h"
 #include <cmath>
 #include <sstream>
 #include "vectorstorm/epsilon.h"
@@ -1175,5 +1173,3 @@ size_t hash_value(vector4<T> const &value) {
   HASH_COMBINE(hashvalue, value.w);
   return hashvalue;
 }
-
-#endif // VECTORSTORM_VECTOR4_H_INCLUDED

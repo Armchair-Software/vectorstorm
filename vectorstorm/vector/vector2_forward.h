@@ -1,7 +1,4 @@
-#ifndef VECTORSTORM_VECTOR2_FORWARD_H_INCLUDED
-#define VECTORSTORM_VECTOR2_FORWARD_H_INCLUDED
-
-#include "vectorstorm/deprecated_macros.h"
+#pragma once
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {
@@ -21,5 +18,3 @@ template<typename T> constexpr vector2<T> min(vector2<T> const &a, const vector2
 template<typename T> constexpr vector2<T> max(vector2<T> const &a, const vector2<T> &b) noexcept;
 
 }
-
-#endif // VECTORSTORM_VECTOR2_FORWARD_H_INCLUDED

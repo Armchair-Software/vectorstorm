@@ -1,7 +1,5 @@
-#ifndef VECTORSTORM_SIGMOID_H_INCLUDED
-#define VECTORSTORM_SIGMOID_H_INCLUDED
+#pragma once
 
-#include "vectorstorm/deprecated_macros.h"
 #include <cmath>
 #include "pi.h"
 #ifndef VERTORSTORM_NO_BOOST
@@ -72,5 +70,3 @@ inline static T constexpr sigmoid_erf(T value) noexcept {
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif
-
-#endif // VECTORSTORM_SIGMOID_H_INCLUDED

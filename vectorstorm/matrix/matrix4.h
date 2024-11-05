@@ -1,7 +1,5 @@
-#ifndef VECTORSTORM_MATRIX4_H_INCLUDED
-#define VECTORSTORM_MATRIX4_H_INCLUDED
+#pragma once
 
-#include "vectorstorm/deprecated_macros.h"
 #include <cstring>
 #include <array>
 #include <sstream>
@@ -1156,5 +1154,3 @@ size_t hash_value(matrix4<T> const &value) {
   return hashvalue;
 }
 #endif // VECTORSTORM_NO_BOOST
-
-#endif // VECTORSTORM_MATRIX4_H_INCLUDED

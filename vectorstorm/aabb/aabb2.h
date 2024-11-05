@@ -1,7 +1,5 @@
-#ifndef VECTORSTORM_AABB2_H_INCLUDED
-#define VECTORSTORM_AABB2_H_INCLUDED
+#pragma once
 
-#include "vectorstorm/deprecated_macros.h"
 #include "vectorstorm/vector/vector2.h"
 
 #ifdef VECTORSTORM_NAMESPACE
@@ -454,5 +452,3 @@ public:
 #endif //VECTORSTORM_NAMESPACE
 
 #include "aabb2_types.h"
-
-#endif // VECTORSTORM_AABB2_H_INCLUDED

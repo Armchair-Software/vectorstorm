@@ -1,5 +1,4 @@
-#ifndef VECTORSTORM_LERP_H_INCLUDED
-#define VECTORSTORM_LERP_H_INCLUDED
+#pragma once
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {
@@ -17,5 +16,3 @@ inline static constexpr T lerp(T const a, T const b, F factor) noexcept {
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif
-
-#endif // VECTORSTORM_LERP_H_INCLUDED

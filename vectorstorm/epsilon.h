@@ -1,7 +1,5 @@
-#ifndef VECTORSTORM_EPSILON_H_INCLUDED
-#define VECTORSTORM_EPSILON_H_INCLUDED
+#pragma once
 
-#include "vectorstorm/deprecated_macros.h"
 #include <limits>
 
 // note: use VECTORSTORM_SOFT_COMPARE to enable fuzzy matching for different types,
@@ -11,5 +9,3 @@
 template<class T>
 constexpr T epsilon{std::numeric_limits<T>::epsilon()};
 #define EPSILON epsilon
-
-#endif // VECTORSTORM_EPSILON_H_INCLUDED

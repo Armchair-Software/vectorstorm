@@ -1,7 +1,4 @@
-#ifndef VECTORSTORM_VECTOR4_TYPES_H_INCLUDED
-#define VECTORSTORM_VECTOR4_TYPES_H_INCLUDED
-
-#include "vectorstorm/deprecated_macros.h"
+#pragma once
 
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {
@@ -41,5 +38,3 @@ using Vector4i  __attribute__((deprecated("Use vector4 or vec4 instead."))) = ve
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif //VECTORSTORM_NAMESPACE
-
-#endif // VECTORSTORM_VECTOR4_TYPES_H_INCLUDED

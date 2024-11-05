@@ -1,8 +1,6 @@
-#ifndef VECTORSTORM_SQRT_FAST_H_INCLUDED
-#define VECTORSTORM_SQRT_FAST_H_INCLUDED
+#pragma once
 
 #include <cstdint>
-#include "vectorstorm/deprecated_macros.h"
 #ifdef __SSE__
   #include <xmmintrin.h>
 #endif // __SSE__
@@ -151,5 +149,3 @@ inline static float sqrt_sse(float number) noexcept {
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif
-
-#endif // VECTORSTORM_SQRT_FAST_H_INCLUDED

@@ -1,7 +1,4 @@
-#ifndef VECTORSTORM_AABB3_H_INCLUDED
-#define VECTORSTORM_AABB3_H_INCLUDED
-
-#include "vectorstorm/deprecated_macros.h"
+#pragma once
 
 #include "vectorstorm/vector/vector3_forward.h"
 #include "vectorstorm/vector/vector4.h"
@@ -513,5 +510,3 @@ public:
 #endif //VECTORSTORM_NAMESPACE
 
 #include "aabb3_types.h"
-
-#endif // VECTORSTORM_AABB3_H_INCLUDED
