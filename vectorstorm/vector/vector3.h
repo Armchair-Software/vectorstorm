@@ -341,8 +341,8 @@ public:
    * reference to y, else reference to z
    * y coordinate.
    */
-  inline constexpr T &operator[](int n) noexcept __attribute__((__always_inline__)) {
-    return n == 0 ? x : (n == 1 ? y : z);
+  inline constexpr T &operator[](unsigned int n) noexcept __attribute__((__always_inline__)) {
+    return n == 0u ? x : (n == 1u ? y : z);
   }
 
   /**
@@ -352,8 +352,8 @@ public:
    * reference to y, else reference to z
    * y coordinate.
    */
-  inline constexpr T const &operator[](int n) const noexcept __attribute__((__always_inline__)) {
-    return n == 0 ? x : (n == 1 ? y : z);
+  inline constexpr T const &operator[](unsigned int n) const noexcept __attribute__((__always_inline__)) {
+    return n == 0u ? x : (n == 1u ? y : z);
   }
 
   //---------------[ vector arithmetic operator ]--------------
