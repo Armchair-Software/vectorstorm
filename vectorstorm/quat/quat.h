@@ -658,7 +658,10 @@ public:
     } else {
       T const sin_theta = static_cast<T>(std::sqrt(static_cast<T>(1) - cos_theta * cos_theta));
       //if(std::abs(sin_theta) <= epsilon<T>) {
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wfloat-equal"
       if(sin_theta == static_cast<T>(0)) {                                      // we only need to avoid division by zero, no need to check for epsilon
+      #pragma GCC diagnostic pop
         // this point may only be reached extremely rarely?
         return quaternion<T>{static_cast<T>(0.5) * w + static_cast<T>(0.5) * rhs_temp.w, v.lerp(static_cast<T>(0.5), rhs_temp.v)};
       } else {
