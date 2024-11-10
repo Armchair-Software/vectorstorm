@@ -445,7 +445,7 @@ public:
     lhs << rhs.min << " x " << rhs.max;
     return lhs;
   }
-} __attribute__((__packed__));
+};
 
 #ifdef VECTORSTORM_NAMESPACE
 }

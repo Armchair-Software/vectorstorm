@@ -1097,7 +1097,7 @@ public:
   inline vector3<T> constexpr to_3d() const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x, y, z);
   }
-} __attribute__((__packed__));
+};
 
 #ifdef VECTORSTORM_NAMESPACE
 }
