@@ -1076,7 +1076,7 @@ public:
   inline vector2<T> constexpr to_2D_XZ() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use lowercase version."))) {
     return to_2d_xz();
   }
-};
+} __attribute__((__packed__));
 
 #ifdef VECTORSTORM_NAMESPACE
 }

@@ -1043,7 +1043,7 @@ public:
   inline std::string CONSTEXPR_IF_NO_CLANG toString() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_string()"))) {
     return to_string();
   }
-};
+} __attribute__((__packed__));
 
 #ifdef VECTORSTORM_NAMESPACE
 }

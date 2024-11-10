@@ -839,7 +839,7 @@ public:
   inline vector3<T> constexpr to_3D_XZ() const noexcept __attribute__((__always_inline__)) {
     return to_3d_xz();
   }
-};
+} __attribute__((__packed__));
 
 #ifdef VECTORSTORM_NAMESPACE
 }

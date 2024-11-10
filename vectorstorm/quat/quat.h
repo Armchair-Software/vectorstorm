@@ -751,7 +751,7 @@ public:
   inline static quaternion<T> constexpr fromMatrix(matrix3<T> const &m) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
     return from_matrix(m);
   }
-};
+} __attribute__((__packed__));
 
 #ifdef VECTORSTORM_NAMESPACE
 }
