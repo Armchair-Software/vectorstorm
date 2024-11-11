@@ -75,6 +75,7 @@ All dimensions of vectors have the following operations in common, the below exa
 - `cross(vector2<T> const &rhs)` Cross product with other vector.
 - Comparison operators: Equality, inequality, less than, greater than, less than or equal, greater than or equal.
 - Unary operations: Unary negate.
+- `size_t consteval size()` number of elements of the vector (2 for `vector2` etc).
 - `T length()` length of the vector.
 - `T length_fast()` length of the vector, using fast square root approximation (see below).
 - `T length_faster()` length of the vector, using faster square root with a single iteration (see below).
