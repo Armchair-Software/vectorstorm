@@ -27,6 +27,9 @@ using mat3ld = matrix3ld;
 using mat3i  = matrix3i;
 using mat3ui = matrix3ui;
 
+// Special WebGPU padded 3x3 matrix - only float is needed
+using mat3fwgpu = matrix3wgpu<float>;
+
 // deprecated transitional declarations
 template<typename T>
 using Matrix3   __attribute__((deprecated("Use matrix3 or mat3 instead."))) = matrix3<T>;

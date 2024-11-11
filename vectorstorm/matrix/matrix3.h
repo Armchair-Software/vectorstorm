@@ -19,6 +19,8 @@
 namespace VECTORSTORM_NAMESPACE {
 #endif
 
+template<typename T> class matrix4x3;
+
 /**
  * Class for matrix 3x3.
  * @note Data stored in this matrix are in column major order. This arrangement suits OpenGL.
@@ -64,6 +66,16 @@ public:
     : data{src.data[0], src.data[1], src.data[2],
            src.data[3], src.data[4], src.data[5],
            src.data[6], src.data[7], src.data[8]} {
+  }
+
+  /**
+   * Copy constructor from matrix3wgpu.
+   * @param src Data source matrix3wgpu for new created instance of matrix3
+   */
+  inline constexpr explicit matrix3(matrix3wgpu<T> const &src) noexcept __attribute__((__always_inline__))
+    : data{src.data[0], src.data[1], src.data[2], /* drop padding 3 */
+           src.data[4], src.data[5], src.data[6], /* drop padding 7 */
+           src.data[8], src.data[9], src.data[10] /* drop padding 11 */} {
   }
 
   /**
@@ -803,6 +815,57 @@ public:
   }
   inline std::string CONSTEXPR_IF_NO_CLANG toString() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_string()"))) {
     return to_string();
+  }
+};
+
+/**
+ * Class for WebGPU matrix 3x3, which is padded to 4x3.
+ * @note This is a special case for WebGPU which expects 3x3 matrices to be padded to 16 bytes.
+ * This is only an inter-operation type, so it can only transform implicitly from matrix3, and can
+ * produce a matrix3 only by explicit request.
+ */
+template<typename T>
+class matrix3wgpu {
+public:
+  /// Data stored in column major order, including padding
+  std::array<T, 12> data;
+
+  //--------------------------[ constructors ]-------------------------------
+  /**
+   * Creates identity matrix with padding
+   */
+  inline constexpr matrix3wgpu() noexcept __attribute__((__always_inline__))
+    : data{1, 0, 0, 0,
+           0, 1, 0, 0,
+           0, 0, 1, 0} {
+  }
+
+  /**
+   * Copy constructor.
+   * @param src Data source for new created instance of matrix3wgpu - note padding is always zeroed
+   */
+  inline constexpr explicit matrix3wgpu(matrix3wgpu<T> const &src) noexcept __attribute__((__always_inline__))
+    : data{src.data[0], src.data[1], src.data[2],  T{0},
+           src.data[4], src.data[6], src.data[7],  T{0},
+           src.data[8], src.data[9], src.data[10], T{0}} {
+  }
+
+  /**
+   * Move constructor.
+   * @param src Data source for new created instance of matrix3wgpu
+   */
+  inline constexpr matrix3wgpu(matrix3wgpu<T> &&src) noexcept __attribute__((__always_inline__))
+    : data(std::move(src.data)) {
+  }
+
+  /**
+   * Copy constructor from matrix3.
+   * @param src Data source matrix3 for new created instance of matrix3wgpu
+   */
+  inline constexpr explicit matrix3wgpu(matrix3<T> const &src) noexcept __attribute__((__always_inline__))
+    : data{src.data[0], src.data[1], src.data[2], T{0},
+           src.data[3], src.data[4], src.data[5], T{0},
+           src.data[6], src.data[7], src.data[8], T{0}} {
   }
 };
 

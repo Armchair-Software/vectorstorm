@@ -5,6 +5,7 @@ namespace VECTORSTORM_NAMESPACE {
 #endif
 
 template<typename T> class matrix3;
+template<typename T> class matrix3wgpu;
 
 #ifdef VECTORSTORM_NAMESPACE
 }
