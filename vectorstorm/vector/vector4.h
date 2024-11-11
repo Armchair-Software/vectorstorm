@@ -880,6 +880,14 @@ public:
 
   //-------------[ size operations ]---------------------------
   /**
+   * Get number of elements in the vector.
+   * @return number of elements (will always return 4)
+   */
+  static inline size_t consteval size() noexcept __attribute__((__always_inline__)) __attribute__((__const__)) {
+    return 4u;
+  }
+
+  /**
    * Return square of length.
    * @return length ^ 2
    * @note This method is faster then length(). For comparison
