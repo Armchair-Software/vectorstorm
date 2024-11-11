@@ -1,7 +1,11 @@
 #pragma once
 
 #include "vectorstorm/epsilon.h"
+#include "matrix3_forward.h"
 #include "matrix4_forward.h"
+#include "vectorstorm/quat/quat_forward.h"
+#include "vectorstorm/vector/vector3_forward.h"
+#include "vectorstorm/vector/vector4_forward.h"
 #ifdef VECTORSTORM_NO_BOOST
   #include <array>
   #include <cstring>
@@ -18,8 +22,6 @@
 #ifdef VECTORSTORM_NAMESPACE
 namespace VECTORSTORM_NAMESPACE {
 #endif
-
-template<typename T> class matrix4x3;
 
 /**
  * Class for matrix 3x3.
