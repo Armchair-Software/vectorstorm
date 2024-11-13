@@ -174,7 +174,7 @@ Quaternions have the following operations:
 - `quaternion<T> from_euler_angles(T x, T y, T z)` Construct a quaternion from three Euler angles: rotation around the x, y and z axis in degrees.
 - `quaternion<T> from_euler_angles_rad(T x, T y, T z)` Construct a quaternion from three Euler angles: rotation around the x, y and z axis in radians.
 - `quaternion<T> from_axis_rot(vector3<T> const &axis, T angleDeg)` Construct a quaternion as a rotation around an axis, in degrees.
-- `quaternion<T> from_axis_rot_rad(vector3<T> const &axis, T angleDeg)` Construct a quaternion as a rotation around an axis, in radians.
+- `quaternion<T> from_axis_rot_rad(vector3<T> const &axis, T angleRad)` Construct a quaternion as a rotation around an axis, in radians.
 - `void to_angle_axis(T &angle, vector3<T> &axis)` Convert this quaternion to an axis and angle combination.
 - `matrix3<T> rotmatrix()` Converts this quaternion into a rotation matrix.
 - `matrix4<T> transform()` Converts this quaternion into a transformation matrix.  This is identical to `rotmatrix()` above but produces a 4x4 matrix.
