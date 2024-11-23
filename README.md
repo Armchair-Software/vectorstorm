@@ -228,7 +228,7 @@ The following functions are specific to 3x3 matrices only:
 - `matrix4<T> get_transform()` Return a transform matrix with this matrix as the rotation component.
 
 The following functions are specific to 4x4 matrices only:
-- `matrix4<T> createTranslation(T x, T y, T z, T w = 1)` Creates a translation matrix from x, y, and z direction translation values, and an optional w translation.
+- `matrix4<T> create_translation(T x, T y, T z, T w = 1)` Creates a translation matrix from x, y, and z direction translation values, and an optional w translation.
 - `matrix4<T> create_scale(T sx, T sy, T sz)` Create scale matrix with sx, sy, and sz being scale values for each axis.
 - `matrix4<T> create_look_at(vector3<T> const &eye_pos, vector3<T> const &target_pos, vector3<T> const &up_dir)` Create a view matrix to look from the eye position to the target position, with a specified up vector.
 - `matrix4<T> create_frustum(T left, T right, T bottom, T top, T near_plane, T far_plane)` Create an OpenGL compatible perspective projection according to the specified frustum clipping planes.
