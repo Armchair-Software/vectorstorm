@@ -260,6 +260,24 @@ public:
   }
 
   /**
+   * Creates translation matrix from a vector3
+   *
+   * @param v Vector of translation to be set.
+   */
+  inline static matrix4<T> constexpr create_translation(vector3<T> const &v) noexcept __attribute__((__always_inline__)) {
+    return create_translation(v.x, v.y, v.z);
+  }
+
+  /**
+   * Creates translation matrix from a vector4
+   *
+   * @param v Vector of translation to be set.
+   */
+  inline static matrix4<T> constexpr create_translation(vector4<T> const &v) noexcept __attribute__((__always_inline__)) {
+    return create_translation(v.x, v.y, v.z, v.w);
+  }
+
+  /**
    * Create scale matrix with @a sx, @a sy, and @a sz
    * being values of matrix main diagonal.
    * @param sx Scale in X-axis
