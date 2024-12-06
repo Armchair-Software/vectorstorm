@@ -843,7 +843,7 @@ public:
   }
 
   /**
-   * Copy constructor.
+   * Copy constructor
    * @param src Data source for new created instance of matrix3wgpu - note padding is always zeroed
    */
   inline constexpr explicit matrix3wgpu(matrix3wgpu<T> const &src) noexcept __attribute__((__always_inline__))
@@ -853,7 +853,7 @@ public:
   }
 
   /**
-   * Move constructor.
+   * Move constructor
    * @param src Data source for new created instance of matrix3wgpu
    */
   inline constexpr matrix3wgpu(matrix3wgpu<T> &&src) noexcept __attribute__((__always_inline__))
@@ -861,13 +861,22 @@ public:
   }
 
   /**
-   * Copy constructor from matrix3.
+   * Copy constructor from matrix3
    * @param src Data source matrix3 for new created instance of matrix3wgpu
    */
   inline constexpr explicit matrix3wgpu(matrix3<T> const &src) noexcept __attribute__((__always_inline__))
     : data{src.data[0], src.data[1], src.data[2], T{0},
            src.data[3], src.data[4], src.data[5], T{0},
            src.data[6], src.data[7], src.data[8], T{0}} {
+  }
+
+  /**
+   * Copy operator
+   * @param rhs Right hand side argument of binary operator.
+   */
+  inline matrix3wgpu<T> constexpr &operator=(matrix3wgpu<T> const &rhs) noexcept __attribute__((__always_inline__)) {
+    std::memcpy(data.data(), rhs.data.data(), sizeof(T) * 12);
+    return *this;
   }
 };
 
