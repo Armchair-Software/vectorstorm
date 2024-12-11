@@ -540,6 +540,13 @@ public:
 
   //-------------[ unary operations ]--------------------------
   /**
+   * Unary plus operator
+   * @return vector with unary + applied to its components
+   */
+  inline vector2<T> constexpr operator+() const noexcept __attribute__((__always_inline__)) {
+    return vector2<T>(+x, +y);
+  }
+  /**
    * Unary negate operator
    * @return negated vector
    */
