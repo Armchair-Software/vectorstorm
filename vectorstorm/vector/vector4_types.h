@@ -27,14 +27,6 @@ using vec4ld = vector4ld;
 using vec4i  = vector4i;
 using vec4ui = vector4ui;
 
-// deprecated transitional declarations
-template<typename T>
-using Vector4   __attribute__((deprecated("Use vector4 or vec4 instead."))) = vector4<T>;
-using Vector4f  __attribute__((deprecated("Use vector4 or vec4 instead."))) = vector4f;
-using Vector4d  __attribute__((deprecated("Use vector4 or vec4 instead."))) = vector4d;
-using Vector4ld __attribute__((deprecated("Use vector4 or vec4 instead."))) = vector4ld;
-using Vector4i  __attribute__((deprecated("Use vector4 or vec4 instead."))) = vector4i;
-
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif //VECTORSTORM_NAMESPACE

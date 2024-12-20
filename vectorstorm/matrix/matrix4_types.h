@@ -27,14 +27,6 @@ using mat4ld = matrix4ld;
 using mat4i  = matrix4i;
 using mat4ui = matrix4ui;
 
-// deprecated transitional declarations
-template<typename T>
-using Matrix4   __attribute__((deprecated("Use matrix4 or mat4 instead."))) = matrix4<T>;
-using Matrix4f  __attribute__((deprecated("Use matrix4 or mat4 instead."))) = matrix4f;
-using Matrix4d  __attribute__((deprecated("Use matrix4 or mat4 instead."))) = matrix4d;
-using Matrix4ld __attribute__((deprecated("Use matrix4 or mat4 instead."))) = matrix4ld;
-using Matrix4i  __attribute__((deprecated("Use matrix4 or mat4 instead."))) = matrix4i;
-
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif //VECTORSTORM_NAMESPACE

@@ -141,12 +141,6 @@ public:
   inline static matrix3<T> constexpr create_rotation_from_euler_angles(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) {
     return create_rotation_from_euler_angles_rad(deg2rad(xDeg), deg2rad(yDeg), deg2rad(zDeg));
   }
-  inline static matrix3<T> constexpr create_rotation_around_axis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_from_euler_angles()"))) {
-    return create_rotation_from_euler_angles(xDeg, yDeg, zDeg);
-  }
-  inline static matrix3<T> constexpr createRotationAroundAxis(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_from_euler_angles()"))) {
-    return create_rotation_from_euler_angles(xDeg, yDeg, zDeg);
-  }
 
   /**
    * Creates rotation matrix by rotation around three axes, radian version.
@@ -183,12 +177,6 @@ public:
                       temp_cos_z_cos_y * sin_xRads,
                       temp_cos_z_cos_y * cos_xRads);
   }
-  inline static matrix3<T> constexpr create_rotation_around_axis_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_from_euler_angles_rad()"))) {
-    return create_rotation_from_euler_angles_rad(xRads, yRads, zRads);
-  }
-  inline static matrix3<T> constexpr createRotationAroundAxis_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_from_euler_angles_rad()"))) {
-    return create_rotation_from_euler_angles_rad(xRads, yRads, zRads);
-  }
 
   /**
    * Creates rotation matrix by rotation around an axis.
@@ -197,9 +185,6 @@ public:
    */
   inline static matrix3<T> constexpr create_rotation_around_axis(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) {
     return create_rotation_around_axis_rad(axis, deg2rad(angle));
-  }
-  inline static matrix3<T> constexpr createRotationAroundAxis(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis()"))) {
-    return create_rotation_around_axis(axis, angle);
   }
 
   /**
@@ -226,9 +211,6 @@ public:
                       axis.x * axis.z * cos_a_inv - sin_a * axis.y,
                       axis.y * axis.z * cos_a_inv + sin_a * axis.x,
                       axis.z * axis.z * cos_a_inv + cos_a);
-  }
-  inline static matrix3<T> constexpr createRotationAroundAxis_rad(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_around_axis_rad()"))) {
-    return create_rotation_around_axis_rad(axis, angle);
   }
 
   /**
@@ -259,9 +241,6 @@ public:
                       cross.y * cross.z * temp_k + cross.x,
                       cross.z * cross.z * temp_k + dot);
 
-  }
-  inline static matrix3<T> constexpr createRotationBetweenVectors(vector3<T> const &from, vector3<T> const &to) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use create_rotation_between_vectors()"))) {
-    return create_rotation_between_vectors(from, to);
   }
 
   /**
@@ -297,10 +276,6 @@ public:
                       static_cast<T>(mat[1]), static_cast<T>(mat[5]), static_cast<T>(mat[9]),
                       static_cast<T>(mat[2]), static_cast<T>(mat[6]), static_cast<T>(mat[10]));
   }
-  template<typename It> __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_ode()")))
-  inline static matrix3<T> constexpr fromOde(It const *mat) noexcept {
-    return from_ode(mat);
-  }
 
   /**
    * Creates new matrix 3x3 from array that represents such matrix 3x3
@@ -314,10 +289,6 @@ public:
                       static_cast<T>(arr[1]), static_cast<T>(arr[4]), static_cast<T>(arr[7]),
                       static_cast<T>(arr[2]), static_cast<T>(arr[5]), static_cast<T>(arr[8]));
   }
-  template<typename FromT> __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_row_major_array()")))
-  inline static matrix3<T> constexpr fromRowMajorArray(FromT const *arr) noexcept {
-    return from_row_major_array(arr);
-  }
 
   /**
    * Creates new matrix 3x3 from array that represents such matrix 3x3
@@ -330,10 +301,6 @@ public:
     return matrix3<T>(static_cast<T>(arr[0]), static_cast<T>(arr[1]), static_cast<T>(arr[2]),
                       static_cast<T>(arr[3]), static_cast<T>(arr[4]), static_cast<T>(arr[5]),
                       static_cast<T>(arr[6]), static_cast<T>(arr[7]), static_cast<T>(arr[8]));
-  }
-  template<typename FromT> __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_column_major_array()")))
-  inline static matrix3<T> constexpr fromColumnMajorArray(FromT const *arr) noexcept {
-    return from_column_major_array(arr);
   }
 
   //---------------------[ equality operators ]------------------------------
@@ -426,9 +393,6 @@ public:
                       data[3],           data[4],           data[5],           static_cast<T>(0),
                       data[6],           data[7],           data[8],           static_cast<T>(0),
                       static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1));
-  }
-  inline matrix4<T> constexpr getTranslation() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use get_transform()"))) {
-     return get_transform();
   }
 
   /**
@@ -719,10 +683,6 @@ public:
     data[4] = data[8] * data[0] - data[2] * data[6];
     data[5] = data[6] * data[1] - data[0] * data[7];
   }
-  [[deprecated("Proper English, please!")]]
-  inline void constexpr orthonormalize() noexcept __attribute__((__always_inline__)) {
-    orthonormalise();
-  }
 
   /**
    * Returns a quaternion such that its corresponding matrix can be used to diagonalise the input matrix.
@@ -814,9 +774,6 @@ public:
     std::ostringstream oss;
     oss << *this;
     return oss.str();
-  }
-  inline std::string CONSTEXPR_IF_NO_CLANG toString() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_string()"))) {
-    return to_string();
   }
 };
 

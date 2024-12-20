@@ -51,6 +51,25 @@ public:
   };
 
   /**
+   * What square root mode to use, passed as a template parameter to functions like length()
+   */
+  enum class sqrt_mode {
+    /**
+     * Use standard library std::sqrt
+     */
+    std,
+    /**
+     * Use fast approximation from sqrt_fast.h
+     */
+    fast,
+    /**
+     * Use rough version of fast approximation from sqrt_fast.h, with one step instead of two
+     */
+    coarse,
+  };
+
+
+  /**
    * quaternion constructor, sets quaternion to (0 + 0i + 0j + 0k).
    */
   inline constexpr quaternion() noexcept __attribute__((__always_inline__))
@@ -388,28 +407,6 @@ public:
   }
 
   /**
-   * Get length of quaternion.
-   * @return Length of quaternion.
-   */
-  inline T constexpr length() const noexcept __attribute__((__always_inline__)) {
-    return static_cast<T>(std::sqrt(length_sq()));
-  }
-  /**
-   * Get length of quaternion, fast approximation.
-   * @return Length of quaternion.
-   */
-  inline T constexpr length_fast() const noexcept __attribute__((__always_inline__)) {
-    return static_cast<T>(sqrt_fast(length_sq()));
-  }
-  /**
-   * Get length of quaternion, rougher fast approximation.
-   * @return Length of quaternion.
-   */
-  inline T constexpr length_faster() const noexcept __attribute__((__always_inline__)) {
-    return static_cast<T>(sqrt_faster(length_sq()));
-  }
-
-  /**
    * Return square of length.
    * @return length ^ 2
    * @note This method is faster then length(). For comparison
@@ -419,57 +416,66 @@ public:
   inline T constexpr length_sq() const noexcept __attribute__((__always_inline__)) {
     return w * w + v.length_sq();
   }
-  inline T constexpr lengthSq() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use length_sq()"))) {
-    return length_sq();
+
+  /**
+   * Get length of quaternion.
+   * @return Length of quaternion.
+   */
+  template<sqrt_mode mode = sqrt_mode::std>
+  inline T constexpr length() const noexcept __attribute__((__always_inline__)) {
+    if constexpr(mode == sqrt_mode::std) {
+      return std::sqrt(length_sq());
+    } else if constexpr(mode == sqrt_mode::fast) {
+      return sqrt_fast(length_sq());
+    } else if constexpr(mode == sqrt_mode::coarse) {
+      return sqrt_coarse(length_sq());
+    } else {
+      static_assert(always_false_v<sqrt_mode>, "Unsupported sqrt_mode");
+    }
+  }
+  /**
+   * Get length of quaternion, fast approximation.
+   * @return Length of quaternion.
+   */
+  [[deprecated("Use length<quat<T>::sqrt_mode::fast>()")]]
+  inline T constexpr length_fast() const noexcept __attribute__((__always_inline__)) {
+    return length<sqrt_mode::fast>();
+  }
+  /**
+   * Get length of quaternion, rougher fast approximation.
+   * @return Length of quaternion.
+   */
+  [[deprecated("Use length<quat<T>::sqrt_mode::coarse>()")]]
+  inline T constexpr length_faster() const noexcept __attribute__((__always_inline__)) {
+    return length<sqrt_mode::coarse>();
   }
 
   /**
    * normalise quaternion
    */
+  template<sqrt_mode mode = sqrt_mode::std>
   inline void constexpr normalise() noexcept __attribute__((__always_inline__)) {
-    T const len = length();
-    w /= len;
-    v /= len;
+    *this /= length<mode>();
   }
+  [[deprecated("Use normalise<quat<T>::sqrt_mode::fast>()")]]
   inline void constexpr normalise_fast() noexcept __attribute__((__always_inline__)) {
-    T const len = length_fast();
-    w /= len;
-    v /= len;
+    normalise<sqrt_mode::fast>();
   }
+  [[deprecated("Use normalise<quat<T>::sqrt_mode::coarse>()")]]
   inline void constexpr normalise_faster() noexcept __attribute__((__always_inline__)) {
-    T const len = length_faster();
-    w /= len;
-    v /= len;
+    normalise<sqrt_mode::coarse>();
   }
-  inline void constexpr normalize() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    normalise();
-  }
-  inline void constexpr normalize_fast() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    normalise_fast();
-  }
-  inline void constexpr normalize_faster() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    normalise_faster();
-  }
+  template<sqrt_mode mode = sqrt_mode::std>
   inline quaternion<T> constexpr normalise_copy() const noexcept __attribute__((__always_inline__)) {
-    T const len(length());
-    return {w / len, v / len};
+    return *this / length<mode>();
   }
+  [[deprecated("Use normalise_copy<quat<T>::sqrt_mode::fast>()")]]
   inline quaternion<T> constexpr normalise_copy_fast() const noexcept __attribute__((__always_inline__)) {
-    T const len(length_fast());
-    return {w / len, v / len};
+    return normalise_copy<sqrt_mode::fast>();
   }
+  [[deprecated("Use normalise_copy<quat<T>::sqrt_mode::coarse>()")]]
   inline quaternion<T> constexpr normalise_copy_faster() const noexcept __attribute__((__always_inline__)) {
-    T const len(length_faster());
-    return {w / len, v / len};
-  }
-  inline quaternion<T> constexpr normalize_copy() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    return normalise_copy();
-  }
-  inline quaternion<T> constexpr normalize_copy_fast() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    return normalise_copy_fast();
-  }
-  inline quaternion<T> constexpr normalize_copy_faster() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    return normalise_copy_faster();
+    return normalise_copy<sqrt_mode::coarse>();
   }
 
   inline void constexpr conjugate() noexcept __attribute__((__always_inline__)) {
@@ -493,7 +499,7 @@ public:
   inline void constexpr invert() noexcept __attribute__((__always_inline__)) {
     T l = length();
     conjugate();
-    (*this) /= l;
+    *this /= l;
   }
 
   inline quaternion<T> constexpr invert_copy() const noexcept __attribute__((__always_inline__)) {
@@ -512,9 +518,6 @@ public:
                          from_axis_rot(vector3<T>(0, 1, 0), y) *
                          from_axis_rot(vector3<T>(0, 0, 1), z));
   }
-  inline static quaternion<T> constexpr fromEulerAngles(T x, T y, T z) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_euler_angles()"))) {
-    return from_euler_angles(x, y, z);
-  }
 
   /**
    * Creates quaternion for Euler angles, rad version.
@@ -528,9 +531,6 @@ public:
                          from_axis_rot_rad(vector3<T>(0, 1, 0), y) *
                          from_axis_rot_rad(vector3<T>(0, 0, 1), z));
   }
-  inline static quaternion<T> constexpr fromEulerAngles_rad(T x, T y, T z) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_euler_angles_rad()"))) {
-    return from_euler_angles_rad(x, y, z);
-  }
 
   /**
    * Creates quaternion as rotation around axis.
@@ -539,9 +539,6 @@ public:
    */
   inline static quaternion<T> constexpr from_axis_rot(vector3<T> const &axis, T angleDeg) noexcept __attribute__((__always_inline__)) {
     return from_axis_rot_rad(axis, deg2rad(angleDeg));
-  }
-  inline static quaternion<T> constexpr fromAxisRot(vector3<T> const &axis, T angleDeg) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_axis_rot()"))) {
-    return from_axis_rot(axis, angleDeg);
   }
 
   /**
@@ -554,9 +551,6 @@ public:
     T temp_cos = static_cast<T>(0);
     sincos_any(angleRad / static_cast<T>(2.0), temp_sin, temp_cos);
     return quaternion<T>(temp_cos, axis * temp_sin);
-  }
-  inline static quaternion<T> constexpr fromAxisRot_rad(vector3<T> const &axis, T angleRad) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_axis_rot_rad()"))) {
-    return from_axis_rot_rad(axis, angleRad);
   }
 
   /**
@@ -573,9 +567,6 @@ public:
       angle = static_cast<T>(0);
       axis.assign(static_cast<T>(1), static_cast<T>(0), static_cast<T>(0));
     }
-  }
-  inline void constexpr toAngleAxis(T &angle, vector3<T> &axis) const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_angle_axis()"))) {
-    to_angle_axis(angle, axis);
   }
 
   /**
@@ -689,9 +680,6 @@ public:
     oss << *this;
     return oss.str();
   }
-  inline std::string CONSTEXPR_IF_NO_CLANG toString() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_string()"))) {
-    return to_string();
-  }
 
   /**
    * Creates quaternion from transform matrix.
@@ -703,9 +691,6 @@ public:
   /*
   inline static quaternion<T> constexpr from_matrix(matrix4<T> const &m) noexcept __attribute__((__always_inline__)) {
     return from_matrix(m.get_rotation());
-  }
-  inline static quaternion<T> constexpr fromMatrix(matrix4<T> const &m) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
-    return from_matrix(m);
   }
   */
 
@@ -748,9 +733,9 @@ public:
                            static_cast<T>(0.25)    * s);
     }
   }
-  inline static quaternion<T> constexpr fromMatrix(matrix3<T> const &m) noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use from_matrix()"))) {
-    return from_matrix(m);
-  }
+
+private:
+  template<typename> static constexpr bool always_false_v{false};
 };
 
 #ifdef VECTORSTORM_NAMESPACE

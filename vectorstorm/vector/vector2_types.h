@@ -27,14 +27,6 @@ using vec2ld = vector2ld;
 using vec2i  = vector2i;
 using vec2ui = vector2ui;
 
-// deprecated transitional declarations
-template<typename T>
-using Vector2   __attribute__((deprecated("Use vector2 or vec2 instead."))) = vector2<T>;
-using Vector2f  __attribute__((deprecated("Use vector2 or vec2 instead."))) = vector2f;
-using Vector2d  __attribute__((deprecated("Use vector2 or vec2 instead."))) = vector2d;
-using Vector2ld __attribute__((deprecated("Use vector2 or vec2 instead."))) = vector2ld;
-using Vector2i  __attribute__((deprecated("Use vector2 or vec2 instead."))) = vector2i;
-
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif //VECTORSTORM_NAMESPACE

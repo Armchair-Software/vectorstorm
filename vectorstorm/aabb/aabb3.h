@@ -296,9 +296,6 @@ public:
   inline vector3<T> constexpr centre() const noexcept __attribute__((__always_inline__)) {
     return (min + max) / static_cast<T>(2);
   }
-  inline vector3<T> constexpr center() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    return centre();
-  }
 
   /**
    * Gets extent of bounding-box.

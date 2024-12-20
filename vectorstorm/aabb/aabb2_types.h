@@ -15,14 +15,6 @@ using aabb2i  = aabb2<int>;
 /// 2D axis-aligned bounding box of unsigned integers
 using aabb2ui = aabb2<unsigned int>;
 
-// deprecated transitional declarations
-template<typename T>
-using Aabb2   __attribute__((deprecated("Use aabb2 instead."))) = aabb2<T>;
-using Aabb2f  __attribute__((deprecated("Use aabb2 instead."))) = aabb2f;
-using Aabb2d  __attribute__((deprecated("Use aabb2 instead."))) = aabb2d;
-using Aabb2ld __attribute__((deprecated("Use aabb2 instead."))) = aabb2ld;
-using Aabb2i  __attribute__((deprecated("Use aabb2 instead."))) = aabb2i;
-
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif //VECTORSTORM_NAMESPACE

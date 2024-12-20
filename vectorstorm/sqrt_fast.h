@@ -38,7 +38,7 @@ inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(float number) noexcept {
   i = 0x5f375a84 - (i >> 1);                                                    // improved magic number from http://jheriko-rtw.blogspot.co.uk/2009/04/understanding-and-improving-fast.html
   y = *reinterpret_cast<float*>(&i);
   y = y * (threehalfs - (x * y * y));                                           // 1st iteration
-  y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
+  y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed - see sqrt_inv_coarse below
   return y;
 }
 inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(double number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
@@ -54,7 +54,7 @@ inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_fast(double number) noexcept
   i = magic - (i >> 1);
   y = *reinterpret_cast<double*>(&i);
   y = y * (threehalfs - (x * y * y));                                           // 1st iteration
-  y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
+  y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed - see sqrt_inv_coarse below
   return y;
 }
 #pragma GCC diagnostic pop
@@ -80,8 +80,8 @@ inline static int constexpr sqrt_fast(int number) noexcept {
 #ifdef __clang__
   #pragma GCC diagnostic ignored "-Wundefined-reinterpret-cast"
 #endif // __clang__
-inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
-inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept {
+inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_coarse(float number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
+inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_coarse(float number) noexcept {
   /// Adapted from Quake III's fast inverse square root approximation - one iteration version
   float constexpr threehalfs = 1.5f;
 
@@ -92,11 +92,11 @@ inline static float CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(float number) noexcept
   i = 0x5f375a84 - (i >> 1);                                                    // improved magic number from http://jheriko-rtw.blogspot.co.uk/2009/04/understanding-and-improving-fast.html
   y = *reinterpret_cast<float*>(&i);
   y = y * (threehalfs - (x * y * y));                                           // 1st iteration
-  //y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
+  // 2nd iteration omitted
   return y;
 }
-inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(double number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
-inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(double number) noexcept {
+inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_coarse(double number) noexcept __attribute__((__always_inline__)) OPTIMISE_NO_STRICT_ALIASING;
+inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_coarse(double number) noexcept {
   /// Similar to the Quake III fast inverse square root but for doubles
   double constexpr threehalfs = 1.5;
 
@@ -108,25 +108,25 @@ inline static double CONSTEXPR_IF_NO_CLANG sqrt_inv_faster(double number) noexce
   i = magic - (i >> 1);
   y = *reinterpret_cast<double*>(&i);
   y = y * (threehalfs - (x * y * y));                                           // 1st iteration
-  //y = y * (threehalfs - (x * y * y));                                           // 2nd iteration, this can be removed
+  // 2nd iteration omitted
   return y;
 }
 #pragma GCC diagnostic pop
 template<typename T>
-inline static T constexpr sqrt_faster(T number) noexcept __attribute__((__always_inline__));
+inline static T constexpr sqrt_coarse(T number) noexcept __attribute__((__always_inline__));
 template<typename T>
-inline static T constexpr sqrt_faster(T number) noexcept {
-  return sqrt_inv_faster(number) * number;
+inline static T constexpr sqrt_coarse(T number) noexcept {
+  return sqrt_inv_coarse(number) * number;
 }
-inline static long double constexpr sqrt_faster(long double number) __attribute__((__always_inline__));
-inline static long double constexpr sqrt_faster(long double number) {
+inline static long double constexpr sqrt_coarse(long double number) __attribute__((__always_inline__));
+inline static long double constexpr sqrt_coarse(long double number) {
   // we don't have a way to handle long doubles with the fast approximation, so just cast to double
-  return static_cast<long double>(sqrt_inv_faster(static_cast<double>(number))) * number;
+  return static_cast<long double>(sqrt_inv_coarse(static_cast<double>(number))) * number;
 }
-inline static int constexpr sqrt_faster(int number) noexcept __attribute__((__always_inline__));
-inline static int constexpr sqrt_faster(int number) noexcept {
+inline static int constexpr sqrt_coarse(int number) noexcept __attribute__((__always_inline__));
+inline static int constexpr sqrt_coarse(int number) noexcept {
   // convert ints to floats and back
-  return static_cast<int>(sqrt_inv_faster(static_cast<float>(number)) * static_cast<float>(number));
+  return static_cast<int>(sqrt_inv_coarse(static_cast<float>(number)) * static_cast<float>(number));
 }
 
 #ifdef __SSE__

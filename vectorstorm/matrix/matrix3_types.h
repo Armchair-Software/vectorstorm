@@ -30,14 +30,6 @@ using mat3ui = matrix3ui;
 // Special WebGPU padded 3x3 matrix - only float is needed
 using mat3fwgpu = matrix3wgpu<float>;
 
-// deprecated transitional declarations
-template<typename T>
-using Matrix3   __attribute__((deprecated("Use matrix3 or mat3 instead."))) = matrix3<T>;
-using Matrix3f  __attribute__((deprecated("Use matrix3 or mat3 instead."))) = matrix3f;
-using Matrix3d  __attribute__((deprecated("Use matrix3 or mat3 instead."))) = matrix3d;
-using Matrix3ld __attribute__((deprecated("Use matrix3 or mat3 instead."))) = matrix3ld;
-using Matrix3i  __attribute__((deprecated("Use matrix3 or mat3 instead."))) = matrix3i;
-
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif //VECTORSTORM_NAMESPACE

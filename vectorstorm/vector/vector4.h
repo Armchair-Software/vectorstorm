@@ -90,6 +90,24 @@ public:
     T w;
   };
 
+  /**
+   * What square root mode to use, passed as a template parameter to functions like length()
+   */
+  enum class sqrt_mode {
+    /**
+     * Use standard library std::sqrt
+     */
+    std,
+    /**
+     * Use fast approximation from sqrt_fast.h
+     */
+    fast,
+    /**
+     * Use rough version of fast approximation from sqrt_fast.h, with one step instead of two
+     */
+    coarse,
+  };
+
   //----------------[ constructors ]--------------------------
   /**
    * Creates and sets to (0,0,0,0)
@@ -904,32 +922,39 @@ public:
   inline T constexpr length_sq() const noexcept __attribute__((__always_inline__)) {
     return x * x + y * y + z * z + w * w;
   }
-  inline T constexpr lengthSq() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use length_sq()"))) {
-    return length_sq();
-  }
 
   /**
    * Get length of vector.
    * @return length of vector
    */
+  template<sqrt_mode mode = sqrt_mode::std>
   inline T constexpr length() const noexcept __attribute__((__always_inline__)) {
-    return static_cast<T>(std::sqrt(length_sq()));
+    if constexpr(mode == sqrt_mode::std) {
+      return std::sqrt(length_sq());
+    } else if constexpr(mode == sqrt_mode::fast) {
+      return sqrt_fast(length_sq());
+    } else if constexpr(mode == sqrt_mode::coarse) {
+      return sqrt_coarse(length_sq());
+    } else {
+      static_assert(always_false_v<sqrt_mode>, "Unsupported sqrt_mode");
+    }
   }
   /**
    * Get length of vector, fast approximation.
    * @return length of vector
    */
+  [[deprecated("Use length<vector4<T>::sqrt_mode::fast>()")]]
   inline T constexpr length_fast() const noexcept __attribute__((__always_inline__)) __attribute__((__pure__)) {
-    return static_cast<T>(sqrt_fast(length_sq()));
+    return length<sqrt_mode::fast>();
   }
   /**
    * Get length of vector, rougher fast approximation.
    * @return length of vector
    */
+  [[deprecated("Use length<vector4<T>::sqrt_mode::coarse>()")]]
   inline T constexpr length_faster() const noexcept __attribute__((__always_inline__)) __attribute__((__pure__)) {
-    return static_cast<T>(sqrt_faster(length_sq()));
+    return length<sqrt_mode::coarse>();
   }
-
   /**
    * Return whether the vector is zero length - this is much faster than a full length calculation
    * @return whether vector is zero length
@@ -937,93 +962,58 @@ public:
   inline bool constexpr length_zero() const noexcept __attribute__((__always_inline__)) {
     /*
     return x == static_cast<T>(0) &&
-           y == static_cast<T>(0) &&
-           z == static_cast<T>(0) &&
-           w == static_cast<T>(0);
+           y == static_cast<T>(0);
     */
     // the above may fail to detect cases where the sqrt of three tiny numbers would be zero
     return std::abs(x) < epsilon<T> &&
-           std::abs(y) < epsilon<T> &&
-           std::abs(z) < epsilon<T> &&
-           std::abs(w) < epsilon<T>;
+           std::abs(y) < epsilon<T>;
   }
 
   /**
    * normalise vector
    */
+  template<sqrt_mode mode = sqrt_mode::std>
   inline void constexpr normalise() noexcept __attribute__((__always_inline__)) {
-    T const temp = length();
-    x /= temp;
-    y /= temp;
-    z /= temp;
-    w /= temp;
+    *this /= length<mode>();
   }
+  [[deprecated("Use normalise<vector4<T>::sqrt_mode::fast>()")]]
   inline void constexpr normalise_fast() noexcept __attribute__((__always_inline__)) {
-    T const temp = length_fast();
-    x /= temp;
-    y /= temp;
-    z /= temp;
-    w /= temp;
+    normalise<sqrt_mode::fast>();
   }
+  [[deprecated("Use normalise<vector4<T>::sqrt_mode::coarse>()")]]
   inline void constexpr normalise_faster() noexcept __attribute__((__always_inline__)) {
-    T const temp = length_faster();
-    x /= temp;
-    y /= temp;
-    z /= temp;
-    w /= temp;
+    normalise<sqrt_mode::coarse>();
   }
-  inline void constexpr normalize() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    normalise();
-  }
-  inline void constexpr normalize_fast() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    normalise_fast();
-  }
-  inline void constexpr normalize_faster() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    normalise_faster();
-  }
+  template<sqrt_mode mode = sqrt_mode::std>
   inline vector4<T> constexpr normalise_copy() const noexcept __attribute__((__always_inline__)) {
-    T const temp(length());
-    return vector4<T>(x / temp, y / temp, z / temp, w / temp);
+    return *this / length<mode>();
   }
+  [[deprecated("Use normalise_copy<vector4<T>::sqrt_mode::fast>()")]]
   inline vector4<T> constexpr normalise_copy_fast() const noexcept __attribute__((__always_inline__)) {
-    T const temp(length_fast());
-    return vector4<T>(x / temp, y / temp, z / temp, w / temp);
+    return normalise_copy<sqrt_mode::fast>();
   }
+  [[deprecated("Use normalise_copy<vector4<T>::sqrt_mode::coarse>()")]]
   inline vector4<T> constexpr normalise_copy_faster() const noexcept __attribute__((__always_inline__)) {
-    T const temp(length_faster());
-    return vector4<T>(x / temp, y / temp, z / temp, w / temp);
-  }
-  inline vector4<T> constexpr normalize_copy() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    return normalise_copy();
-  }
-  inline vector4<T> constexpr normalize_copy_fast() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    return normalise_copy_fast();
-  }
-  inline vector4<T> constexpr normalize_copy_faster() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    return normalise_copy_faster();
+    return normalise_copy<sqrt_mode::coarse>();
   }
   /**
-   * normalise vector. with added zero safety check
+   * normalise vector, with added zero safety check
    */
+  template<sqrt_mode mode = sqrt_mode::std>
   inline void constexpr normalise_safe() noexcept __attribute__((__always_inline__)) {
     if(length_zero()) {
       assign();
     } else {
-      *this /= length();
+      normalise<mode>();
     }
   }
-  inline void constexpr normalize_safe() noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    normalise_safe();
-  }
+  template<sqrt_mode mode = sqrt_mode::std>
   inline vector4<T> constexpr normalise_safe_copy() const noexcept __attribute__((__always_inline__)) {
     if(length_zero()) {
-      return vector4<T>();
+      return {};
     } else {
-      return *this / length();
+      return normalise_copy<mode>();
     }
-  }
-  inline vector4<T> constexpr normalize_safe_copy() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Proper English, please!"))) {
-    return normalise_safe_copy();
   }
 
   /**
@@ -1102,9 +1092,6 @@ public:
     oss << *this;
     return oss.str();
   }
-  inline std::string CONSTEXPR_IF_NO_CLANG toString() const noexcept __attribute__((__always_inline__)) __attribute__((__deprecated__("Use to_string()"))) {
-    return to_string();
-  }
 
   /**
    * Gets a 3D vector subset.
@@ -1112,6 +1099,9 @@ public:
   inline vector3<T> constexpr to_3d() const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x, y, z);
   }
+
+private:
+  template<typename> static constexpr bool always_false_v{false};
 };
 
 #ifdef VECTORSTORM_NAMESPACE
