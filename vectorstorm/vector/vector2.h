@@ -589,7 +589,7 @@ public:
    * @return length of vector
    */
   template<sqrt_mode mode = sqrt_mode::std>
-  inline T constexpr length() const noexcept __attribute__((__always_inline__)) {
+  inline T  __attribute__((__always_inline__))constexpr length() const noexcept {
     if constexpr(mode == sqrt_mode::std) {
       return std::sqrt(length_sq());
     } else if constexpr(mode == sqrt_mode::fast) {
@@ -634,7 +634,7 @@ public:
    * normalise vector
    */
   template<sqrt_mode mode = sqrt_mode::std>
-  inline void constexpr normalise() noexcept __attribute__((__always_inline__)) {
+  inline void __attribute__((__always_inline__)) constexpr normalise() noexcept {
     *this /= length<mode>();
   }
   [[deprecated("Use normalise<vector2<T>::sqrt_mode::fast>()")]]
@@ -646,7 +646,7 @@ public:
     normalise<sqrt_mode::coarse>();
   }
   template<sqrt_mode mode = sqrt_mode::std>
-  inline vector2<T> constexpr normalise_copy() const noexcept __attribute__((__always_inline__)) {
+  inline vector2<T> __attribute__((__always_inline__)) constexpr normalise_copy() const noexcept {
     return *this / length<mode>();
   }
   [[deprecated("Use normalise_copy<vector2<T>::sqrt_mode::fast>()")]]
@@ -661,7 +661,7 @@ public:
    * normalise vector, with added zero safety check
    */
   template<sqrt_mode mode = sqrt_mode::std>
-  inline void constexpr normalise_safe() noexcept __attribute__((__always_inline__)) {
+  inline void __attribute__((__always_inline__)) constexpr normalise_safe() noexcept {
     if(length_zero()) {
       assign();
     } else {
@@ -669,7 +669,7 @@ public:
     }
   }
   template<sqrt_mode mode = sqrt_mode::std>
-  inline vector2<T> constexpr normalise_safe_copy() const noexcept __attribute__((__always_inline__)) {
+  inline vector2<T> __attribute__((__always_inline__)) constexpr normalise_safe_copy() const noexcept {
     if(length_zero()) {
       return {};
     } else {

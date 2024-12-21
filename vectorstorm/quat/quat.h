@@ -422,7 +422,7 @@ public:
    * @return Length of quaternion.
    */
   template<sqrt_mode mode = sqrt_mode::std>
-  inline T constexpr length() const noexcept __attribute__((__always_inline__)) {
+  inline T __attribute__((__always_inline__)) constexpr length() const noexcept {
     if constexpr(mode == sqrt_mode::std) {
       return std::sqrt(length_sq());
     } else if constexpr(mode == sqrt_mode::fast) {
@@ -454,7 +454,7 @@ public:
    * normalise quaternion
    */
   template<sqrt_mode mode = sqrt_mode::std>
-  inline void constexpr normalise() noexcept __attribute__((__always_inline__)) {
+  inline void __attribute__((__always_inline__)) constexpr normalise() noexcept {
     *this /= length<mode>();
   }
   [[deprecated("Use normalise<quat<T>::sqrt_mode::fast>()")]]
@@ -466,7 +466,7 @@ public:
     normalise<sqrt_mode::coarse>();
   }
   template<sqrt_mode mode = sqrt_mode::std>
-  inline quaternion<T> constexpr normalise_copy() const noexcept __attribute__((__always_inline__)) {
+  inline quaternion<T> __attribute__((__always_inline__)) constexpr normalise_copy() const noexcept {
     return *this / length<mode>();
   }
   [[deprecated("Use normalise_copy<quat<T>::sqrt_mode::fast>()")]]
