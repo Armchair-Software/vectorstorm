@@ -779,15 +779,31 @@ public:
     return vector3<T>(-x, -y, -z);
   }
 
-  //-------------[ size operations ]---------------------------
+  //-------------[ data operations ]---------------------------
+  /**
+   * Data access
+   * @return pointer to the first element in the vector
+   */
+  inline T constexpr *data() noexcept __attribute__((__always_inline__)) {
+    return &x;
+  }
+  /**
+   * Data access
+   * @return pointer to the first element in the vector, const version
+   */
+  inline T constexpr const *data() const noexcept __attribute__((__always_inline__)) {
+    return &x;
+  }
+
   /**
    * Get number of elements in the vector.
    * @return number of elements (will always return 3)
    */
-  static inline size_t consteval size() noexcept __attribute__((__always_inline__)) __attribute__((__const__)) {
+  static inline unsigned int constexpr size() noexcept __attribute__((__always_inline__)) __attribute__((__const__)) {
     return 3u;
   }
 
+  //-------------[ size operations ]---------------------------
   /**
    * Return square of length.
    * @return length ^ 2
