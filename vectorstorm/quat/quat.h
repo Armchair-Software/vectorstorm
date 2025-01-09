@@ -116,76 +116,76 @@ public:
   /**
    * Construct quaternion from rotation matrix.
    */
-  template<sqrt_mode mode = sqrt_mode::std>
-  inline constexpr explicit quaternion(matrix3<T> const &matrix) noexcept __attribute__((__always_inline__)) {
+  template<sqrt_mode mode = sqrt_mode::std> __attribute__((__always_inline__))
+  inline constexpr explicit quaternion(matrix3<T> const &matrix) noexcept {
     // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
     // article "quaternion Calculus and Fast Animation".
-    T const trace{matrix.at(0, 0) + matrix.at(1, 1) + matrix.at(2, 2)};
+    T const trace{matrix[0, 0] + matrix[1, 1] + matrix[2, 2]};
     if(trace > 0) {
       // |w| > 1/2, may as well choose w > 1/2
       T root{sqrt_switchable<mode>(trace + static_cast<T>(1.0))};               // 2w
       w = static_cast<T>(0.5) * root;
       root = static_cast<T>(0.5) / root;                                        // 1/(4w)
-      v.x = (matrix.at(2, 1) - matrix.at(1, 2)) * root;
-      v.y = (matrix.at(0, 2) - matrix.at(2, 0)) * root;
-      v.z = (matrix.at(1, 0) - matrix.at(0, 1)) * root;
+      v.x = (matrix[2, 1] - matrix[1, 2]) * root;
+      v.y = (matrix[0, 2] - matrix[2, 0]) * root;
+      v.z = (matrix[1, 0] - matrix[0, 1]) * root;
     } else {
       // |w| <= 1/2
       unsigned int constexpr next[3]{1, 2, 0};
 
       unsigned int i{0};
-      if(matrix.at(1, 1) > matrix.at(0, 0)) {
+      if(matrix[1, 1] > matrix[0, 0]) {
         i = 1;
       }
-      if(matrix.at(2, 2) > matrix.at(i, i)) {
+      if(matrix[2, 2] > matrix[i, i]) {
         i = 2;
       }
       unsigned int j{next[i]};
       unsigned int k{next[j]};
 
-      T root{sqrt_switchable<mode>(matrix.at(i, i) - matrix.at(j, j) - matrix.at(k, k) + static_cast<T>(1.0))};
+      T root{sqrt_switchable<mode>(matrix[i, i] - matrix[j, j] - matrix[k, k] + static_cast<T>(1.0))};
       T *q[3]{&v.x, &v.y, &v.z};
       *q[i] = static_cast<T>(0.5) * root;
       root = static_cast<T>(0.5) / root;
-      w = (matrix.at(k, j) - matrix.at(j, k)) * root;
-      *q[j] = (matrix.at(j, i) + matrix.at(i, j)) * root;
-      *q[k] = (matrix.at(k, i) + matrix.at(i, k)) * root;
+      w = (matrix[k, j] - matrix[j, k]) * root;
+      *q[j] = (matrix[j, i] + matrix[i, j]) * root;
+      *q[k] = (matrix[k, i] + matrix[i, k]) * root;
     }
   }
-  template<sqrt_mode mode = sqrt_mode::std>
-  inline constexpr explicit quaternion(matrix4<T> const &matrix) noexcept __attribute__((__always_inline__)) {
+  template<sqrt_mode mode = sqrt_mode::std> __attribute__((__always_inline__))
+  inline constexpr explicit quaternion(matrix4<T> const &matrix) noexcept {
     // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
     // article "quaternion Calculus and Fast Animation".
-    T const trace{matrix.at(0, 0) + matrix.at(1, 1) + matrix.at(2, 2)};
+    T const trace{matrix[0, 0] + matrix[1, 1] + matrix[2, 2]};
     if(trace > 0) {
       // |w| > 1/2, may as well choose w > 1/2
       T root{sqrt_switchable<mode>(trace + static_cast<T>(1.0))};               // 2w
       w = static_cast<T>(0.5) * root;
       root = static_cast<T>(0.5) / root;                                        // 1/(4w)
-      v.x = (matrix.at(2, 1) - matrix.at(1, 2)) * root;
-      v.y = (matrix.at(0, 2) - matrix.at(2, 0)) * root;
-      v.z = (matrix.at(1, 0) - matrix.at(0, 1)) * root;
+      v.x = (matrix[2, 1] - matrix[1, 2]) * root;
+      v.y = (matrix[0, 2] - matrix[2, 0]) * root;
+      v.z = (matrix[1, 0] - matrix[0, 1]) * root;
     } else {
       // |w| <= 1/2
       unsigned int constexpr next[3]{1, 2, 0};
 
       unsigned int i{0};
-      if(matrix.at(1, 1) > matrix.at(0, 0)) {
+      if(matrix[1, 1] > matrix[0, 0]) {
         i = 1;
       }
-      if(matrix.at(2, 2) > matrix.at(i, i)) {
+      if(matrix[2, 2] > matrix[i, i]) {
         i = 2;
       }
       unsigned int j{next[i]};
       unsigned int k{next[j]};
 
-      T root{sqrt_switchable<mode>(matrix.at(i, i) - matrix.at(j, j) - matrix.at(k, k) + static_cast<T>(1.0))};
+      T root{sqrt_switchable<mode>(matrix[i, i] - matrix[j, j] - matrix[k, k] + static_cast<T>(1.0))};
       T *q[3]{&v.x, &v.y, &v.z};
       *q[i] = static_cast<T>(0.5) * root;
       root = static_cast<T>(0.5) / root;
-      w = (matrix.at(k, j) - matrix.at(j, k)) * root;
-      *q[j] = (matrix.at(j, i) + matrix.at(i, j)) * root;
-      *q[k] = (matrix.at(k, i) + matrix.at(i, k)) * root;
+      w = (matrix[k, j] - matrix[j, k]) * root;
+      *q[j] = (matrix[j, i] + matrix[i, j]) * root;
+      *q[k] = (matrix[k, i] + matrix[i, k]) * root;
     }
   }
 
@@ -631,8 +631,8 @@ public:
    * @param rhs Second quaternion for interpolation.
    * @return Result of interpolation.
    */
-  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard("Interpolation does not modify the input quaternions")]]
-  inline quaternion<T> constexpr slerp(T fact, quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
+  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard("Interpolation does not modify the input quaternions")]] __attribute__((__always_inline__))
+  inline quaternion<T> constexpr slerp(T fact, quaternion<T> const &rhs) const noexcept {
     T cos_theta = std::clamp(dot(rhs), static_cast<T>(-1), static_cast<T>(1));  // clamp the dot product, as it can sometimes exceed 1.0 and cause acos to return NaN
     quaternion<T> rhs_temp(rhs);
     if(cos_theta < static_cast<T>(0)) {                                         // dot(lhs, rhs) must be positive for smooth interpolation around poles; if not, flip rhs
@@ -697,8 +697,8 @@ public:
    * @param mat Rotation matrix used to compute quaternion.
    * @return quaternion representing rotation of matrix m.
    */
-  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard]]
-  inline static quaternion<T> constexpr from_matrix(matrix3<T> const &mat) noexcept __attribute__((__always_inline__)) {
+  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard]] __attribute__((__always_inline__))
+  inline static quaternion<T> constexpr from_matrix(matrix3<T> const &mat) noexcept {
     T const tr = mat(1, 1) + mat(2, 2) + mat(3, 3);
     if(tr >= epsilon<T>) {
       T const s = static_cast<T>(0.5) / static_cast<T>(sqrt_switchable<mode>(tr + static_cast<T>(1.0)));

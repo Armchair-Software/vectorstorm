@@ -6,6 +6,7 @@
 #include "vectorstorm/quat/quat_forward.h"
 #include "vectorstorm/vector/vector3_forward.h"
 #include "vectorstorm/vector/vector4_forward.h"
+#include "vectorstorm/sqrt_fast.h"
 #ifdef VECTORSTORM_NO_BOOST
   #include <array>
   #include <cstring>
@@ -382,7 +383,7 @@ public:
    * @param y Number of row (0..2)
    */
   [[nodiscard]]
-  inline T constexpr &at(unsigned int x, unsigned int y) noexcept __attribute__((__always_inline__)) {
+  inline T constexpr &at(unsigned int x, unsigned int y) __attribute__((__always_inline__)) {
     if(x > 2 || y > 2) throw std::out_of_range("Matrix access at() function accepts x and y values 0..2, given " + std::to_string(x) + ", " + std::to_string(y));
     return data[x * 3 + y];
   }
@@ -393,7 +394,7 @@ public:
    * @param y Number of row (0..2)
    */
   [[nodiscard]]
-  inline T constexpr const &at(unsigned int x, unsigned int y) const noexcept __attribute__((__always_inline__)) {
+  inline T constexpr const &at(unsigned int x, unsigned int y) const __attribute__((__always_inline__)) {
     if(x > 2 || y > 2) throw std::out_of_range("Matrix access at() function accepts x and y values 0..2, given " + std::to_string(x) + ", " + std::to_string(y));
     return data[x * 3 + y];
   }
@@ -710,8 +711,8 @@ public:
    * 2. normalises the tangent and makes sure it is orthogonal to normal.
    * 3. normalises binormal and makes sure it is orthogonal to both normal and tangent.
    */
-  template<sqrt_mode mode = sqrt_mode::std>
-  inline void constexpr orthonormalise() noexcept __attribute__((__always_inline__)) {
+  template<sqrt_mode mode = sqrt_mode::std> __attribute__((__always_inline__))
+  inline void constexpr orthonormalise() noexcept {
     // normalize x:
     T const x_length{static_cast<T>(sqrt_switchable<mode>(data[0] * data[0] + data[1] * data[1] + data[2] * data[2]))};
     data[0] /= x_length;
@@ -750,14 +751,14 @@ public:
     for(unsigned int i{0}; i != maxsteps; ++i) {
       matrix3<T> const Q{q.rotmatrix()};                                        // v*Q == q*v*conj(q)
       matrix3<T> const D{Q * *this * Q.transpose()};                            // A = Q^T*D*Q
-      vector3<T> offdiag(D.at(1, 2), D.at(0, 2), D.at(0, 1));                   // elements not on the diagonal
+      vector3<T> offdiag(D[1, 2], D[0, 2], D[0, 1]);                            // elements not on the diagonal
       vector3<T> om(std::fabs(offdiag.x), std::fabs(offdiag.y), std::fabs(offdiag.z)); // mag of each offdiag elem
       unsigned int const k{(om.x > om.y && om.x > om.z) ? 0 : (om.y > om.z) ? 1 : 2}; // index of largest element of offdiag
       if(offdiag[k] == 0.0f) break;                                             // diagonal already
       unsigned int const k1{(k + 1) % 3};
       unsigned int const k2{(k + 2) % 3};
 
-      T thet{(D.at(k2, k2) - D.at(k1, k1)) / (2 * offdiag[k])};
+      T thet{(D[k2, k2] - D[k1, k1]) / (2 * offdiag[k])};
       T const sgn{std::signbit(thet) ? -1 : 1};
       thet *= sgn;                                                              // make it positive
       T const t{sgn / (thet + ((thet < 1.E6) ? sqrt_switchable<mode>((thet * thet) + 1) : thet))}; // sign(T)/(|T|+sqrt(T^2+1))
@@ -808,7 +809,7 @@ public:
     for(unsigned int i{0}; i != 3; ++i) {
       lhs << "|\t";
       for(int j = 0; j != 3; ++j) {
-        lhs << +rhs.at(j, i) << "\t";
+        lhs << +rhs[j, i] << "\t";
       }
       lhs << "|" << std::endl;
     }

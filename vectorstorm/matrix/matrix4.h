@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <cstring>
 #include <array>
 #include <sstream>
@@ -564,7 +565,7 @@ public:
    * @param y Number of row (0..3)
    */
   [[nodiscard]]
-  inline T constexpr &at(unsigned int x, unsigned int y) noexcept __attribute__((__always_inline__)) {
+  inline T constexpr &at(unsigned int x, unsigned int y) __attribute__((__always_inline__)) {
     if(x > 2 || y > 2) throw std::out_of_range("Matrix access at() function accepts x and y values 0..3, given " + std::to_string(x) + ", " + std::to_string(y));
     return data[x * 4 + y];
   }
@@ -575,7 +576,7 @@ public:
    * @param y Number of row (0..3)
    */
   [[nodiscard]]
-  inline T constexpr const &at(unsigned int x, unsigned int y) const noexcept __attribute__((__always_inline__)) {
+  inline T constexpr const &at(unsigned int x, unsigned int y) const __attribute__((__always_inline__)) {
     if(x > 2 || y > 2) throw std::out_of_range("Matrix access at() function accepts x and y values 0..3, given " + std::to_string(x) + ", " + std::to_string(y));
     return data[x * 4 + y];
   }
@@ -1047,7 +1048,7 @@ public:
     for(int i = 0; i != 4; ++i) {
       lhs << "|\t";
       for(int j = 0; j != 4; ++j) {
-        lhs << +rhs.at(j, i) << "\t";
+        lhs << +rhs[j, i] << "\t";
       }
       lhs << "|" << std::endl;
     }
