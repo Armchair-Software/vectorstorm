@@ -372,7 +372,7 @@ public:
    * @param rhs A vector to move this bounding-box by.
    * @return Reference to this.
    */
-  template<typename RhsT> [[nodiscard]] __attribute__((__always_inline__))
+  template<typename RhsT> __attribute__((__always_inline__))
   inline aabb2<T> constexpr &operator+=(vector2<RhsT> const &rhs) noexcept {
     min.x += rhs.x;
     min.y += rhs.y;
