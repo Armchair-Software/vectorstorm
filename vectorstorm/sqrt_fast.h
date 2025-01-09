@@ -146,6 +146,42 @@ inline static float sqrt_sse(float number) noexcept {
 #warning "SSE is not available, performance may be impacted - check your compilation flags."
 #endif // __SSE__
 
+/**
+ * What square root mode to use, passed as a template parameter to functions like length()
+ */
+enum class sqrt_mode {
+  /**
+   * Use standard library std::sqrt
+   */
+  std,
+  /**
+   * Use fast approximation from sqrt_fast.h
+   */
+  fast,
+  /**
+   * Use rough version of fast approximation from sqrt_fast.h, with one step instead of two
+   */
+  coarse,
+};
+
+template<typename> static constexpr bool sqrt_always_false_v{false};
+
+template<sqrt_mode mode = sqrt_mode::std, typename T>
+inline T constexpr sqrt_switchable(T value) noexcept __attribute__((__always_inline__));
+
+template<sqrt_mode mode, typename T>
+inline T constexpr sqrt_switchable(T value) noexcept {
+  if constexpr(mode == sqrt_mode::std) {
+    return std::sqrt(value);
+  } else if constexpr(mode == sqrt_mode::fast) {
+    return sqrt_fast(value);
+  } else if constexpr(mode == sqrt_mode::coarse) {
+    return sqrt_coarse(value);
+  } else {
+    static_assert(sqrt_always_false_v<sqrt_mode>, "Unsupported sqrt_mode");
+  }
+};
+
 #ifdef VECTORSTORM_NAMESPACE
 }
 #endif

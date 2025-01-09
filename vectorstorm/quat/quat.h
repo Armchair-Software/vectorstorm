@@ -51,25 +51,6 @@ public:
   };
 
   /**
-   * What square root mode to use, passed as a template parameter to functions like length()
-   */
-  enum class sqrt_mode {
-    /**
-     * Use standard library std::sqrt
-     */
-    std,
-    /**
-     * Use fast approximation from sqrt_fast.h
-     */
-    fast,
-    /**
-     * Use rough version of fast approximation from sqrt_fast.h, with one step instead of two
-     */
-    coarse,
-  };
-
-
-  /**
    * quaternion constructor, sets quaternion to (0 + 0i + 0j + 0k).
    */
   inline constexpr quaternion() noexcept __attribute__((__always_inline__))
@@ -135,13 +116,14 @@ public:
   /**
    * Construct quaternion from rotation matrix.
    */
+  template<sqrt_mode mode = sqrt_mode::std>
   inline constexpr explicit quaternion(matrix3<T> const &matrix) noexcept __attribute__((__always_inline__)) {
     // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
     // article "quaternion Calculus and Fast Animation".
-    T const trace = matrix.at(0, 0) + matrix.at(1, 1) + matrix.at(2, 2);
+    T const trace{matrix.at(0, 0) + matrix.at(1, 1) + matrix.at(2, 2)};
     if(trace > 0) {
       // |w| > 1/2, may as well choose w > 1/2
-      T root = std::sqrt(trace + static_cast<T>(1.0));                          // 2w
+      T root{sqrt_switchable<mode>(trace + static_cast<T>(1.0))};               // 2w
       w = static_cast<T>(0.5) * root;
       root = static_cast<T>(0.5) / root;                                        // 1/(4w)
       v.x = (matrix.at(2, 1) - matrix.at(1, 2)) * root;
@@ -149,20 +131,20 @@ public:
       v.z = (matrix.at(1, 0) - matrix.at(0, 1)) * root;
     } else {
       // |w| <= 1/2
-      unsigned int constexpr next[3] = {1, 2, 0};
+      unsigned int constexpr next[3]{1, 2, 0};
 
-      unsigned int i = 0;
+      unsigned int i{0};
       if(matrix.at(1, 1) > matrix.at(0, 0)) {
         i = 1;
       }
       if(matrix.at(2, 2) > matrix.at(i, i)) {
         i = 2;
       }
-      unsigned int j = next[i];
-      unsigned int k = next[j];
+      unsigned int j{next[i]};
+      unsigned int k{next[j]};
 
-      T root = std::sqrt(matrix.at(i, i) - matrix.at(j, j) - matrix.at(k, k) + static_cast<T>(1.0));
-      T *q[3] = {&v.x, &v.y, &v.z};
+      T root{sqrt_switchable<mode>(matrix.at(i, i) - matrix.at(j, j) - matrix.at(k, k) + static_cast<T>(1.0))};
+      T *q[3]{&v.x, &v.y, &v.z};
       *q[i] = static_cast<T>(0.5) * root;
       root = static_cast<T>(0.5) / root;
       w = (matrix.at(k, j) - matrix.at(j, k)) * root;
@@ -170,13 +152,14 @@ public:
       *q[k] = (matrix.at(k, i) + matrix.at(i, k)) * root;
     }
   }
+  template<sqrt_mode mode = sqrt_mode::std>
   inline constexpr explicit quaternion(matrix4<T> const &matrix) noexcept __attribute__((__always_inline__)) {
     // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
     // article "quaternion Calculus and Fast Animation".
-    T const trace = matrix.at(0, 0) + matrix.at(1, 1) + matrix.at(2, 2);
+    T const trace{matrix.at(0, 0) + matrix.at(1, 1) + matrix.at(2, 2)};
     if(trace > 0) {
       // |w| > 1/2, may as well choose w > 1/2
-      T root = std::sqrt(trace + static_cast<T>(1.0));                          // 2w
+      T root{sqrt_switchable<mode>(trace + static_cast<T>(1.0))};               // 2w
       w = static_cast<T>(0.5) * root;
       root = static_cast<T>(0.5) / root;                                        // 1/(4w)
       v.x = (matrix.at(2, 1) - matrix.at(1, 2)) * root;
@@ -184,20 +167,20 @@ public:
       v.z = (matrix.at(1, 0) - matrix.at(0, 1)) * root;
     } else {
       // |w| <= 1/2
-      unsigned int constexpr next[3] = {1, 2, 0};
+      unsigned int constexpr next[3]{1, 2, 0};
 
-      unsigned int i = 0;
+      unsigned int i{0};
       if(matrix.at(1, 1) > matrix.at(0, 0)) {
         i = 1;
       }
       if(matrix.at(2, 2) > matrix.at(i, i)) {
         i = 2;
       }
-      unsigned int j = next[i];
-      unsigned int k = next[j];
+      unsigned int j{next[i]};
+      unsigned int k{next[j]};
 
-      T root = std::sqrt(matrix.at(i, i) - matrix.at(j, j) - matrix.at(k, k) + static_cast<T>(1.0));
-      T *q[3] = {&v.x, &v.y, &v.z};
+      T root{sqrt_switchable<mode>(matrix.at(i, i) - matrix.at(j, j) - matrix.at(k, k) + static_cast<T>(1.0))};
+      T *q[3]{&v.x, &v.y, &v.z};
       *q[i] = static_cast<T>(0.5) * root;
       root = static_cast<T>(0.5) / root;
       w = (matrix.at(k, j) - matrix.at(j, k)) * root;
@@ -265,6 +248,7 @@ public:
    * Addition operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline quaternion<T> constexpr operator+(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return quaternion<T>(w + rhs.w, v + rhs.v);
   }
@@ -273,6 +257,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline quaternion<T> constexpr operator*(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return quaternion<T>(w * rhs.w   - v.x * rhs.v.x - v.y * rhs.v.y - v.z * rhs.v.z,
                          w * rhs.v.x + v.x * rhs.w   + v.y * rhs.v.z - v.z * rhs.v.y,
@@ -284,6 +269,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline quaternion<T> constexpr operator*(T rhs) const noexcept __attribute__((__always_inline__)) {
     return quaternion<T>(w * rhs, v * rhs);
   }
@@ -292,6 +278,7 @@ public:
    * Division operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline quaternion<T> constexpr operator/(T rhs) const noexcept __attribute__((__always_inline__)) {
     return quaternion<T>(w / rhs, v / rhs);
   }
@@ -300,6 +287,7 @@ public:
    * Subtraction operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline quaternion<T> constexpr operator-(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return quaternion<T>(w - rhs.w, v - rhs.v);
   }
@@ -358,10 +346,11 @@ public:
   /**
    * Equality test operator
    * @param rhs Right hand side argument of binary operator.
-   * @note Test of equality is based of threshold epsilon value. To be two
-   * values equal, must satisfy this condition | lhs - rhs | < epsilon,
-   * for all quaternion coordinates.
+   * @note Test of equality is based of threshold epsilon value. If VECTORSTORM_SOFT_COMPARE is enabled,
+   * for two valuesto be considered equal, they must satisfy this condition | lhs - rhs | < epsilon
+   * for all quaternion coordinates.  Otherwise, exact equality comparison is used.
    */
+  [[nodiscard]]
   inline bool constexpr operator==(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     #ifdef VECTORSTORM_SOFT_COMPARE
       return (std::abs(w - rhs.w) < epsilon<T>) && v == rhs.v;
@@ -376,8 +365,9 @@ public:
   /**
    * Inequality test operator
    * @param rhs Right hand side argument of binary operator.
-   * @return not (lhs == rhs) :-P
+   * @return not (lhs == rhs)
    */
+  [[nodiscard]]
   inline bool constexpr operator!=(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return !(*this == rhs);
   }
@@ -385,6 +375,7 @@ public:
    * Dot product of two quaternions.
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline T constexpr dot(quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return (w * rhs.w) + v.dot(rhs.v);
   }
@@ -394,6 +385,7 @@ public:
    * Unary negate operator
    * @return negated quaternion
    */
+  [[nodiscard]]
   inline quaternion<T> constexpr operator-() const noexcept __attribute__((__always_inline__)) {
     return quaternion<T>(-w, -v);
   }
@@ -402,6 +394,7 @@ public:
    * Unary conjugate operator
    * @return conjugated quaternion
    */
+  [[nodiscard]]
   inline quaternion<T> constexpr operator~() const noexcept __attribute__((__always_inline__)) {
     return quaternion<T>(w, -v);
   }
@@ -413,6 +406,7 @@ public:
    * of length of two quaternion can be used just this value, instead
    * of more expensive length() method.
    */
+  [[nodiscard]]
   inline T constexpr length_sq() const noexcept __attribute__((__always_inline__)) {
     return w * w + v.length_sq();
   }
@@ -421,23 +415,15 @@ public:
    * Get length of quaternion.
    * @return Length of quaternion.
    */
-  template<sqrt_mode mode = sqrt_mode::std>
+  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard]]
   inline T __attribute__((__always_inline__)) constexpr length() const noexcept {
-    if constexpr(mode == sqrt_mode::std) {
-      return std::sqrt(length_sq());
-    } else if constexpr(mode == sqrt_mode::fast) {
-      return sqrt_fast(length_sq());
-    } else if constexpr(mode == sqrt_mode::coarse) {
-      return sqrt_coarse(length_sq());
-    } else {
-      static_assert(always_false_v<sqrt_mode>, "Unsupported sqrt_mode");
-    }
+    return sqrt_switchable<mode>(length_sq());
   }
   /**
    * Get length of quaternion, fast approximation.
    * @return Length of quaternion.
    */
-  [[deprecated("Use length<quat<T>::sqrt_mode::fast>()")]]
+  [[nodiscard]] [[deprecated("Use length<quat<T>::sqrt_mode::fast>()")]]
   inline T constexpr length_fast() const noexcept __attribute__((__always_inline__)) {
     return length<sqrt_mode::fast>();
   }
@@ -445,7 +431,7 @@ public:
    * Get length of quaternion, rougher fast approximation.
    * @return Length of quaternion.
    */
-  [[deprecated("Use length<quat<T>::sqrt_mode::coarse>()")]]
+  [[nodiscard]] [[deprecated("Use length<quat<T>::sqrt_mode::coarse>()")]]
   inline T constexpr length_faster() const noexcept __attribute__((__always_inline__)) {
     return length<sqrt_mode::coarse>();
   }
@@ -465,15 +451,15 @@ public:
   inline void constexpr normalise_faster() noexcept __attribute__((__always_inline__)) {
     normalise<sqrt_mode::coarse>();
   }
-  template<sqrt_mode mode = sqrt_mode::std>
+  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard]]
   inline quaternion<T> __attribute__((__always_inline__)) constexpr normalise_copy() const noexcept {
     return *this / length<mode>();
   }
-  [[deprecated("Use normalise_copy<quat<T>::sqrt_mode::fast>()")]]
+  [[nodiscard]] [[deprecated("Use normalise_copy<quat<T>::sqrt_mode::fast>()")]]
   inline quaternion<T> constexpr normalise_copy_fast() const noexcept __attribute__((__always_inline__)) {
     return normalise_copy<sqrt_mode::fast>();
   }
-  [[deprecated("Use normalise_copy<quat<T>::sqrt_mode::coarse>()")]]
+  [[nodiscard]] [[deprecated("Use normalise_copy<quat<T>::sqrt_mode::coarse>()")]]
   inline quaternion<T> constexpr normalise_copy_faster() const noexcept __attribute__((__always_inline__)) {
     return normalise_copy<sqrt_mode::coarse>();
   }
@@ -482,6 +468,7 @@ public:
     v = -v;
   }
 
+  [[nodiscard]]
   inline quaternion<T> constexpr conjugate_copy() const noexcept __attribute__((__always_inline__)) {
     return quaternion<T>(w, -v);
   }
@@ -502,6 +489,7 @@ public:
     *this /= l;
   }
 
+  [[nodiscard]]
   inline quaternion<T> constexpr invert_copy() const noexcept __attribute__((__always_inline__)) {
     return conjugate_copy() / length();
   }
@@ -513,6 +501,7 @@ public:
    * @param z Rotation around z axis (in degrees).
    * @return quaternion object representing transformation.
    */
+  [[nodiscard]]
   inline static quaternion<T> constexpr from_euler_angles(T x, T y, T z) noexcept __attribute__((__always_inline__)) {
     return quaternion<T>(from_axis_rot(vector3<T>(1, 0, 0), x) *
                          from_axis_rot(vector3<T>(0, 1, 0), y) *
@@ -526,6 +515,7 @@ public:
    * @param z Rotation around z axis (in radians).
    * @return quaternion object representing transformation.
    */
+  [[nodiscard]]
   inline static quaternion<T> constexpr from_euler_angles_rad(T x, T y, T z) noexcept __attribute__((__always_inline__)) {
     return quaternion<T>(from_axis_rot_rad(vector3<T>(1, 0, 0), x) *
                          from_axis_rot_rad(vector3<T>(0, 1, 0), y) *
@@ -537,6 +527,7 @@ public:
    * @param axis Unit vector expressing axis of rotation.
    * @param angleDeg Angle of rotation around axis (in degrees).
    */
+  [[nodiscard]]
   inline static quaternion<T> constexpr from_axis_rot(vector3<T> const &axis, T angleDeg) noexcept __attribute__((__always_inline__)) {
     return from_axis_rot_rad(axis, deg2rad(angleDeg));
   }
@@ -546,6 +537,7 @@ public:
    * @param axis Unit vector expressing axis of rotation.
    * @param angleRad Angle of rotation around axis (in radians).
    */
+  [[nodiscard]]
   inline static quaternion<T> constexpr from_axis_rot_rad(vector3<T> const &axis, T angleRad) noexcept __attribute__((__always_inline__)) {
     T temp_sin = static_cast<T>(0);
     T temp_cos = static_cast<T>(0);
@@ -559,31 +551,32 @@ public:
    * @param axis The axis around which the rotation is
    */
   inline void constexpr to_angle_axis(T &angle, vector3<T> &axis) const noexcept __attribute__((__always_inline__)) {
-    T const squareLength = v.length_sq();
-    if(squareLength != 0) {
-      angle = static_cast<T>(2) * std::acos(w);
-      axis = v / std::pow(squareLength, static_cast<T>(0.5));
-    } else {
+    T const square_length{v.length_sq()};
+    if(square_length == 0) {
       angle = static_cast<T>(0);
       axis.assign(static_cast<T>(1), static_cast<T>(0), static_cast<T>(0));
+      return;
     }
+    angle = static_cast<T>(2) * std::acos(w);
+    axis = v / std::pow(square_length, static_cast<T>(0.5));
   }
 
   /**
    * Converts quaternion into rotation matrix.
    * @return Rotation matrix expressing this quaternion.
    */
+  [[nodiscard]]
   inline matrix3<T> constexpr rotmatrix() const noexcept __attribute__((__always_inline__)) {
     return matrix3<T>(static_cast<T>(1) - static_cast<T>(2) * (v.y * v.y + v.z * v.z),
-                      static_cast<T>(2)                     * (v.x * v.y + v.z * w),
-                      static_cast<T>(2)                     * (v.x * v.z - v.y * w),
+                      static_cast<T>(2)                     * (v.x * v.y + v.z * w  ),
+                      static_cast<T>(2)                     * (v.x * v.z - v.y * w  ),
 
-                      static_cast<T>(2)                     * (v.x * v.y - v.z * w),
+                      static_cast<T>(2)                     * (v.x * v.y - v.z * w  ),
                       static_cast<T>(1) - static_cast<T>(2) * (v.x * v.x + v.z * v.z),
-                      static_cast<T>(2)                     * (v.y * v.z + v.x * w),
+                      static_cast<T>(2)                     * (v.y * v.z + v.x * w  ),
 
-                      static_cast<T>(2)                     * (v.x * v.z + v.y * w),
-                      static_cast<T>(2)                     * (v.y * v.z - v.x * w),
+                      static_cast<T>(2)                     * (v.x * v.z + v.y * w  ),
+                      static_cast<T>(2)                     * (v.y * v.z - v.x * w  ),
                       static_cast<T>(1) - static_cast<T>(2) * (v.x * v.x + v.y * v.y));
   }
 
@@ -593,19 +586,20 @@ public:
    * conversion method. But returns matrix of 4x4 elements.
    * @return Transformation matrix expressing this quaternion.
    */
+  [[nodiscard]]
   inline matrix4<T> constexpr transform() const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(static_cast<T>(1) - static_cast<T>(2) * (v.y * v.y + v.z * v.z),
-                      static_cast<T>(2)                     * (v.x * v.y + v.z * w),
-                      static_cast<T>(2)                     * (v.x * v.z - v.y * w),
+                      static_cast<T>(2)                     * (v.x * v.y + v.z * w  ),
+                      static_cast<T>(2)                     * (v.x * v.z - v.y * w  ),
                       static_cast<T>(0),
 
-                      static_cast<T>(2)                     * (v.x * v.y - v.z * w),
+                      static_cast<T>(2)                     * (v.x * v.y - v.z * w  ),
                       static_cast<T>(1) - static_cast<T>(2) * (v.x * v.x + v.z * v.z),
-                      static_cast<T>(2)                     * (v.y * v.z + v.x * w),
+                      static_cast<T>(2)                     * (v.y * v.z + v.x * w  ),
                       static_cast<T>(0),
 
-                      static_cast<T>(2)                     * (v.x * v.z + v.y * w),
-                      static_cast<T>(2)                     * (v.y * v.z - v.x * w),
+                      static_cast<T>(2)                     * (v.x * v.z + v.y * w  ),
+                      static_cast<T>(2)                     * (v.y * v.z - v.x * w  ),
                       static_cast<T>(1) - static_cast<T>(2) * (v.x * v.x + v.y * v.y),
                       static_cast<T>(0),
 
@@ -624,6 +618,7 @@ public:
    * [0.0 , 1.0], you can pass also values outside of this interval and you
    * can get result (extrapolation?)
    */
+  [[nodiscard("Interpolation does not modify the input quaternions")]]
   inline quaternion<T> constexpr lerp(T fact, quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return quaternion<T>((1 - fact) * w + fact * rhs.w, v.lerp(fact, rhs.v));
   }
@@ -636,6 +631,7 @@ public:
    * @param rhs Second quaternion for interpolation.
    * @return Result of interpolation.
    */
+  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard("Interpolation does not modify the input quaternions")]]
   inline quaternion<T> constexpr slerp(T fact, quaternion<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     T cos_theta = std::clamp(dot(rhs), static_cast<T>(-1), static_cast<T>(1));  // clamp the dot product, as it can sometimes exceed 1.0 and cause acos to return NaN
     quaternion<T> rhs_temp(rhs);
@@ -647,7 +643,7 @@ public:
     if(std::abs(theta) <= epsilon<T>) {
       return quaternion<T>{*this};
     } else {
-      T const sin_theta = static_cast<T>(std::sqrt(static_cast<T>(1) - cos_theta * cos_theta));
+      T const sin_theta = static_cast<T>(sqrt_switchable<mode>(static_cast<T>(1) - cos_theta * cos_theta));
       //if(std::abs(sin_theta) <= epsilon<T>) {
       #pragma GCC diagnostic push
       #pragma GCC diagnostic ignored "-Wfloat-equal"
@@ -675,6 +671,7 @@ public:
   /**
    * Gets string representation.
    */
+  [[nodiscard]]
   inline std::string CONSTEXPR_IF_NO_CLANG to_string() const noexcept __attribute__((__always_inline__)) {
     std::ostringstream oss;
     oss << *this;
@@ -700,10 +697,11 @@ public:
    * @param mat Rotation matrix used to compute quaternion.
    * @return quaternion representing rotation of matrix m.
    */
+  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard]]
   inline static quaternion<T> constexpr from_matrix(matrix3<T> const &mat) noexcept __attribute__((__always_inline__)) {
     T const tr = mat(1, 1) + mat(2, 2) + mat(3, 3);
     if(tr >= epsilon<T>) {
-      T const s = static_cast<T>(0.5) / static_cast<T>(std::sqrt(tr + static_cast<T>(1.0)));
+      T const s = static_cast<T>(0.5) / static_cast<T>(sqrt_switchable<mode>(tr + static_cast<T>(1.0)));
       return quaternion<T>(static_cast<T>(0.25)    / s,
                            (mat(3, 2) - mat(2, 3)) * s,
                            (mat(1, 3) - mat(3, 1)) * s,
@@ -711,7 +709,7 @@ public:
     } else {
       if(mat(1, 1) > mat(2, 2)) {
         if(mat(1, 1) > mat(3, 3)) {
-          T const s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + mat(1, 1) - mat(2, 2) - mat(3, 3)));
+          T const s = static_cast<T>(2.0) * static_cast<T>(sqrt_switchable<mode>(static_cast<T>(1.0) + mat(1, 1) - mat(2, 2) - mat(3, 3)));
           return quaternion<T>((mat(3, 2) - mat(2, 3)) / s,
                                static_cast<T>(0.25)    * s,
                                (mat(1, 2) + mat(2, 1)) / s,
@@ -719,23 +717,20 @@ public:
         }
       } else {
         if(mat(2, 2) > mat(3, 3)) {
-          T const s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + mat(2, 2) - mat(1, 1) - mat(3, 3)));
+          T const s = static_cast<T>(2.0) * static_cast<T>(sqrt_switchable<mode>(static_cast<T>(1.0) + mat(2, 2) - mat(1, 1) - mat(3, 3)));
           return quaternion<T>((mat(1, 3) - mat(3, 1)) / s,
                                (mat(1, 2) + mat(2, 1)) / s,
                                static_cast<T>(0.25)    * s,
                                (mat(2, 3) + mat(3, 2)) / s);
         }
       }
-      T const s = static_cast<T>(2.0) * static_cast<T>(std::sqrt(static_cast<T>(1.0) + mat(3, 3) - mat(1, 1) - mat(2, 2)));
+      T const s = static_cast<T>(2.0) * static_cast<T>(sqrt_switchable<mode>(static_cast<T>(1.0) + mat(3, 3) - mat(1, 1) - mat(2, 2)));
       return quaternion<T>((mat(2, 1) - mat(1, 2)) / s,
                            (mat(1, 3) + mat(3, 1)) / s,
                            (mat(2, 3) + mat(3, 2)) / s,
                            static_cast<T>(0.25)    * s);
     }
   }
-
-private:
-  template<typename> static constexpr bool always_false_v{false};
 };
 
 #ifdef VECTORSTORM_NAMESPACE

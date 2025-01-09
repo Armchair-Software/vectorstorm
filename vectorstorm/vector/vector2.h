@@ -67,24 +67,6 @@ public:
     T t;
   };
 
-  /**
-   * What square root mode to use, passed as a template parameter to functions like length()
-   */
-  enum class sqrt_mode {
-    /**
-     * Use standard library std::sqrt
-     */
-    std,
-    /**
-     * Use fast approximation from sqrt_fast.h
-     */
-    fast,
-    /**
-     * Use rough version of fast approximation from sqrt_fast.h, with one step instead of two
-     */
-    coarse,
-  };
-
   //----------------[ constructors ]--------------------------
   /**
    * Creates and sets to (0,0)
@@ -259,6 +241,7 @@ public:
    * @return For n = 0, reference to x coordinate, else reference to y
    * y coordinate.
    */
+  [[nodiscard]]
   inline constexpr T &operator[](unsigned int n) noexcept __attribute__((__always_inline__)) {
     return n == 0u ? x : y;
   }
@@ -269,6 +252,7 @@ public:
    * @return For n = 0, reference to x coordinate, else reference to y
    * y coordinate.
    */
+  [[nodiscard]]
   inline constexpr T const &operator[](unsigned int n) const noexcept __attribute__((__always_inline__)) {
     return n == 0u ? x : y;
   }
@@ -278,6 +262,7 @@ public:
    * Addition operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator+(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x + rhs.x, y + rhs.y);
   }
@@ -286,6 +271,7 @@ public:
    * Subtraction operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator-(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x - rhs.x, y - rhs.y);
   }
@@ -294,6 +280,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator*(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x * rhs.x, y * rhs.y);
   }
@@ -302,6 +289,7 @@ public:
    * Division operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator/(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x / rhs.x, y / rhs.y);
   }
@@ -310,6 +298,7 @@ public:
    * Modulo operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator%(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x % rhs.x, y % rhs.y);
   }
@@ -368,6 +357,7 @@ public:
    * Dot product of two vectors.
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline T constexpr dot(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return (x * rhs.x) +
            (y * rhs.y);
@@ -377,6 +367,7 @@ public:
    * Cross product of two vectors
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline T constexpr cross(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return (x * rhs.y) -
            (y * rhs.x);
@@ -387,6 +378,7 @@ public:
    * Addition operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator+(T rhs) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x + rhs, y + rhs);
   }
@@ -395,6 +387,7 @@ public:
    * Subtraction operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator-(T rhs) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x - rhs, y - rhs);
   }
@@ -403,6 +396,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator*(T rhs) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x * rhs, y * rhs);
   }
@@ -411,6 +405,7 @@ public:
    * Division operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator/(T rhs) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x / rhs, y / rhs);
   }
@@ -419,6 +414,7 @@ public:
    * Modulo operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator%(T rhs) const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(x % rhs, y % rhs);
   }
@@ -472,6 +468,7 @@ public:
    * | lhs.x - rhs.y | < epsilon must be satisfied for each coordinate.
    * Otherwise, direct equality comparison is used.
    */
+  [[nodiscard]]
   inline bool constexpr operator==(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     #ifdef VECTORSTORM_SOFT_COMPARE
       return (std::abs(x - rhs.x) < epsilon<T>) &&
@@ -490,22 +487,9 @@ public:
    * @param rhs Right hand side argument of binary operator.
    * @return not (lhs == rhs) :-P
    */
+  [[nodiscard]]
   inline bool constexpr operator!=(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return !(*this == rhs);
-  }
-  inline bool constexpr operator==(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
-    #ifdef VECTORSTORM_SOFT_COMPARE
-      return std::abs(x - rhs.x) < epsilon<T> &&
-             std::abs(y - rhs.y) < epsilon<T> &&
-             std::abs(z - rhs.z) < epsilon<T>;
-    #else
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wfloat-equal"
-      return x == rhs.x &&
-             y == rhs.y &&
-             z == rhs.z;
-      #pragma GCC diagnostic pop
-    #endif // VECTORSTORM_SOFT_COMPARE
   }
 
   /**
@@ -513,6 +497,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    * @note Returns true if all components are less than rhs' components.
    */
+  [[nodiscard]]
   inline bool constexpr operator<(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return (x < rhs.x) &&
            (y < rhs.y);
@@ -523,6 +508,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    * @note Returns true if all components are greater than rhs' components.
    */
+  [[nodiscard]]
   inline bool constexpr operator>(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return (x > rhs.x) &&
            (y > rhs.y);
@@ -533,6 +519,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    * @note Returns true if all components are less than or equal to rhs' components.
    */
+  [[nodiscard]]
   inline bool constexpr operator<=(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return (x <= rhs.x) &&
            (y <= rhs.y);
@@ -543,6 +530,7 @@ public:
    * @param rhs Right hand side argument of binary operator.
    * @note Returns true if all components are greater than or equal to rhs' components.
    */
+  [[nodiscard]]
   inline bool constexpr operator>=(vector2<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return (x >= rhs.x) &&
            (y >= rhs.y);
@@ -553,6 +541,7 @@ public:
    * Unary plus operator
    * @return vector with unary + applied to its components
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator+() const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(+x, +y);
   }
@@ -560,6 +549,7 @@ public:
    * Unary negate operator
    * @return negated vector
    */
+  [[nodiscard]]
   inline vector2<T> constexpr operator-() const noexcept __attribute__((__always_inline__)) {
     return vector2<T>(-x, -y);
   }
@@ -569,6 +559,7 @@ public:
    * Data access
    * @return pointer to the first element in the vector
    */
+  [[nodiscard]]
   inline T constexpr *data() noexcept __attribute__((__always_inline__)) {
     return &x;
   }
@@ -576,6 +567,7 @@ public:
    * Data access
    * @return pointer to the first element in the vector, const version
    */
+  [[nodiscard]]
   inline T constexpr const *data() const noexcept __attribute__((__always_inline__)) {
     return &x;
   }
@@ -584,6 +576,7 @@ public:
    * Get number of elements in the vector.
    * @return number of elements (will always return 2)
    */
+  [[nodiscard]]
   static inline unsigned int constexpr size() noexcept __attribute__((__always_inline__)) __attribute__((__const__)) {
     return 2u;
   }
@@ -597,6 +590,7 @@ public:
    * of length of two vector can be used just this value, instead
    * of more expensive length() method.
    */
+  [[nodiscard]]
   inline T constexpr length_sq() const noexcept __attribute__((__always_inline__)) {
     return x * x + y * y;
   }
@@ -605,23 +599,15 @@ public:
    * Get length of vector.
    * @return length of vector
    */
-  template<sqrt_mode mode = sqrt_mode::std>
+  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard]]
   inline T  __attribute__((__always_inline__))constexpr length() const noexcept {
-    if constexpr(mode == sqrt_mode::std) {
-      return std::sqrt(length_sq());
-    } else if constexpr(mode == sqrt_mode::fast) {
-      return sqrt_fast(length_sq());
-    } else if constexpr(mode == sqrt_mode::coarse) {
-      return sqrt_coarse(length_sq());
-    } else {
-      static_assert(always_false_v<sqrt_mode>, "Unsupported sqrt_mode");
-    }
+    return sqrt_switchable<mode>(length_sq());
   }
   /**
    * Get length of vector, fast approximation.
    * @return length of vector
    */
-  [[deprecated("Use length<vector2<T>::sqrt_mode::fast>()")]]
+  [[nodiscard]] [[deprecated("Use length<vector2<T>::sqrt_mode::fast>()")]]
   inline T constexpr length_fast() const noexcept __attribute__((__always_inline__)) __attribute__((__pure__)) {
     return length<sqrt_mode::fast>();
   }
@@ -629,7 +615,7 @@ public:
    * Get length of vector, rougher fast approximation.
    * @return length of vector
    */
-  [[deprecated("Use length<vector2<T>::sqrt_mode::coarse>()")]]
+  [[nodiscard]] [[deprecated("Use length<vector2<T>::sqrt_mode::coarse>()")]]
   inline T constexpr length_faster() const noexcept __attribute__((__always_inline__)) __attribute__((__pure__)) {
     return length<sqrt_mode::coarse>();
   }
@@ -637,12 +623,17 @@ public:
    * Return whether the vector is zero length - this is much faster than a full length calculation
    * @return whether vector is zero length
    */
+  [[nodiscard]]
   inline bool constexpr length_zero() const noexcept __attribute__((__always_inline__)) {
     /*
-    return x == static_cast<T>(0) &&
-           y == static_cast<T>(0);
+    #ifdef VECTORSTORM_SOFT_COMPARE
+      ...
+    #else
+      return x == static_cast<T>(0) &&
+             y == static_cast<T>(0);
+    #endif //VECTORSTORM_SOFT_COMPARE
     */
-    // the above may fail to detect cases where the sqrt of three tiny numbers would be zero
+    // the above may fail to detect cases where the sqrt of two tiny numbers would be zero
     return std::abs(x) < epsilon<T> &&
            std::abs(y) < epsilon<T>;
   }
@@ -662,15 +653,15 @@ public:
   inline void constexpr normalise_faster() noexcept __attribute__((__always_inline__)) {
     normalise<sqrt_mode::coarse>();
   }
-  template<sqrt_mode mode = sqrt_mode::std>
+  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard]]
   inline vector2<T> __attribute__((__always_inline__)) constexpr normalise_copy() const noexcept {
     return *this / length<mode>();
   }
-  [[deprecated("Use normalise_copy<vector2<T>::sqrt_mode::fast>()")]]
+  [[nodiscard]] [[deprecated("Use normalise_copy<vector2<T>::sqrt_mode::fast>()")]]
   inline vector2<T> constexpr normalise_copy_fast() const noexcept __attribute__((__always_inline__)) {
     return normalise_copy<sqrt_mode::fast>();
   }
-  [[deprecated("Use normalise_copy<vector2<T>::sqrt_mode::coarse>()")]]
+  [[nodiscard]] [[deprecated("Use normalise_copy<vector2<T>::sqrt_mode::coarse>()")]]
   inline vector2<T> constexpr normalise_copy_faster() const noexcept __attribute__((__always_inline__)) {
     return normalise_copy<sqrt_mode::coarse>();
   }
@@ -685,7 +676,7 @@ public:
       normalise<mode>();
     }
   }
-  template<sqrt_mode mode = sqrt_mode::std>
+  template<sqrt_mode mode = sqrt_mode::std> [[nodiscard]]
   inline vector2<T> __attribute__((__always_inline__)) constexpr normalise_safe_copy() const noexcept {
     if(length_zero()) {
       return {};
@@ -701,6 +692,7 @@ public:
     x = std::abs(x);
     y = std::abs(y);
   }
+  [[nodiscard]]
   inline vector2<T> constexpr abs_copy() const __attribute__((__always_inline__)) {
     return vector2<T>(std::abs(x), std::abs(y));
   }
@@ -737,6 +729,7 @@ public:
    * [0.0 , 1.0], you can pass also values outside of this interval and you
    * can get result (extrapolation?)
    */
+  [[nodiscard("Interpolation does not modify the input vectors")]]
   inline vector2<T> constexpr lerp(T fact, vector2<T> const &r) const noexcept __attribute__((__always_inline__)) {
     return (*this) + (r - (*this)) * fact;
   }
@@ -747,6 +740,7 @@ public:
    * @return Pointer to internally stored (in management of class vector2<T>)
    * used for passing vector2<T> values to gl*2[fd] functions.
    */
+  [[nodiscard]]
   inline constexpr operator T*() noexcept __attribute__((__always_inline__)) {
     return reinterpret_cast<T*>(this);
   }
@@ -755,6 +749,7 @@ public:
    * @return Constant Pointer to internally stored (in management of class vector2<T>)
    * used for passing vector2<T> values to gl*2[fd] functions.
    */
+  [[nodiscard]]
   inline constexpr operator const T*() const noexcept __attribute__((__always_inline__)) {
     return reinterpret_cast<T const*>(this);
   }
@@ -774,6 +769,7 @@ public:
   /**
    * Gets string representation.
    */
+  [[nodiscard]]
   inline std::string CONSTEXPR_IF_NO_CLANG to_string() const noexcept __attribute__((__always_inline__)) {
     std::ostringstream oss;
     oss << *this;
@@ -788,7 +784,7 @@ public:
    * @param line2start The start coordinates of the first line
    * @param line2end The end coordinates of the first line
    */
-  template<typename FromT> __attribute__((__always_inline__))
+  template<typename FromT> [[nodiscard]] __attribute__((__always_inline__))
   inline bool constexpr get_line_intersection(vector2<FromT> const &line1start,
                                               vector2<FromT> const &line1end,
                                               vector2<FromT> const &line2start,
@@ -814,7 +810,7 @@ public:
    * @param line2start The start coordinates of the first line
    * @param line2end The end coordinates of the first line
    */
-  template<typename FromT> __attribute__((__always_inline__))
+  template<typename FromT> [[nodiscard]] __attribute__((__always_inline__))
   inline static bool constexpr do_lines_intersect(vector2<FromT> const &line1start,
                                                   vector2<FromT> const &line1end,
                                                   vector2<FromT> const &line2start,
@@ -834,6 +830,7 @@ public:
   /**
    * Gets a 3D vector equivalent populating the X and Y axes
    */
+  [[nodiscard]]
   inline vector3<T> constexpr to_3d_xy() const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x, y, 0);
   }
@@ -841,11 +838,10 @@ public:
   /**
    * Gets a 3D vector equivalent populating the X and Z axes
    */
+  [[nodiscard]]
   inline vector3<T> constexpr to_3d_xz() const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(x, 0, z);
   }
-private:
-  template<typename> static constexpr bool always_false_v{false};
 };
 
 #ifdef VECTORSTORM_NAMESPACE

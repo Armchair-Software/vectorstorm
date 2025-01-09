@@ -191,6 +191,7 @@ public:
    * @param yDeg Angle (in degrees) of rotation around axis Y.
    * @param zDeg Angle (in degrees) of rotation around axis Z.
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_rotation_from_euler_angles(T xDeg, T yDeg, T zDeg) noexcept __attribute__((__always_inline__)) {
     return create_rotation_from_euler_angles_rad(deg2rad(xDeg), deg2rad(yDeg), deg2rad(zDeg));
   }
@@ -201,6 +202,7 @@ public:
    * @param yRads Angle (in radians) of rotation around axis Y.
    * @param zRads Angle (in radians) of rotation around axis Z.
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_rotation_from_euler_angles_rad(T xRads, T yRads, T zRads) noexcept __attribute__((__always_inline__)) {
     return matrix3<T>::create_rotation_from_euler_angles_rad(xRads, yRads, zRads).get_transform();
   }
@@ -210,6 +212,7 @@ public:
    * @param axis Axis to rotate around.
    * @param angle Angle (in degrees) of rotation around axis.
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_rotation_around_axis(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) {
     return create_rotation_around_axis_rad(axis, deg2rad(angle));
   }
@@ -219,11 +222,11 @@ public:
    * @param axis Axis to rotate around.
    * @param angle Angle (in radians) of rotation around axis.
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_rotation_around_axis_rad(vector3<T> const &axis, T angle) noexcept __attribute__((__always_inline__)) {
     return matrix3<T>::create_rotation_around_axis_rad(axis, angle).get_transform();
   }
 
-  /// Creates translation matrix
   /**
    * Creates translation matrix.
    * @param x X-direction translation
@@ -231,6 +234,7 @@ public:
    * @param z Z-direction translation
    * @param w for W-coordinate translation (implicitly set to 1)
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_translation(T x, T y, T z, T w = 1) noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
                       static_cast<T>(0), static_cast<T>(1), static_cast<T>(0), static_cast<T>(0),
@@ -243,6 +247,7 @@ public:
    *
    * @param v Vector of translation to be set.
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_translation(vector3<T> const &v) noexcept __attribute__((__always_inline__)) {
     return create_translation(v.x, v.y, v.z);
   }
@@ -252,6 +257,7 @@ public:
    *
    * @param v Vector of translation to be set.
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_translation(vector4<T> const &v) noexcept __attribute__((__always_inline__)) {
     return create_translation(v.x, v.y, v.z, v.w);
   }
@@ -264,6 +270,7 @@ public:
    * @param sz Scale in Z-axis
    * @return Transform matrix 4x4 with scale transformation.
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_scale(T sx, T sy, T sz) noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(sx,                static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
                       static_cast<T>(0), sy,                static_cast<T>(0), static_cast<T>(0),
@@ -277,6 +284,7 @@ public:
    * @param to Vector to rotate to.
    * @return An instance of matrix4<T> representing rotation between the two vectors.
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_rotation_between_vectors(vector3<T> const &from, vector3<T> const &to) noexcept __attribute__((__always_inline__)) {
     return matrix3<T>::create_rotation_between_vectors(from, to).get_transform();
   }
@@ -287,6 +295,7 @@ public:
    * @param up_dir Direction of up vector
    * @return Resulting matrix that's oriented to the target vector
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_rotation_aligned_to_vector(vector3<T> const &target, vector3<T> const &up_dir) noexcept __attribute__((__always_inline__)) {
     return matrix3<T>::create_rotation_aligned_to_vector(target, up_dir).get_transform();
   }
@@ -298,6 +307,7 @@ public:
    * @param up_dir Direction of up vector
    * @return Resulting view matrix that's looking at the target point
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_look_at(vector3<T> const &eye_pos, vector3<T> const &target_pos, vector3<T> const &up_dir) noexcept __attribute__((__always_inline__)) {
     vector3<T> const forward((target_pos - eye_pos).normalise_copy());
     vector3<T> const side(forward.cross(up_dir).normalise_safe_copy());         // Side = forward x up
@@ -335,6 +345,7 @@ public:
    * @param far_plane Specify the distance to the far depth clipping plane.  Distance must be positive.
    * @return Projection matrix for specified frustum.
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_frustum(T left, T right, T bottom, T top, T near_plane, T far_plane) noexcept __attribute__((__always_inline__)) {
     /*
      *    2 near
@@ -385,6 +396,7 @@ public:
    * @param far_plane Specify the distance to the farther depth clipping plane. This value is negative if the plane is to be behind the viewer.
    * @return Othrographic projection matrix.
    */
+  [[nodiscard]]
   inline static matrix4<T> constexpr create_ortho(T left, T right, T bottom, T top, T near_plane, T far_plane) noexcept __attribute__((__always_inline__)) {
     /*      2
      *  ------------       0              0              tx
@@ -429,7 +441,7 @@ public:
    * @param arr An array of elements for 4x4 matrix in row major order.
    * @return An instance of matrix4<T> representing @a arr
    */
-  template<typename FromT> __attribute__((__always_inline__))
+  template<typename FromT> [[nodiscard]] __attribute__((__always_inline__))
   inline static matrix4<T> constexpr from_row_major_array(FromT const *arr) noexcept {
     return matrix4<T>(static_cast<T>(arr[0]), static_cast<T>(arr[4]), static_cast<T>(arr[ 8]), static_cast<T>(arr[12]),
                       static_cast<T>(arr[1]), static_cast<T>(arr[5]), static_cast<T>(arr[ 9]), static_cast<T>(arr[13]),
@@ -443,7 +455,7 @@ public:
    * @param arr An array of elements for 4x4 matrix in column major order.
    * @return An instance of matrix4<T> representing @a arr
    */
-  template<typename FromT> __attribute__((__always_inline__))
+  template<typename FromT> [[nodiscard]] __attribute__((__always_inline__))
   inline static matrix4<T> constexpr from_column_major_array(FromT const *arr) noexcept {
     return matrix4<T>(static_cast<T>(arr[ 0]), static_cast<T>(arr[ 1]), static_cast<T>(arr[ 2]), static_cast<T>(arr[ 3]),
                       static_cast<T>(arr[ 4]), static_cast<T>(arr[ 5]), static_cast<T>(arr[ 6]), static_cast<T>(arr[ 7]),
@@ -457,7 +469,7 @@ public:
    * @param arr An array of elements for 3x4 matrix in row major order.
    * @return An instance of matrix4<T> representing @a arr
    */
-  template<typename FromT> __attribute__((__always_inline__))
+  template<typename FromT> [[nodiscard]] __attribute__((__always_inline__))
   inline static matrix4<T> constexpr from_row_major_34_array(FromT const *arr) noexcept {
     return matrix4<T>(static_cast<T>(arr[0]), static_cast<T>(arr[4]), static_cast<T>(arr[ 8]), static_cast<T>(0),
                       static_cast<T>(arr[1]), static_cast<T>(arr[5]), static_cast<T>(arr[ 9]), static_cast<T>(0),
@@ -474,6 +486,7 @@ public:
    * | lhs[i] - rhs[i] | < epsilon,
    * same for y-coordinate, z-coordinate, and w-coordinate.
    */
+  [[nodiscard]]
   inline bool constexpr operator==(matrix4<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     #ifdef VECTORSTORM_SOFT_COMPARE
       return std::abs(data[ 0] - rhs.data[ 0]) < epsilon<T> &&
@@ -520,26 +533,50 @@ public:
    * @param rhs Right hand side argument of binary operator.
    * @return not (lhs == rhs) :-P
    */
+  [[nodiscard]]
   inline bool constexpr operator!=(matrix4<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return !(*this == rhs);
   }
 
   //---------------------[ access operators ]---------------------------------
   /**
-   * Get reference to element at postion (x,y).
+   * Get reference to element at position (x,y).
    * @param x Number of column (0..3)
    * @param y Number of row (0..3)
    */
-  inline T constexpr &at(int x, int y) noexcept __attribute__((__always_inline__)) {
+  [[nodiscard]]
+  inline T constexpr &operator[](unsigned int x, unsigned int y) noexcept __attribute__((__always_inline__)) {
+    return data[x * 4 + y];
+  }
+  /**
+   * Get reference to element at position (x,y).
+   * @param x Number of column (0..3)
+   * @param y Number of row (0..3)
+   */
+  [[nodiscard]]
+  inline T constexpr const &operator[](unsigned int x, unsigned int y) const noexcept __attribute__((__always_inline__)) {
     return data[x * 4 + y];
   }
 
   /**
-   * Get constant reference to element at position (x,y).
+   * Get reference to element at postion (x,y).  Throws an exception if out of range.
    * @param x Number of column (0..3)
    * @param y Number of row (0..3)
    */
-  inline T constexpr const &at(int x, int y) const noexcept __attribute__((__always_inline__)) {
+  [[nodiscard]]
+  inline T constexpr &at(unsigned int x, unsigned int y) noexcept __attribute__((__always_inline__)) {
+    if(x > 2 || y > 2) throw std::out_of_range("Matrix access at() function accepts x and y values 0..3, given " + std::to_string(x) + ", " + std::to_string(y));
+    return data[x * 4 + y];
+  }
+
+  /**
+   * Get constant reference to element at position (x,y).  Throws an exception if out of range.
+   * @param x Number of column (0..3)
+   * @param y Number of row (0..3)
+   */
+  [[nodiscard]]
+  inline T constexpr const &at(unsigned int x, unsigned int y) const noexcept __attribute__((__always_inline__)) {
+    if(x > 2 || y > 2) throw std::out_of_range("Matrix access at() function accepts x and y values 0..3, given " + std::to_string(x) + ", " + std::to_string(y));
     return data[x * 4 + y];
   }
 
@@ -548,8 +585,10 @@ public:
    * @param i Number of row (1..4)
    * @param j Number of column (1..4)
    */
-  inline T constexpr &operator()(int i, int j) noexcept __attribute__((__always_inline__)) {
-    return data[(j - 1) * 4 + i - 1];
+  [[nodiscard]] [[deprecated("Use either multidimensional operator[] or .at(), counting from 0")]]
+  inline T constexpr &operator()(unsigned int i, unsigned int j) noexcept __attribute__((__always_inline__)) {
+    assert(j != 0 && j < 5);
+    return operator[](j - 1, i - 1);
   }
 
   /**
@@ -557,8 +596,10 @@ public:
    * @param i Number of row (1..4)
    * @param j Number of column (1..4)
    */
-  inline T constexpr const &operator()(int i, int j) const noexcept __attribute__((__always_inline__)) {
-    return data[(j - 1) * 4 + i - 1];
+  [[nodiscard]] [[deprecated("Use either multidimensional operator[] or .at(), counting from 0")]]
+  inline T constexpr const &operator()(unsigned int i, unsigned int j) const noexcept __attribute__((__always_inline__)) {
+    assert(j != 0 && j < 5);
+    return operator[](j - 1, i - 1);
   }
 
   /**
@@ -576,8 +617,9 @@ public:
   /**
    * Returns translation part of matrix.
    */
+  [[nodiscard]]
   inline vector3<T> constexpr get_translation() const noexcept __attribute__((__always_inline__)) {
-    return vector3<T>(data[12], data[13], data[14]);
+    return vector3<T>{data[12], data[13], data[14]};
   }
 
   /**
@@ -600,10 +642,11 @@ public:
   /**
    * Returns rotation (matrix 3x3) part of matrix.
    */
+  [[nodiscard]]
   inline matrix3<T> constexpr get_rotation() const noexcept __attribute__((__always_inline__)) {
-    return matrix3<T>(data[ 0], data[ 1], data[ 2],
+    return matrix3<T>{data[ 0], data[ 1], data[ 2],
                       data[ 4], data[ 5], data[ 6],
-                      data[ 8], data[ 9], data[10]);
+                      data[ 8], data[ 9], data[10]};
   }
 
   /**
@@ -621,8 +664,9 @@ public:
   /**
    * Returns scale part of matrix.
    */
+  [[nodiscard]]
   inline vector3<T> constexpr get_scale() const noexcept __attribute__((__always_inline__)) {
-    return vector3<T>(data[0], data[5], data[10]);
+    return vector3<T>{data[0], data[5], data[10]};
   }
 
   /**
@@ -713,6 +757,7 @@ public:
    * Addition operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline matrix4<T> constexpr operator+(matrix4<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(data[ 0] + rhs.data[ 0], data[ 1] + rhs.data[ 1], data[ 2] + rhs.data[ 2], data[ 3] + rhs.data[ 3],
                       data[ 4] + rhs.data[ 4], data[ 5] + rhs.data[ 5], data[ 6] + rhs.data[ 6], data[ 7] + rhs.data[ 7],
@@ -724,6 +769,7 @@ public:
    * Subtraction operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline matrix4<T> constexpr operator-(matrix4<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(data[ 0] - rhs.data[ 0], data[ 1] - rhs.data[ 1], data[ 2] - rhs.data[ 2], data[ 3] - rhs.data[ 3],
                       data[ 4] - rhs.data[ 4], data[ 5] - rhs.data[ 5], data[ 6] - rhs.data[ 6], data[ 7] - rhs.data[ 7],
@@ -736,6 +782,7 @@ public:
    * Addition operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline matrix4<T> constexpr operator+(T rhs) const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(data[ 0] + rhs, data[ 1] + rhs, data[ 2] + rhs, data[ 3] + rhs,
                       data[ 4] + rhs, data[ 5] + rhs, data[ 6] + rhs, data[ 7] + rhs,
@@ -747,6 +794,7 @@ public:
    * Subtraction operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline matrix4<T> constexpr operator-(T rhs) const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(data[ 0] - rhs, data[ 1] - rhs, data[ 2] - rhs, data[ 3] - rhs,
                       data[ 4] - rhs, data[ 5] - rhs, data[ 6] - rhs, data[ 7] - rhs,
@@ -758,6 +806,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline matrix4<T> constexpr operator*(T rhs) const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(data[ 0] * rhs, data[ 1] * rhs, data[ 2] * rhs, data[ 3] * rhs,
                       data[ 4] * rhs, data[ 5] * rhs, data[ 6] * rhs, data[ 7] * rhs,
@@ -769,6 +818,7 @@ public:
    * Division operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline matrix4<T> constexpr operator/(T rhs) const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(data[ 0] / rhs, data[ 1] / rhs, data[ 2] / rhs, data[ 3] / rhs,
                       data[ 4] / rhs, data[ 5] / rhs, data[ 6] / rhs, data[ 7] / rhs,
@@ -817,6 +867,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector4<T> constexpr operator*(vector4<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector4<T>(data[0] * rhs.x + data[4] * rhs.y + data[ 8] * rhs.z + data[12] * rhs.w,
                       data[1] * rhs.x + data[5] * rhs.y + data[ 9] * rhs.z + data[13] * rhs.w,
@@ -828,6 +879,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline vector3<T> constexpr operator*(vector3<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return vector3<T>(data[0] * rhs.x + data[4] * rhs.y + data[ 8] * rhs.z + data[12],
                       data[1] * rhs.x + data[5] * rhs.y + data[ 9] * rhs.z + data[13],
@@ -838,6 +890,7 @@ public:
    * Multiplication operator
    * @param rhs Right hand side argument of binary operator.
    */
+  [[nodiscard]]
   inline matrix4<T> constexpr operator*(matrix4<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(rhs.data[ 0] * data[ 0] + rhs.data[ 1] * data[ 4] + rhs.data[ 2] * data[ 8] + rhs.data[ 3] * data[12],
                       rhs.data[ 0] * data[ 1] + rhs.data[ 1] * data[ 5] + rhs.data[ 2] * data[ 9] + rhs.data[ 3] * data[13],
@@ -876,6 +929,7 @@ public:
    * @return Determinant of matrix
    * @note This function does 3 * 4 * 6 mul, 3 * 6 add.
    */
+  [[nodiscard]]
   inline T constexpr det() const noexcept __attribute__((__always_inline__)) {
     return   data[12] * data[9] * data[6]  * data[3]  - data[8] * data[13] * data[6]  * data[3]
            - data[12] * data[5] * data[10] * data[3]  + data[4] * data[13] * data[10] * data[3]
@@ -902,6 +956,7 @@ public:
    * @note This is a little bit time consuming operation
    * (16 * 6 * 3 mul, 16 * 5 add + det() + mul() functions)
    */
+  [[nodiscard("Inverse does not modify the input matrix")]]
   inline matrix4<T> constexpr inverse() const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(data[9]  * data[14] * data[7]  - data[13] * data[10] * data[7]  + data[13] * data[6]  * data[11] -
                       data[5]  * data[14] * data[11] - data[9]  * data[6]  * data[15] + data[5]  * data[10] * data[15],
@@ -940,6 +995,7 @@ public:
   /**
    * Transpose matrix.
    */
+  [[nodiscard("Transpose does not modify the input matrix")]]
   inline matrix4<T> constexpr transpose() const noexcept __attribute__((__always_inline__)) {
     return matrix4<T>(data[0], data[4], data[8],  data[12],
                       data[1], data[5], data[9],  data[13],
@@ -956,6 +1012,7 @@ public:
    * [0.0 , 1.0], you can pass also values outside of this interval and you
    * can get result (extrapolation?)
    */
+  [[nodiscard("Interpolation does not modify the input matrix")]]
   inline matrix4<T> constexpr lerp(T fact, matrix4<T> const &rhs) const noexcept __attribute__((__always_inline__)) {
     return (*this) + (rhs - (*this)) * fact;
   }
@@ -1000,6 +1057,7 @@ public:
   /**
    * Gets string representation.
    */
+  [[nodiscard]]
   inline std::string CONSTEXPR_IF_NO_CLANG to_string() const noexcept __attribute__((__always_inline__)) {
     std::ostringstream oss;
     oss << *this;
@@ -1025,7 +1083,7 @@ namespace std {
  * Gets matrix containing minimal values of @a a and @a b coordinates.
  * @return Matrix of minimal coordinates.
  */
-template<typename T>
+template<typename T> [[nodiscard]]
 inline constexpr matrix4<T> min(matrix4<T> const &a, const matrix4<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
 template<typename T>
 inline constexpr matrix4<T> min(matrix4<T> const &a, const matrix4<T> &b) noexcept {
@@ -1046,7 +1104,7 @@ inline constexpr matrix4<T> min(matrix4<T> const &a, const matrix4<T> &b) noexce
  * Gets matrix containing maximal values of @a a and @a b coordinates.
  * @return Matrix of maximal coordinates.
  */
-template<typename T>
+template<typename T> [[nodiscard]]
 inline constexpr matrix4<T> max(matrix4<T> const &a, const matrix4<T> &b) noexcept __attribute__((__always_inline__)) __attribute__ ((pure));
 template<typename T>
 inline constexpr matrix4<T> max(matrix4<T> const &a, const matrix4<T> &b) noexcept {
