@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <type_traits>
 #include <sstream>
 #include "vectorstorm/epsilon.h"
 #include "vectorstorm/sincos.h"
@@ -90,10 +91,7 @@ public:
    * Copy constructor.
    * @param src Source of data for new created instance.
    */
-  inline constexpr explicit vector2(vector2<T> const &src) noexcept __attribute__((__always_inline__))
-    : x(src.x),
-      y(src.y) {
-  }
+  inline constexpr explicit vector2(vector2<T> const &src) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Copy casting constructor.
@@ -147,10 +145,7 @@ public:
    * Move constructor.
    * @param src Source of data for new created vector2 instance.
    */
-  inline constexpr vector2(vector2<T> &&src) noexcept __attribute__((__always_inline__))
-    : x(std::move(src.x)),
-      y(std::move(src.y)) {
-  }
+  inline constexpr vector2(vector2<T> &&src) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Move casting constructor.
@@ -208,21 +203,13 @@ public:
    * Copy operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector2<T> constexpr &operator=(vector2<T> const &rhs) noexcept __attribute__((__always_inline__)) {
-    x = rhs.x;
-    y = rhs.y;
-    return *this;
-  }
+  inline vector2<T> constexpr &operator=(vector2<T> const &rhs) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Move assignment operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector2<T> constexpr &operator=(vector2<T> &&rhs) noexcept __attribute__((__always_inline__)) {
-    x = std::move(rhs.x);
-    y = std::move(rhs.y);
-    return *this;
-  }
+  inline vector2<T> constexpr &operator=(vector2<T> &&rhs) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Move assignment casting operator.
@@ -573,6 +560,34 @@ public:
   }
 
   /**
+   * Iteration helpers for range-based for
+   */
+  [[nodiscard]]
+  inline T constexpr *begin() noexcept __attribute__((__always_inline__)) {
+    return data();
+  }
+  [[nodiscard]]
+  inline T constexpr *end() noexcept __attribute__((__always_inline__)) {
+    return data() + size();
+  }
+  [[nodiscard]]
+  inline T constexpr const *begin() const noexcept __attribute__((__always_inline__)) {
+    return data();
+  }
+  [[nodiscard]]
+  inline T constexpr const *end() const noexcept __attribute__((__always_inline__)) {
+    return data() + size();
+  }
+  [[nodiscard]]
+  inline T constexpr const *cbegin() const noexcept __attribute__((__always_inline__)) {
+    return begin();
+  }
+  [[nodiscard]]
+  inline T constexpr const *cend() const noexcept __attribute__((__always_inline__)) {
+    return end();
+  }
+
+  /**
    * Get number of elements in the vector.
    * @return number of elements (will always return 2)
    */
@@ -843,6 +858,9 @@ public:
     return vector3<T>(x, 0, z);
   }
 };
+
+static_assert(std::is_trivially_copyable_v<vector2<int>>);
+static_assert(std::is_trivially_copyable_v<vector2<float>>);
 
 #ifdef VECTORSTORM_NAMESPACE
 }

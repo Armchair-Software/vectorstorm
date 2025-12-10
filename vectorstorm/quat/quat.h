@@ -1,5 +1,6 @@
 #pragma once
 
+#include <type_traits>
 #include "vectorstorm/epsilon.h"
 #include "vectorstorm/sincos.h"
 #include "vectorstorm/deg2rad.h"
@@ -61,10 +62,7 @@ public:
   /**
    * Copy constructor.
    */
-  inline constexpr explicit quaternion(quaternion<T> const &q) noexcept __attribute__((__always_inline__))
-    : w(q.w),
-      v(q.v) {
-  }
+  inline constexpr explicit quaternion(quaternion<T> const &q) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Copy casting constructor.
@@ -78,10 +76,7 @@ public:
   /**
    * Move constructor.
    */
-  inline constexpr quaternion(quaternion<T> &&q) noexcept __attribute__((__always_inline__))
-    : w(std::move(q.w)),
-      v(std::move(q.v)) {
-  }
+  inline constexpr quaternion(quaternion<T> &&q) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Move casting constructor.
@@ -206,11 +201,7 @@ public:
    * Copy operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline quaternion<T> constexpr &operator=(quaternion<T> const &rhs) noexcept __attribute__((__always_inline__)) {
-    v = rhs.v;
-    w = rhs.w;
-    return *this;
-  }
+  inline quaternion<T> constexpr &operator=(quaternion<T> const &rhs) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Copy convert operator
@@ -227,11 +218,7 @@ public:
    * Move assignment operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline quaternion<T> constexpr &operator=(quaternion<T> &&rhs) noexcept __attribute__((__always_inline__)) {
-    v = std::move(rhs.v);
-    w = std::move(rhs.w);
-    return *this;
-  }
+  inline quaternion<T> constexpr &operator=(quaternion<T> &&rhs) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Move assignment convert operator

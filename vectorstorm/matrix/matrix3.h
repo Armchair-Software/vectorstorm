@@ -1,5 +1,6 @@
 #pragma once
 
+#include <type_traits>
 #include "vectorstorm/epsilon.h"
 #include "matrix3_forward.h"
 #include "matrix4_forward.h"
@@ -65,11 +66,7 @@ public:
    * Copy constructor.
    * @param src Data source for new created instance of matrix3
    */
-  inline constexpr explicit matrix3(matrix3<T> const &src) noexcept __attribute__((__always_inline__))
-    : data{src.data[0], src.data[1], src.data[2],
-           src.data[3], src.data[4], src.data[5],
-           src.data[6], src.data[7], src.data[8]} {
-  }
+  inline constexpr explicit matrix3(matrix3<T> const &src) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Copy constructor from matrix3wgpu.
@@ -96,9 +93,7 @@ public:
    * Move constructor.
    * @param src Data source for new created instance of matrix3
    */
-  inline constexpr matrix3(matrix3<T> &&src) noexcept __attribute__((__always_inline__))
-    : data(std::move(src.data)) {
-  }
+  inline constexpr matrix3(matrix3<T> &&src) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Move casting constructor.
@@ -436,10 +431,7 @@ public:
    * Copy operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline matrix3<T> constexpr &operator=(matrix3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
-    std::memcpy(data.data(), rhs.data.data(), sizeof(T) * 9);
-    return *this;
-  }
+  inline matrix3<T> constexpr &operator=(matrix3<T> const &rhs) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Copy casting operator
@@ -477,10 +469,7 @@ public:
    * Move assignment operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline matrix3<T> constexpr &operator=(matrix3<T> &&rhs) noexcept __attribute__((__always_inline__)) {
-    data = std::move(rhs.data);
-    return *this;
-  }
+  inline matrix3<T> constexpr &operator=(matrix3<T> &&rhs) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Move assignment casting operator
@@ -853,19 +842,13 @@ public:
    * Copy constructor
    * @param src Data source for new created instance of matrix3wgpu - note padding is always zeroed
    */
-  inline constexpr explicit matrix3wgpu(matrix3wgpu<T> const &src) noexcept __attribute__((__always_inline__))
-    : data{src.data[0], src.data[1], src.data[2],  T{0},
-           src.data[4], src.data[6], src.data[7],  T{0},
-           src.data[8], src.data[9], src.data[10], T{0}} {
-  }
+  inline constexpr explicit matrix3wgpu(matrix3wgpu<T> const &src) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Move constructor
    * @param src Data source for new created instance of matrix3wgpu
    */
-  inline constexpr matrix3wgpu(matrix3wgpu<T> &&src) noexcept __attribute__((__always_inline__))
-    : data(std::move(src.data)) {
-  }
+  inline constexpr matrix3wgpu(matrix3wgpu<T> &&src) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Copy constructor from matrix3
@@ -881,11 +864,13 @@ public:
    * Copy operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline matrix3wgpu<T> constexpr &operator=(matrix3wgpu<T> const &rhs) noexcept __attribute__((__always_inline__)) {
-    std::memcpy(data.data(), rhs.data.data(), sizeof(T) * 12);
-    return *this;
-  }
+  inline matrix3wgpu<T> constexpr &operator=(matrix3wgpu<T> const &rhs) noexcept __attribute__((__always_inline__)) = default;
 };
+
+static_assert(std::is_trivially_copyable_v<matrix3<int>>);
+static_assert(std::is_trivially_copyable_v<matrix3<float>>);
+static_assert(std::is_trivially_copyable_v<matrix3wgpu<int>>);
+static_assert(std::is_trivially_copyable_v<matrix3wgpu<float>>);
 
 #ifdef VECTORSTORM_NAMESPACE
 }

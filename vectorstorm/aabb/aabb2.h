@@ -1,5 +1,6 @@
 #pragma once
 
+#include <type_traits>
 #include "vectorstorm/vector/vector2.h"
 
 #ifdef VECTORSTORM_NAMESPACE
@@ -43,6 +44,9 @@ public:
     : min(1, 1),
       max(0, 0) {
   }
+
+  inline constexpr aabb2(aabb2<T> const &src) noexcept __attribute__((__always_inline__)) = default;
+  inline constexpr aabb2(aabb2<T> &&src) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Constructs axes-aligned bound-box containing one point @a point
@@ -133,6 +137,9 @@ public:
     max = std::move(rhs.max);
     return *this;
   }
+
+  inline aabb2<T> constexpr &operator=(aabb2<T> const &rhs) noexcept __attribute__((__always_inline__)) = default;
+  inline aabb2<T> constexpr &operator=(aabb2<T> &&rhs) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Checks if bounding-box is valid. Valid bounding-box has non-negative size.
@@ -448,6 +455,9 @@ public:
     return lhs;
   }
 };
+
+static_assert(std::is_trivially_copyable_v<aabb2<int>>);
+static_assert(std::is_trivially_copyable_v<aabb2<float>>);
 
 #ifdef VECTORSTORM_NAMESPACE
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <type_traits>
 #include <sstream>
 #include "vectorstorm/epsilon.h"
 #include "vector2_forward.h"
@@ -119,12 +120,7 @@ public:
    * Copy constructor.
    * @param src Source of data for new created vector4 instance.
    */
-  inline constexpr explicit vector4(vector4<T> const &src) noexcept __attribute__((__always_inline__))
-    : x(src.x),
-      y(src.y),
-      z(src.z),
-      w(src.w) {
-  }
+  inline constexpr explicit vector4(vector4<T> const &src) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Copy casting constructor.
@@ -194,12 +190,7 @@ public:
    * Move constructor.
    * @param src Source of data for new created vector4 instance.
    */
-  inline constexpr vector4(vector4<T> &&src) noexcept __attribute__((__always_inline__))
-    : x(std::move(src.x)),
-      y(std::move(src.y)),
-      z(std::move(src.z)),
-      w(std::move(src.w)) {
-  }
+  inline constexpr vector4(vector4<T> &&src) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Move casting constructor.
@@ -285,13 +276,7 @@ public:
    * Copy operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector4<T> constexpr &operator=(vector4<T> const &rhs) noexcept __attribute__((__always_inline__)) {
-    x = rhs.x;
-    y = rhs.y;
-    z = rhs.z;
-    w = rhs.w;
-    return *this;
-  }
+  inline vector4<T> constexpr &operator=(vector4<T> const &rhs) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Copy casting operator
@@ -335,13 +320,7 @@ public:
    * Move assignment operator
    * @param rhs Right hand side argument of binary operator.
    */
-  inline vector4<T> constexpr &operator=(vector4<T> &&rhs) noexcept __attribute__((__always_inline__)) {
-    x = std::move(rhs.x);
-    y = std::move(rhs.y);
-    z = std::move(rhs.z);
-    w = std::move(rhs.w);
-    return *this;
-  }
+  inline vector4<T> constexpr &operator=(vector4<T> &&rhs) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Move assignment casting operator.
@@ -931,6 +910,34 @@ public:
   }
 
   /**
+   * Iteration helpers for range-based for
+   */
+  [[nodiscard]]
+  inline T constexpr *begin() noexcept __attribute__((__always_inline__)) {
+    return data();
+  }
+  [[nodiscard]]
+  inline T constexpr *end() noexcept __attribute__((__always_inline__)) {
+    return data() + size();
+  }
+  [[nodiscard]]
+  inline T constexpr const *begin() const noexcept __attribute__((__always_inline__)) {
+    return data();
+  }
+  [[nodiscard]]
+  inline T constexpr const *end() const noexcept __attribute__((__always_inline__)) {
+    return data() + size();
+  }
+  [[nodiscard]]
+  inline T constexpr const *cbegin() const noexcept __attribute__((__always_inline__)) {
+    return begin();
+  }
+  [[nodiscard]]
+  inline T constexpr const *cend() const noexcept __attribute__((__always_inline__)) {
+    return end();
+  }
+
+  /**
    * Get number of elements in the vector.
    * @return number of elements (will always return 4)
    */
@@ -1134,6 +1141,9 @@ public:
     return vector3<T>(x, y, z);
   }
 };
+
+static_assert(std::is_trivially_copyable_v<vector4<int>>);
+static_assert(std::is_trivially_copyable_v<vector4<float>>);
 
 #ifdef VECTORSTORM_NAMESPACE
 }

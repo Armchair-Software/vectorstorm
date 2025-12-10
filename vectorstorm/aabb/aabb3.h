@@ -1,5 +1,6 @@
 #pragma once
 
+#include <type_traits>
 #include "vectorstorm/vector/vector3_forward.h"
 #include "vectorstorm/vector/vector4.h"
 #include "vectorstorm/matrix/matrix4_forward.h"
@@ -45,6 +46,9 @@ public:
     : min(1, 1, 1),
       max(0, 0, 0) {
   }
+
+  inline constexpr aabb3(aabb3<T> const &src) noexcept __attribute__((__always_inline__)) = default;
+  inline constexpr aabb3(aabb3<T> &&src) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Constructs axes-aligned bound-box containing one point @a point
@@ -138,6 +142,9 @@ public:
     max = std::move(rhs.max);
     return *this;
   }
+
+  inline aabb3<T> constexpr &operator=(aabb3<T> const &rhs) noexcept __attribute__((__always_inline__)) = default;
+  inline aabb3<T> constexpr &operator=(aabb3<T> &&rhs) noexcept __attribute__((__always_inline__)) = default;
 
   /**
    * Checks if bounding-box is valid. Valid bounding-box has non-negative size.
@@ -508,6 +515,9 @@ public:
     return lhs;
   }
 };
+
+static_assert(std::is_trivially_copyable_v<aabb3<int>>);
+static_assert(std::is_trivially_copyable_v<aabb3<float>>);
 
 #ifdef VECTORSTORM_NAMESPACE
 }
