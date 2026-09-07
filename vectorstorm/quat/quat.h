@@ -410,7 +410,7 @@ public:
    * Get length of quaternion, fast approximation.
    * @return Length of quaternion.
    */
-  [[nodiscard]] [[deprecated("Use length<quat<T>::sqrt_mode::fast>()")]]
+  [[nodiscard]] [[deprecated("Use length<sqrt_mode::fast>()")]]
   inline constexpr T length_fast() const noexcept __attribute__((__always_inline__)) {
     return length<sqrt_mode::fast>();
   }
@@ -418,7 +418,7 @@ public:
    * Get length of quaternion, rougher fast approximation.
    * @return Length of quaternion.
    */
-  [[nodiscard]] [[deprecated("Use length<quat<T>::sqrt_mode::coarse>()")]]
+  [[nodiscard]] [[deprecated("Use length<sqrt_mode::coarse>()")]]
   inline constexpr T length_faster() const noexcept __attribute__((__always_inline__)) {
     return length<sqrt_mode::coarse>();
   }
@@ -430,11 +430,11 @@ public:
   inline constexpr void __attribute__((__always_inline__)) normalise() noexcept {
     *this /= length<mode>();
   }
-  [[deprecated("Use normalise<quat<T>::sqrt_mode::fast>()")]]
+  [[deprecated("Use normalise<sqrt_mode::fast>()")]]
   inline constexpr void normalise_fast() noexcept __attribute__((__always_inline__)) {
     normalise<sqrt_mode::fast>();
   }
-  [[deprecated("Use normalise<quat<T>::sqrt_mode::coarse>()")]]
+  [[deprecated("Use normalise<sqrt_mode::coarse>()")]]
   inline constexpr void normalise_faster() noexcept __attribute__((__always_inline__)) {
     normalise<sqrt_mode::coarse>();
   }
@@ -442,11 +442,11 @@ public:
   inline constexpr quaternion<T> __attribute__((__always_inline__)) normalise_copy() const noexcept {
     return *this / length<mode>();
   }
-  [[nodiscard]] [[deprecated("Use normalise_copy<quat<T>::sqrt_mode::fast>()")]]
+  [[nodiscard]] [[deprecated("Use normalise_copy<sqrt_mode::fast>()")]]
   inline constexpr quaternion<T> normalise_copy_fast() const noexcept __attribute__((__always_inline__)) {
     return normalise_copy<sqrt_mode::fast>();
   }
-  [[nodiscard]] [[deprecated("Use normalise_copy<quat<T>::sqrt_mode::coarse>()")]]
+  [[nodiscard]] [[deprecated("Use normalise_copy<sqrt_mode::coarse>()")]]
   inline constexpr quaternion<T> normalise_copy_faster() const noexcept __attribute__((__always_inline__)) {
     return normalise_copy<sqrt_mode::coarse>();
   }
