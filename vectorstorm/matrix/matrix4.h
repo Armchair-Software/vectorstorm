@@ -717,7 +717,7 @@ public:
    */
   inline constexpr matrix4<T> &operator=(T const *rhs) noexcept __attribute__((__always_inline__)) {
     /*
-    for(int i = 0; i != 16; ++i) {
+    for(int i{0}; i != 16; ++i) {
       data[i] = static_cast<T>(rhs[i]);
     }
     */
@@ -1048,9 +1048,9 @@ public:
    * @return Left hand side argument - the ostream object passed to operator.
    */
   inline friend std::ostream &operator <<(std::ostream &lhs, matrix4<T> const &rhs) noexcept __attribute__((__always_inline__)) {
-    for(int i = 0; i != 4; ++i) {
+    for(int i{0}; i != 4; ++i) {
       lhs << "|\t";
-      for(int j = 0; j != 4; ++j) {
+      for(int j{0}; j != 4; ++j) {
         lhs << +rhs[j, i] << "\t";
       }
       lhs << "|" << std::endl;
