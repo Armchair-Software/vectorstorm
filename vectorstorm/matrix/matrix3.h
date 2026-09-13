@@ -812,7 +812,7 @@ public:
   inline friend std::ostream &operator <<(std::ostream &lhs, matrix3<T> const &rhs) noexcept __attribute__((__always_inline__)) {
     for(unsigned int i{0}; i != 3; ++i) {
       lhs << "|\t";
-      for(int j = 0; j != 3; ++j) {
+      for(int j{0}; j != 3; ++j) {
         lhs << +rhs[j, i] << "\t";
       }
       lhs << "|" << std::endl;
