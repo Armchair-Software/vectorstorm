@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <cstdint>
 #ifdef __SSE__
   #include <xmmintrin.h>
